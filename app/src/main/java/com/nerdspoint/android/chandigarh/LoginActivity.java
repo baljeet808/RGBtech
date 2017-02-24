@@ -47,14 +47,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void skip(View v)
-    {
-        Intent i = new Intent(LoginActivity.this,MainPage.class);
-        startActivity(i);
-        finish();
-        Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-    }
-
     public void SignUp(View v)                              //  calling signUpForm class to SignUp a user
     {
         Intent s = new Intent(LoginActivity.this,SignupForm.class);
