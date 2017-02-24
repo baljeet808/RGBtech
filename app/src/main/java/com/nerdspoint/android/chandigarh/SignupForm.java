@@ -58,8 +58,8 @@ public class SignupForm extends AppCompatActivity {
         Email = (EditText) findViewById(R.id.editText5);
         visitor = (CheckBox) findViewById(R.id.checkBox);
         shopowner = (CheckBox) findViewById(R.id.checkBox2);
-//
-        //Password=(EditText) findViewById(R.id.editText7);
+
+        Password=(EditText) findViewById(R.id.editText7);
         ConfirmPassword=(EditText) findViewById(R.id.editText8);
 
 
@@ -78,6 +78,12 @@ public class SignupForm extends AppCompatActivity {
         });
 
 
+    }
+
+    public void getLocation(View view) {
+        longitude="122.22.33";
+        lattitude="082.39.30";
+        isLocationSet=true;
     }
 
     public void skip(View v)
