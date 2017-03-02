@@ -187,8 +187,8 @@ public class SignupForm extends AppCompatActivity {
         )
         {
             @Override
-            protected Map<String,String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<>() ;
+            protected Map getParams() throws AuthFailureError {
+                Map map = new HashMap<>() ;
                 map.put("email",email);
                 map.put("password",password);
                 map.put("firstName",firstName);

@@ -44,17 +44,6 @@
         android:onClick="simpleLogin"
         />
 
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="30dp"
-        android:layout_below="@id/button2"
-        />
-
     <TextView
         android:text="Not Registered Yet?? Click to SignUp"
         android:layout_width="wrap_content"
@@ -62,7 +51,7 @@
         android:layout_marginTop="34dp"
         android:id="@+id/textView2"
         android:onClick="SignUp"
-        android:layout_below="@+id/login_button"
+        android:layout_below="@+id/button2"
         android:layout_alignParentStart="true"
         android:layout_marginStart="45dp" />
 
@@ -74,7 +63,8 @@
         android:layout_alignEnd="@+id/textView2"
         android:layout_marginEnd="66dp"
         android:layout_marginBottom="27dp"
-        android:id="@+id/button3" />
+        android:id="@+id/button3"
+        android:onClick="skip"/>
 
 
 </RelativeLayout>
