@@ -12,5 +12,12 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.nerdspoint.android.chandigarh.MainPage"
     tools:showIn="@layout/app_bar_main_page">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/frag_holder"
+
+        >
+    </RelativeLayout>
 
 </RelativeLayout>
