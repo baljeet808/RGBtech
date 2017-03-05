@@ -1,4 +1,4 @@
-package com.nerdspoint.android.chandigarh;
+package com.nerdspoint.android.chandigarh.fragments;
 
 
 import android.os.Bundle;
@@ -6,13 +6,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.loopeer.cardstack.CardStackView;
+import com.nerdspoint.android.chandigarh.R;
+import com.nerdspoint.android.chandigarh.adapters.TestStackAdapter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
 /**

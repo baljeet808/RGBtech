@@ -1,20 +1,14 @@
-package com.nerdspoint.android.chandigarh;
+package com.nerdspoint.android.chandigarh.activities;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -23,13 +17,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
+import com.nerdspoint.android.chandigarh.R;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.provider.UserDictionary.Words.APP_ID;
 
 public class SignupForm extends AppCompatActivity {
 
@@ -53,6 +44,7 @@ public class SignupForm extends AppCompatActivity {
         editor.apply();
 
         firstname = (EditText) findViewById(R.id.editText2);
+<<<<<<< HEAD:app/src/main/java/com/nerdspoint/android/chandigarh/SignupForm.java
         lastname = (EditText) findViewById(R.id.editText4);
         mobile = (EditText) findViewById(R.id.editText5);
         Email = (EditText) findViewById(R.id.editText6);
@@ -61,6 +53,16 @@ public class SignupForm extends AppCompatActivity {
         userName=(EditText)  findViewById(R.id.editText11);
         Password=(EditText) findViewById(R.id.editText7);
         ConfirmPassword=(EditText) findViewById(R.id.editText8);
+=======
+       // lastname = (EditText) findViewById(R.id.editText3);
+        mobile = (EditText) findViewById(R.id.contact);
+        Email = (EditText) findViewById(R.id.email);
+      //  visitor = (CheckBox) findViewById(R.id.checkBox);
+       // shopowner = (CheckBox) findViewById(R.id.checkBox2);
+
+        Password=(EditText) findViewById(R.id.password);
+        ConfirmPassword=(EditText) findViewById(R.id.confirmpassword);
+>>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb:app/src/main/java/com/nerdspoint/android/chandigarh/activities/SignupForm.java
 
 
         visitor.setOnClickListener(new View.OnClickListener() {

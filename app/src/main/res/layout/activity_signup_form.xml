@@ -4,20 +4,22 @@
     android:id="@+id/activity_signup_form"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FF8A80"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:background="#FF8A80"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.nerdspoint.android.chandigarh.SignupForm">
+    tools:context="com.nerdspoint.android.chandigarh.activities.SignupForm">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
         <RelativeLayout
             android:layout_width="match_parent"
+<<<<<<< HEAD
             android:layout_height="match_parent">
         <EditText
             android:layout_width="150dp"
@@ -62,17 +64,29 @@
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="EMAIL"
-                android:gravity="center"
-                android:ems="10"
-                android:id="@+id/editText6"
-                android:layout_marginTop="20dp"
-                android:layout_below="@+id/imageButton"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true" />
+=======
+            android:layout_height="2000dp"
+            android:background="#424242"
+            android:padding="10dp">
+            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/signupicon"                />
 
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+>>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="38dp"
+                android:text="SIGN UP" />
+
+<<<<<<< HEAD
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -95,28 +109,40 @@
                 android:layout_alignStart="@+id/checkBox"
                 android:onClick="getLocation"
                 />
-
-            <TextView
-                android:text="Set Your Current Locattion As Your Address (OPTIONAL)"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView4"
-                android:layout_marginBottom="11dp"
-                android:layout_above="@+id/editText6"
-                android:layout_toEndOf="@+id/imageButton" />
-
-            <Button
-                android:text="SignUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/button3"
-                android:onClick="signup"
-                android:layout_marginStart="29dp"
-                android:layout_marginTop="118dp"
-                android:layout_below="@+id/editText6"
-                android:layout_alignStart="@+id/checkBox2" />
+=======
+>>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb
 
             <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/textView3"
+                android:layout_marginTop="104dp"
+                android:background="@drawable/roundedborder"
+                android:hint="E-Mail Address"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@drawable/e_mail"
+                android:drawablePadding="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:inputType="text"
+                />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/email"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/roundedborder"
+                android:drawableLeft="@drawable/password"
+                android:drawablePadding="20dp"
+                android:hint="Password"
+                android:inputType="text" />
+
+            <EditText
+<<<<<<< HEAD
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -128,26 +154,55 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true" />
 
+=======
+                android:id="@+id/confirmpassword"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/email"
+                android:layout_marginLeft="170dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/roundedborder"
+                android:drawableLeft="@drawable/confpass"
+                android:drawablePadding="20dp"
+                android:hint="Conf_Pass"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/mobileNo"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/password"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/roundedborder"
+                android:drawableLeft="@drawable/contactno"
+                android:drawablePadding="20dp"
+                android:ems="10"
+                android:hint="Contact Number"
+                android:layout_marginBottom="15dp"
+                android:inputType="text" />
+
+>>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb
             <Button
-                android:text="Skip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="11dp"
-                android:id="@+id/button4"
-                android:layout_alignParentBottom="true"
-                android:layout_toEndOf="@+id/textView3"
-                android:onClick="skip"
-                />
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/btnBack"
+                android:layout_below="@id/mobileNo"
+                android:background="@drawable/back"
+                android:layout_marginLeft="10dp"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_toRightOf="@id/btnBack"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="7dp"
+                android:layout_below="@id/mobileNo"
+                android:text="Continue"
+                android:background="#13b586"/>
 
-            <CheckBox
-                android:text="Shop Owner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:id="@+id/checkBox"
-                android:layout_below="@+id/editText5"
-                android:layout_alignEnd="@+id/button4" />
 
+<<<<<<< HEAD
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -169,6 +224,8 @@
                 android:id="@+id/editText8"
                 android:layout_below="@+id/editText7"
                 android:layout_alignParentStart="true" />
+=======
+>>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

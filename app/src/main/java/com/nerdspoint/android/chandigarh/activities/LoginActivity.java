@@ -1,4 +1,4 @@
-package com.nerdspoint.android.chandigarh;
+package com.nerdspoint.android.chandigarh.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,8 +9,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+<<<<<<< HEAD:app/src/main/java/com/nerdspoint/android/chandigarh/LoginActivity.java
 import android.widget.ProgressBar;
 import android.widget.Toast;
+=======
+>>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb:app/src/main/java/com/nerdspoint/android/chandigarh/activities/LoginActivity.java
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -19,11 +22,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+<<<<<<< HEAD:app/src/main/java/com/nerdspoint/android/chandigarh/LoginActivity.java
 import com.facebook.FacebookSdk;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+=======
+import com.nerdspoint.android.chandigarh.R;
+>>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb:app/src/main/java/com/nerdspoint/android/chandigarh/activities/LoginActivity.java
 
 import java.util.HashMap;
 import java.util.Map;
