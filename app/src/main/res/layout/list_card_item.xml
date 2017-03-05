@@ -7,7 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    app:stackHeaderHeight="160dp">
+    app:stackHeaderHeight="160dp"
+
+    >
 
     <FrameLayout
         android:id="@+id/frame_list_card_item"
@@ -22,22 +24,35 @@
             android:layout_margin="20dp"
             android:textColor="@android:color/white"
             android:textSize="40sp"
-            android:textStyle="bold"
+            android:fontFamily="sans-serif-smallcaps"
             tools:text="12"/>
     </FrameLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/container_list_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true">
+        android:layout_height="341dp"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:background="#fff"
+        >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:text="Every corner must (initially) be provided a corner radius greater than 1, or else no corners are rounded. If you want specific corners to not be rounded, a work-around is to use android:radius to set a default corner radius greater than 1, but then override each and every corner with the values you really want, providing zero (0dp) where you don't want rounded corners."
+            android:id="@+id/body"
+            android:text="hello"
             />
-    </LinearLayout>
 
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/background4"
+        android:background="#fff"
+        android:layout_below="@id/body"
+        android:id="@+id/imageView3" />
+
+</RelativeLayout>
 </LinearLayout>

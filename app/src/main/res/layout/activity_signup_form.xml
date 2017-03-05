@@ -28,7 +28,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:layout_marginTop="22dp"
-            android:id="@+id/editText3" />
+            android:id="@+id/editText2" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
             android:inputType="textPersonName"
             android:hint="LastName"
             android:ems="10"
-            android:layout_alignBottom="@+id/editText3"
+            android:layout_alignBottom="@+id/editText2"
             android:layout_alignParentStart="true"
             android:layout_marginStart="177dp"
             android:id="@+id/editText4" />
@@ -61,7 +61,7 @@
             android:layout_alignTop="@+id/checkBox" />
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:hint="EMAIL"
@@ -70,6 +70,19 @@
                 android:id="@+id/editText6"
                 android:layout_marginTop="20dp"
                 android:layout_below="@+id/imageButton"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:hint="Set A UserName"
+                android:gravity="center"
+                android:ems="10"
+                android:id="@+id/editText11"
+                android:layout_marginTop="40dp"
+                android:layout_below="@+id/editText7"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true" />
 
@@ -104,7 +117,7 @@
                 android:layout_alignStart="@+id/checkBox2" />
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:hint="Enter Password"
@@ -113,18 +126,6 @@
                 android:id="@+id/editText7"
                 android:layout_below="@+id/editText6"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:hint="Confirm Password"
-                android:gravity="center"
-                android:ems="10"
-                android:id="@+id/editText8"
-                android:layout_below="@+id/editText7"
-                android:layout_alignStart="@+id/editText7"
                 android:layout_alignParentEnd="true" />
 
             <Button
@@ -155,8 +156,19 @@
                 android:ems="10"
                 android:layout_marginTop="18dp"
                 android:id="@+id/editText5"
-                android:layout_below="@+id/editText3"
-                android:layout_toEndOf="@+id/editText3" />
+                android:layout_below="@+id/editText2"
+                android:layout_toEndOf="@+id/imageButton" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:hint="Confirm Password"
+                android:gravity="center"
+                android:ems="10"
+                android:id="@+id/editText8"
+                android:layout_below="@+id/editText7"
+                android:layout_alignParentStart="true" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

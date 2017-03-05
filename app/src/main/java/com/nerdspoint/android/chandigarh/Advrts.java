@@ -51,6 +51,7 @@ public class Advrts extends Fragment implements CardStackView.ItemExpendListener
             R.color.color_26
     };
 
+
     CardStackView mStackView;
     TestStackAdapter mTestStackAdapter;
 
@@ -70,9 +71,7 @@ public class Advrts extends Fragment implements CardStackView.ItemExpendListener
         mTestStackAdapter = new TestStackAdapter(getActivity());
         mStackView.setAdapter(mTestStackAdapter);
         mStackView.setItemExpendListener(this);
-
         mTestStackAdapter.updateData((Arrays.asList(TEST_DATAS)));
-
 
 
         return view;

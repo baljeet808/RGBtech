@@ -11,6 +11,8 @@ import com.loopeer.cardstack.CardStackView;
 import com.loopeer.cardstack.StackAdapter;
 
 public class TestStackAdapter extends StackAdapter<Integer> {
+    public static String[] values = new String[]{"mondat offer","tuesday offer","march offer","feb","hjkl","jadjakdj","hcka","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh"};
+
 
     public TestStackAdapter(Context context) {
         super(context);
@@ -50,25 +52,23 @@ public class TestStackAdapter extends StackAdapter<Integer> {
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 6) {//TODO TEST LARGER ITEM
-            return R.layout.list_card_item_larger_header;
-        } else if (position == 10) {
-            return R.layout.list_card_item_with_no_header;
-        }else {
+
             return R.layout.list_card_item;
-        }
+
     }
 
     static class ColorItemViewHolder extends CardStackView.ViewHolder {
         View mLayout;
         View mContainerContent;
         TextView mTextTitle;
+        TextView body;
 
         public ColorItemViewHolder(View view) {
             super(view);
             mLayout = view.findViewById(R.id.frame_list_card_item);
             mContainerContent = view.findViewById(R.id.container_list_content);
             mTextTitle = (TextView) view.findViewById(R.id.text_list_card_title);
+            body=(TextView) view.findViewById(R.id.body);
         }
 
         @Override
@@ -78,7 +78,8 @@ public class TestStackAdapter extends StackAdapter<Integer> {
 
         public void onBind(Integer data, int position) {
             mLayout.getBackground().setColorFilter(ContextCompat.getColor(getContext(), data), PorterDuff.Mode.SRC_IN);
-            mTextTitle.setText(String.valueOf(position));
+            mTextTitle.setText(values[position]);
+            body.setText("ye khul gya g body textview "+position+" huhuhu");
         }
 
     }
@@ -86,11 +87,13 @@ public class TestStackAdapter extends StackAdapter<Integer> {
     static class ColorItemWithNoHeaderViewHolder extends CardStackView.ViewHolder {
         View mLayout;
         TextView mTextTitle;
+        TextView body;
 
         public ColorItemWithNoHeaderViewHolder(View view) {
             super(view);
             mLayout = view.findViewById(R.id.frame_list_card_item);
             mTextTitle = (TextView) view.findViewById(R.id.text_list_card_title);
+            body=(TextView) view.findViewById(R.id.body);
         }
 
         @Override
@@ -99,7 +102,8 @@ public class TestStackAdapter extends StackAdapter<Integer> {
 
         public void onBind(Integer data, int position) {
             mLayout.getBackground().setColorFilter(ContextCompat.getColor(getContext(), data), PorterDuff.Mode.SRC_IN);
-            mTextTitle.setText(String.valueOf(position));
+            mTextTitle.setText(values[position]);
+            body.setText("ye khul gya g body textview "+position+" huhuhu");
         }
 
     }
@@ -108,12 +112,14 @@ public class TestStackAdapter extends StackAdapter<Integer> {
         View mLayout;
         View mContainerContent;
         TextView mTextTitle;
+        TextView body;
 
         public ColorItemLargeHeaderViewHolder(View view) {
             super(view);
             mLayout = view.findViewById(R.id.frame_list_card_item);
             mContainerContent = view.findViewById(R.id.container_list_content);
             mTextTitle = (TextView) view.findViewById(R.id.text_list_card_title);
+            body=(TextView) view.findViewById(R.id.body);
         }
 
         @Override
@@ -134,8 +140,8 @@ public class TestStackAdapter extends StackAdapter<Integer> {
 
         public void onBind(Integer data, int position) {
             mLayout.getBackground().setColorFilter(ContextCompat.getColor(getContext(), data), PorterDuff.Mode.SRC_IN);
-            mTextTitle.setText(String.valueOf(position));
-
+            mTextTitle.setText(values[position]);
+            body.setText("ye khul gya g body textview "+position+" huhuhu");
             itemView.findViewById(R.id.text_view).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
