@@ -1,4 +1,4 @@
-package com.nerdspoint.android.chandigarh;
+package com.nerdspoint.android.chandigarh.activities;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -15,6 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.nerdspoint.android.chandigarh.R;
+import com.nerdspoint.android.chandigarh.fragments.Advrts;
 
 public class MainPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

@@ -10,12 +10,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#FF8A80"
-    tools:context="com.nerdspoint.android.chandigarh.Splash">
+    tools:context="com.nerdspoint.android.chandigarh.activities.Splash">
 
     <ImageView
         android:layout_width="200dp"
         android:layout_height="180dp"
-        android:background="@drawable/logo3"
+        android:background="@drawable/logo"
         android:layout_gravity="center_horizontal"
         android:id="@+id/imageView2"
         android:scaleType="centerInside"

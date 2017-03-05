@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Splash">
+        <activity android:name=".activities.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,11 +23,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".SignupForm" />
+        <activity android:name=".activities.SignupForm" />
         <activity
-            android:name=".MainPage"
+            android:name=".activities.MainPage"
             android:label="@string/title_activity_main_page"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

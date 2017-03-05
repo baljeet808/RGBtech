@@ -1,4 +1,4 @@
-package com.nerdspoint.android.chandigarh;
+package com.nerdspoint.android.chandigarh.adapters;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.loopeer.cardstack.CardStackView;
 import com.loopeer.cardstack.StackAdapter;
+import com.nerdspoint.android.chandigarh.R;
 
 public class TestStackAdapter extends StackAdapter<Integer> {
 
