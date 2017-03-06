@@ -1,6 +1,7 @@
 package com.nerdspoint.android.chandigarh.activities;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -104,7 +105,9 @@ public class MainPage extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
-
+            Intent o = new Intent(MainPage.this,LoginActivity.class);
+            startActivity(o);
+            finish();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

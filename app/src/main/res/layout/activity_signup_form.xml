@@ -11,62 +11,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.nerdspoint.android.chandigarh.activities.SignupForm">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
 
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_container"
+    >
         <RelativeLayout
             android:layout_width="match_parent"
-<<<<<<< HEAD
-            android:layout_height="match_parent">
-        <EditText
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="FirstName"
-            android:ems="10"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="22dp"
-            android:id="@+id/editText2" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="LastName"
-            android:ems="10"
-            android:layout_alignBottom="@+id/editText2"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="177dp"
-            android:id="@+id/editText4" />
-
-            <TextView
-            android:text="+91"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/editText5"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="21dp"
-            android:layout_marginBottom="11dp"
-            android:id="@+id/textView3" />
-
-        <CheckBox
-            android:text="Visitor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/checkBox"
-            android:layout_alignStart="@+id/editText4"
-            android:id="@+id/checkBox2"
-            android:layout_alignTop="@+id/checkBox" />
-
-            <EditText
-                android:layout_width="match_parent"
-=======
-            android:layout_height="2000dp"
+            android:layout_height="match_parent"
             android:background="#424242"
+            android:id="@+id/holder"
             android:padding="10dp">
             <ImageView
                 android:layout_width="110dp"
@@ -79,38 +34,12 @@
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
->>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="38dp"
                 android:text="SIGN UP" />
 
-<<<<<<< HEAD
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="Set A UserName"
-                android:gravity="center"
-                android:ems="10"
-                android:id="@+id/editText11"
-                android:layout_marginTop="40dp"
-                android:layout_below="@+id/editText7"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true" />
-
-            <ImageButton
-                android:layout_width="30pt"
-                android:layout_height="30pt"
-                android:background="@android:drawable/ic_dialog_map"
-                android:id="@+id/imageButton"
-                android:layout_below="@+id/checkBox"
-                android:layout_alignStart="@+id/checkBox"
-                android:onClick="getLocation"
-                />
-=======
->>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb
 
             <EditText
                 android:id="@+id/email"
@@ -142,19 +71,6 @@
                 android:inputType="text" />
 
             <EditText
-<<<<<<< HEAD
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:hint="Enter Password"
-                android:gravity="center"
-                android:ems="10"
-                android:id="@+id/editText7"
-                android:layout_below="@+id/editText6"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true" />
-
-=======
                 android:id="@+id/confirmpassword"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
@@ -183,7 +99,6 @@
                 android:layout_marginBottom="15dp"
                 android:inputType="text" />
 
->>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb
             <Button
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -191,41 +106,20 @@
                 android:layout_below="@id/mobileNo"
                 android:background="@drawable/back"
                 android:layout_marginLeft="10dp"/>
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_toRightOf="@id/btnBack"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="7dp"
-                android:layout_below="@id/mobileNo"
                 android:text="Continue"
-                android:background="#13b586"/>
+                android:background="#13b586"
+                android:id="@+id/button4"
+                android:layout_below="@+id/mobileNo"
+                android:layout_toEndOf="@+id/btnBack"
+                android:onClick="signup"/>
 
 
-<<<<<<< HEAD
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="Mobile Number"
-                android:ems="10"
-                android:layout_marginTop="18dp"
-                android:id="@+id/editText5"
-                android:layout_below="@+id/editText2"
-                android:layout_toEndOf="@+id/imageButton" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:hint="Confirm Password"
-                android:gravity="center"
-                android:ems="10"
-                android:id="@+id/editText8"
-                android:layout_below="@+id/editText7"
-                android:layout_alignParentStart="true" />
-=======
->>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb
         </RelativeLayout>
-    </ScrollView>
+</RelativeLayout>
 </RelativeLayout>

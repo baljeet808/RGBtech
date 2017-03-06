@@ -1,0 +1,132 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nerdspoint.android.chandigarh.fragments.profileUpdation">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="2000dp"
+        android:background="#424242"
+        android:padding="10dp">
+        <ImageView
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/signupicon"
+            android:id="@+id/iv"
+            />
+
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/color_2"
+            android:layout_marginTop="20dp"
+            android:text="Profile 80% Completed"
+            android:textSize="18dp"
+            />
+
+
+
+        <EditText
+            android:id="@+id/fname"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/iv"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/roundedborder"
+            android:drawableLeft="@drawable/password"
+            android:drawablePadding="20dp"
+            android:hint="FirstName"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/lname"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/iv"
+            android:layout_marginLeft="170dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/roundedborder"
+            android:drawableLeft="@drawable/confpass"
+            android:drawablePadding="20dp"
+            android:hint="Last Name"
+            android:inputType="text" />
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/btnBack"
+            android:layout_below="@id/fname"
+            android:background="@drawable/back"
+            android:layout_marginTop="70dp"
+            android:layout_marginLeft="10dp"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="7dp"
+            android:text="Continue"
+            android:background="#13b586"
+            android:id="@+id/button4"
+            android:layout_marginTop="70dp"
+            android:layout_below="@+id/fname"
+            android:layout_toEndOf="@+id/btnBack"
+            />
+
+        <CheckBox
+            android:text="Shop Owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cb_visitor"
+            android:layout_below="@+id/lname"
+            android:textColor="@color/color_1"
+            android:layout_alignEnd="@+id/textView3"
+            android:layout_marginTop="22dp"
+
+            />
+
+        <CheckBox
+            android:text="Visitor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_1"
+            android:id="@+id/cb_shopOwner"
+            android:layout_alignBaseline="@+id/cb_visitor"
+            android:layout_toEndOf="@+id/btnBack" />
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/btnSkip"
+            android:layout_below="@id/btnBack"
+            android:background="@drawable/forward"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="7dp"
+            android:text="You Can Skip this Step For Later"
+            android:background="#13b586"
+            android:id="@+id/buttonSkip"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/button4"
+            android:layout_toEndOf="@+id/btnBack"
+
+            />
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

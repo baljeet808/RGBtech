@@ -6,140 +6,16 @@
     android:layout_height="match_parent"
     android:background="#FF8A80"
     android:padding="10dp"
-<<<<<<< HEAD
-    tools:context="com.nerdspoint.android.chandigarh.LoginActivity">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/shadowlayout">
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/textView5"
-            android:layout_alignBottom="@+id/textView5"
-            android:layout_alignStart="@+id/button3"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginStart="37dp"
-            android:text="|"
-            android:textColor="#000000"
-            android:textSize="14dp"
-            android:textStyle="bold" />
-
-
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="13dp"
-            android:onClick="skip"
-            android:text="Skip" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/textView9"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="40dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:background="#13b586"
-            android:elevation="0dp"
-            android:onClick="simpleLogin"
-
-            android:text="Login" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/button3"
-            android:layout_marginBottom="118dp"
-            android:layout_toStartOf="@+id/button3"
-            android:onClick="SignUp"
-            android:text="Register Here"
-            android:textColor="#000000"
-            android:textSize="14dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/button2"
-            android:layout_marginStart="26dp"
-            android:layout_toEndOf="@+id/textView9"
-            android:text="Forgot Password"
-            android:onClick="forgotPassword"
-            android:textColor="#000000"
-            android:textSize="14dp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true">
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textInputLayout2">
-                <EditText
-                    android:id="@+id/editText2"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/roundedborder"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:hint="username"
-                    />
-
-            </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textInputLayout">
-
-                <EditText
-                    android:id="@+id/editText"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/roundedborder"
-                    android:ems="10"
-                    android:inputType="textPassword"
-                    android:hint="password"
-                    android:layout_below="@+id/textInputLayout"
-                    android:layout_marginTop="15dp"
-                    android:layout_alignParentEnd="true" />
-            </android.support.design.widget.TextInputLayout>
-
-        </LinearLayout>
-
-    </RelativeLayout>
-=======
     tools:context="com.nerdspoint.android.chandigarh.activities.LoginActivity">
 
-
-
-<RelativeLayout
+    <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/demo"
-    android:layout_marginBottom="50dp"
 
-    android:id="@+id/relativeLayout">
+        android:id="@+id/relativeLayout"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
 
     <EditText
@@ -149,7 +25,7 @@
         android:layout_marginRight="14dp"
         android:inputType="textPersonName"
         android:background="@drawable/roundedborder"
-        android:text="Name"
+        android:hint="Name"
         android:ems="10"
         android:layout_alignParentTop="true"
         android:layout_marginTop="40dp"
@@ -162,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:inputType="textPersonName"
-        android:text="Password"
+        android:hint="Password"
         android:background="@drawable/roundedborder"
         android:ems="10"
         android:id="@+id/editText2"
@@ -188,20 +64,7 @@
         android:layout_marginStart="37dp" />
 
 
-    <TextView
-        android:text="Forgot Password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView7"
-        android:textSize="14dp"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:layout_marginStart="36dp"
-        android:layout_alignBottom="@+id/login_button"
-        android:layout_toEndOf="@+id/textView9"
-        android:layout_marginBottom="60dp" />
-
-    <Button
+        <Button
         android:text="Login"
         android:layout_width="200dp"
         android:layout_centerHorizontal="true"
@@ -224,31 +87,13 @@
         android:layout_marginBottom="39dp"
         android:id="@+id/button3"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
-        android:layout_width="190dp"
-        android:layout_height="38dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_above="@+id/button3"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="37dp" />
+        android:onClick="skip"
 
-    <TextView
-        android:text="Register Here"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:textSize="14dp"
-        android:id="@+id/textView5"
-        android:onClick="SignUp"
-        android:layout_alignBaseline="@+id/textView7"
-        android:layout_alignBottom="@+id/textView7"
-        android:layout_toStartOf="@+id/textView9" />
+        />
 
-    <TextView
+
+        <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView2"
@@ -258,10 +103,34 @@
         android:text="Copyright © 2017 RGB Techsoln. All rights reserved."
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
->>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb
+
+        <TextView
+            android:text="Forgot Password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView7"
+            android:textSize="14dp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:layout_alignBaseline="@+id/textView9"
+            android:layout_alignBottom="@+id/textView9"
+            android:layout_toEndOf="@+id/button3" />
+
+        <TextView
+            android:text="Register Here"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="14dp"
+            android:id="@+id/textView5"
+            android:onClick="SignUp"
+            android:layout_marginBottom="87dp"
+            android:layout_above="@+id/button3"
+            android:layout_toStartOf="@+id/textView9" />
 
 
-</RelativeLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

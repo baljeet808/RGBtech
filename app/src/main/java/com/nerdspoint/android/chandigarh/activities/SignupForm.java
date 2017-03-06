@@ -1,14 +1,23 @@
 package com.nerdspoint.android.chandigarh.activities;
 
+import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -18,17 +27,24 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.nerdspoint.android.chandigarh.R;
+import com.nerdspoint.android.chandigarh.fragments.profileUpdation;
+import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SignupForm extends AppCompatActivity {
 
-    EditText firstname,lastname,mobile,Email,Password,ConfirmPassword,userName;
+    EditText mobile,Email,Password,ConfirmPassword,userName;
     CheckBox visitor,shopowner;
+    RelativeLayout holder;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    String longitude,lattitude;
+    FragmentTransaction fragmentTransaction;
+    View view;
+
+    FragmentManager fragmentManager;
+
     Boolean isLocationSet=false;
 
     private String signup_url ="https://baljeet808singh.000webhostapp.com/chandigarh/signup.php";          // enter the url here for signup purpose
@@ -38,53 +54,24 @@ public class SignupForm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_form);
-
         sharedPreferences = getSharedPreferences("userDetail",MODE_PRIVATE);     // SharedPreferences Name >> usrDetail
         editor= sharedPreferences.edit();                                       // SharedPreferences contain >>  email , password , location, sex , age, interests,name , type  of user
         editor.apply();
 
-        firstname = (EditText) findViewById(R.id.editText2);
-<<<<<<< HEAD:app/src/main/java/com/nerdspoint/android/chandigarh/SignupForm.java
-        lastname = (EditText) findViewById(R.id.editText4);
-        mobile = (EditText) findViewById(R.id.editText5);
-        Email = (EditText) findViewById(R.id.editText6);
-        visitor = (CheckBox) findViewById(R.id.checkBox);
-        shopowner = (CheckBox) findViewById(R.id.checkBox2);
-        userName=(EditText)  findViewById(R.id.editText11);
-        Password=(EditText) findViewById(R.id.editText7);
-        ConfirmPassword=(EditText) findViewById(R.id.editText8);
-=======
-       // lastname = (EditText) findViewById(R.id.editText3);
-        mobile = (EditText) findViewById(R.id.contact);
+
+        holder = (RelativeLayout) findViewById(R.id.holder);
+        mobile = (EditText) findViewById(R.id.mobileNo);
         Email = (EditText) findViewById(R.id.email);
-      //  visitor = (CheckBox) findViewById(R.id.checkBox);
-       // shopowner = (CheckBox) findViewById(R.id.checkBox2);
 
         Password=(EditText) findViewById(R.id.password);
         ConfirmPassword=(EditText) findViewById(R.id.confirmpassword);
->>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb:app/src/main/java/com/nerdspoint/android/chandigarh/activities/SignupForm.java
 
-
-        visitor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shopowner.setChecked(false);
-            }
-        });
-
-        shopowner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                visitor.setChecked(false);
-            }
-        });
 
 
     }
 
     public void getLocation(View view) {
-        longitude="122.22.33";
-        lattitude="082.39.30";
+
         isLocationSet=true;
     }
 
@@ -97,25 +84,8 @@ public class SignupForm extends AppCompatActivity {
 
     public void signup(View v)
     {
-        if(firstname.getText().length()>1)
-        {
-
-            if(lastname.getText().length()>1)
-            {
-
                 if(mobile.getText().length()==10)
                 {
-                    if(visitor.isChecked() || shopowner.isChecked())
-                    {
-                         String userType="";
-                        if(visitor.isChecked())
-                        {
-                             userType="Visitor";
-                        }
-                        if(shopowner.isChecked())
-                        {
-                             userType="ShopOwner";
-                        }
                         String email= Email.getText().toString();
                         if(email.contains("@gmail.com") || email.contains("@live.com") || email.contains("@hotmail.com") || email.contains("@yahoo.in"))
                         {
@@ -123,15 +93,29 @@ public class SignupForm extends AppCompatActivity {
                             {
                                 if(Password.getText().toString().equals(ConfirmPassword.getText().toString()))
                                 {
+                                    final AlertDialog.Builder alert =new AlertDialog.Builder(v.getContext());
+                                    alert.setTitle("Enter Your Name >");
+                                    final EditText editText = new EditText(getApplicationContext());
+                                    editText.setHint("Note : username will be used for login");
+                                    editText.setHintTextColor(Color.RED);
+                                    editText.setTextColor(Color.BLACK);
+                                    editText.setTextSize(14.0f);
+                                    alert.setView(editText);
 
-                                    if(userName.getText().length()>1) {
-                                        Log.d("values","firstname > "+firstname.getText().toString()+" lastname > "+lastname.getText().toString()+" mobile > "+mobile.getText().toString()+" usertype > "+userType+" Email >"+Email.getText().toString()+" Password > "+Password.getText().toString()+" userName > "+userName.getText().toString()+" ");
-                                        SaveUser(firstname.getText().toString(), lastname.getText().toString(), mobile.getText().toString(),userType, Email.getText().toString(), Password.getText().toString(),userName.getText().toString());
-                                    }
-                                    else
-                                    {
-                                        Snackbar.make(getCurrentFocus(),"give a UserName for future login reference ",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-                                    }
+                                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+
+                                            if(editText.getText().length()>1) {
+
+                                                SaveUser(mobile.getText().toString(), Email.getText().toString(), Password.getText().toString(),editText.getText().toString());
+                                            }
+                                            else
+                                            {
+                                                Snackbar.make(getCurrentFocus(),"give a UserName for future login reference ",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                                            }
+                                        }
+                                    });
+                                    alert.show();
                                 }
                                 else{
                                     Snackbar.make(getCurrentFocus(),"Password does not match",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
@@ -140,35 +124,20 @@ public class SignupForm extends AppCompatActivity {
                             {
                                 Snackbar.make(getCurrentFocus(),"Password should be atleast of 5 letters",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                             }
-                        }
-                        else
+                        }else
                         {
-                            Snackbar.make(getCurrentFocus(),"Invalid email",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                            Snackbar.make(getCurrentFocus(),"invalid email",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                         }
-                    }else
-                    {
-                        Snackbar.make(getCurrentFocus(),"please select User type",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-                    }
 
                 }else
                 {
                     Snackbar.make(getCurrentFocus(),"please correct mobile number",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                 }
 
-            }else
-            {
-                Snackbar.make(getCurrentFocus(),"please enter lastname",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-            }
-        }else
-        {
-            Snackbar.make(getCurrentFocus(),"please enter firstname",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-        }
     }
 
-    private void SaveUser(final String firstName, final String lastName, final String Mobile, final String UserType, final String email, final String password, final String userName)
+    private void SaveUser(final String Mobile, final String email, final String password, final String userName)
     {
-
-        Log.d("values","firstname > "+firstName+" lastname > "+lastName+" mobile > "+Mobile+" usertype > "+UserType+" Email >"+email+" Password > "+password+" userName > "+userName+" ");
 
         StringRequest request = new StringRequest(Request.Method.POST, signup_url, new Response.Listener<String>() {
 
@@ -177,25 +146,23 @@ public class SignupForm extends AppCompatActivity {
                 Log.d("Response", response+"Done");
                 if(response.equals("Already"))
                 {
-
+                    Snackbar.make(getCurrentFocus(),"User already exists with this detail",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                 }
                 if(response.equals("User Successfully Registered"))
                 {
-
-                    Snackbar.make(getCurrentFocus(),"Signup SUCCESSFUL",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-                    editor.putString("UserName",userName);
-                    editor.putString("firstName",firstName);
-                    editor.putString("lastName",lastName);
-                    editor.putString("email",email);
-                    editor.putString("password",password);
-                    editor.putString("Mobile",Mobile);
-                    editor.putString("UserType",UserType);
-
-                    editor.apply();
-                    Intent i = new Intent(SignupForm.this,MainPage.class);
-                    startActivity(i);
-                    finish();
+                  //  alert.cancel();
                     Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+
+
+                   profileUpdation profileUpdation = new profileUpdation();
+                    fragmentManager =getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.add(R.id.fragment_container,profileUpdation);
+                    fragmentTransaction.commit();
+                    holder.setVisibility(View.GONE);
+
+                 //   Snackbar.make(getCurrentFocus(),"Moving to next Step",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+
                 }
                 else
                 {
@@ -214,15 +181,11 @@ public class SignupForm extends AppCompatActivity {
             @Override
             protected Map getParams() throws AuthFailureError {
                 Map map = new HashMap<>() ;
-                Log.d("values","firstname > "+firstName+" lastname > "+lastName+" mobile > "+Mobile+" usertype > "+UserType+" Email >"+email+" Password > "+password+" userName > "+userName+" ");
 
                 map.put("UserName",userName);
-                map.put("FirstName",firstName);
-                map.put("LastName",lastName);
                 map.put("Email",email);
                 map.put("Password",password);
                 map.put("PhoneNumber",Mobile);
-                map.put("UserType",UserType);
 
                 return map;
             }

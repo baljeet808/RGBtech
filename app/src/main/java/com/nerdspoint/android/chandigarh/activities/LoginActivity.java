@@ -9,11 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-<<<<<<< HEAD:app/src/main/java/com/nerdspoint/android/chandigarh/LoginActivity.java
 import android.widget.ProgressBar;
 import android.widget.Toast;
-=======
->>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb:app/src/main/java/com/nerdspoint/android/chandigarh/activities/LoginActivity.java
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -22,15 +19,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-<<<<<<< HEAD:app/src/main/java/com/nerdspoint/android/chandigarh/LoginActivity.java
+
 import com.facebook.FacebookSdk;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-=======
 import com.nerdspoint.android.chandigarh.R;
->>>>>>> be89b44fab92c666d411d1453c9d9b609fcb8ceb:app/src/main/java/com/nerdspoint/android/chandigarh/activities/LoginActivity.java
+import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,11 +44,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // FacebookSdk.sdkInitialize(this);
         setContentView(R.layout.activity_login);
 
-        et_username = (EditText) findViewById(R.id.editText2);
-        et_password = (EditText) findViewById(R.id.editText);
+        et_username = (EditText) findViewById(R.id.editText);
+        et_password = (EditText) findViewById(R.id.editText2);
         sharedPreferences = getSharedPreferences("userDetail",MODE_PRIVATE);     // SharedPreferences Name >> usrDetail
         editor= sharedPreferences.edit();                                       // SharedPreferences contain >>  email , password , location, sex , age, interests,name , type  of user
         editor.apply();
@@ -88,8 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("simpleLogin","\t\t\tentered");
         if(et_username.getText().toString().length()>1 && et_password.getText().toString().length()>1)
         {
-            Log.d("first if","\t\t\tchecked length");
-            //if(email.contains("@gmail.com") || email.contains("@live.com") || email.contains("@hotmail.com") || email.contains("@yahoo.in"))
+            Log.d("first if","\t\t\tchecked length  "+et_username.getText().toString()+"  "+et_password.getText().toString());
             {
                 String Password = et_password.getText().toString();
                 if(Password.length()>5)
@@ -107,17 +101,37 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             Log.d("Response", response+"ok");
-                            if(response.equals("success"))
+                            if(response.equals("fail")==false)
                             {
 
                                 alert.cancel();
+
                                 Snackbar.make(getCurrentFocus(),"LOGIN SUCCESSFUL",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-                                editor.putString("userName",et_username.getText().toString());
-                                editor.putString("password",et_password.getText().toString());
-                                editor.apply();
-                                Intent i = new Intent(LoginActivity.this,MainPage.class);
-                                startActivity(i);
-                                finish();
+                                try {
+
+                                    JSONArray jsonArray = new JSONArray(response);
+                                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setEmailAddress(jsonObject.getString("Email"));
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setLastName(jsonObject.getString("LastName"));
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setFirstName(jsonObject.getString("FirstName"));
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setUserName(jsonObject.getString("UserName"));
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setPhoneNumber(jsonObject.getString("PhoneNumber"));
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setUserType(jsonObject.getString("UserType"));
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setUID(jsonObject.getString("UID"));
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setIsActive("Login");
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setLoginType("Simple");
+
+                                    Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+
+                                    Intent i= new Intent(LoginActivity.this,MainPage.class);
+                                    startActivity(i);
+                                    finish();
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+
+                                }
                                 Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                             }
                             else
