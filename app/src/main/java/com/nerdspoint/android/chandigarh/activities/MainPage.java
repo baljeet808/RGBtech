@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.fragments.Advrts;
+import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
 import com.nerdspoint.android.chandigarh.fragments.profileUpdation;
 import com.nerdspoint.android.chandigarh.fragments.shopRegistration;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -197,6 +198,15 @@ public class MainPage extends AppCompatActivity
             fragmentTransaction.commit();
 
         } else if (id == R.id.nav_slideshow) {
+
+            main_fragment_holder.setVisibility(View.VISIBLE);
+            host.setVisibility(View.GONE);
+            QuickSearchResults searchResults = new QuickSearchResults();
+            fragmentManager =getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.Main_Fragment_Holder,searchResults);
+            fragmentTransaction.commit();
+
 
         } else if (id == R.id.nav_manage) {
             Intent o = new Intent(MainPage.this,LoginActivity.class);
