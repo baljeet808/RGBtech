@@ -115,15 +115,16 @@ public class ActiveUserDetail {
     public Bundle getUserFullDetailAsBundle()
     {
         Bundle bundle= new Bundle();
+        bundle.putString("UID",sharedPreferences.getString("UID","1"));
         bundle.putString("UserName",sharedPreferences.getString("UserName","nerdspoint"));
         bundle.putString("LastName",sharedPreferences.getString("LastName","nerdspoint"));
         bundle.putString("FirstName",sharedPreferences.getString("FirstName","nerdspoint"));
         bundle.putString("Email",sharedPreferences.getString("Email","nerdspoint"));
         bundle.putString("PhoneNumber",sharedPreferences.getString("PhoneNumber","nerdspoint"));
         bundle.putString("Password",sharedPreferences.getString("Password","nerdspoint"));
-        bundle.putString("UserName",sharedPreferences.getString("UserType","nerdspoint"));
+        bundle.putString("UserType",sharedPreferences.getString("UserType","nerdspoint"));
         bundle.putString("IsActive",sharedPreferences.getString("IsActive","logOut"));
-        bundle.putString("loginType",sharedPreferences.getString("LoginType","Simple"));
+        bundle.putString("LoginType",sharedPreferences.getString("LoginType","Simple"));
         return bundle;
     }
 

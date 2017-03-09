@@ -1,9 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FF8A80"
-    tools:context="layout.shopRegistration">
+    tools:context="com.nerdspoint.android.chandigarh.fragments.shopRegistration">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -47,17 +48,26 @@
                 android:padding="10dp" />
 
 
-            <EditText
+            <Spinner
                 android:id="@+id/category"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="90dp"
-                android:drawablePadding="10dp"
-                android:drawableLeft=@drawable/shopcategory"
+                android:layout_marginLeft="40dp"
+                android:gravity="center"
+                android:textAlignment="center"
                 android:background="@drawable/roundedborder"
-                android:hint="Shop category"
-                android:padding="10dp" />
-
+                 />
+            <Button
+                android:text="CLICK HERE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="75dp"
+                android:id="@+id/productsave"
+                android:background="#FF8A80"
+                android:layout_below="@+id/SCO"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="14dp" />
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -114,17 +124,19 @@
                 android:layout_alignBaseline="@+id/productsave"
                 android:layout_alignBottom="@+id/productsave" />
 
-            <Button
-                android:text="CLICK HERE"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="75dp"
-                android:id="@+id/productsave"
-                android:background="#FF8A80"
-                android:layout_below="@+id/SCO"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="14dp" />
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignBottom="@+id/category"
+                android:layout_alignParentStart="true"
+                app:srcCompat="@drawable/shopcategory"
+                android:background="@drawable/roundedborder"
+                />
+
 
         </RelativeLayout>
     </ScrollView>
+
+
 </RelativeLayout>

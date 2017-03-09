@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -81,7 +83,7 @@ public class profileUpdation extends Fragment {
                 {
                     if(visitor.isChecked()==true || shopOwner.isChecked()==true)
                     {
-                       // updateValues();
+                        updateValues(v);
                     }
                     else {
                         Snackbar.make(getView(),"Please check one of the checkbox above",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
@@ -106,18 +108,37 @@ public class profileUpdation extends Fragment {
         return view;
     }
 
-    public void updateValues()
+    public void updateValues(View view)
     {
 
-        StringRequest request = new StringRequest(Request.Method.POST, signup_url, new Response.Listener<String>() {
 
+        final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        final AlertDialog alert = builder.create();
+        alert.setTitle("Please Wait");
+        final ProgressBar progressBar = new ProgressBar(getActivity());
+        alert.setView(progressBar);
+        alert.show();
+
+
+        StringRequest request = new StringRequest(Request.Method.POST, signup_url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("Response", response+"Done");
 
-                if(response.equals("Record updated successfull"))
+
+                if(response.equals("fail")==false)
                 {
+                    alert.cancel();
                     Snackbar.make(getActivity().getCurrentFocus(),"record saved",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                    ActiveUserDetail.getCustomInstance(getActivity()).setFirstName(fname.getText().toString());
+                    ActiveUserDetail.getCustomInstance(getActivity()).setLastName(lname.getText().toString());
+                    ActiveUserDetail.getCustomInstance(getActivity()).setUserType(userType);
+                    ActiveUserDetail.getCustomInstance(getActivity()).setUID(response);
+                    check();
+                    Intent h = new Intent(getActivity(),MainPage.class);
+                    startActivity(h);
+                    getActivity().finish();
+
                 }
                 else
                 {
@@ -135,20 +156,32 @@ public class profileUpdation extends Fragment {
         {
             @Override
             protected Map getParams() throws AuthFailureError {
+
+
                 Map map = new HashMap<>() ;
+
 
                 map.put("FirstName",fname.getText().toString());
                 map.put("LastName",lname.getText().toString());
                 map.put("UserType",userType);
-                map.put("UID", ActiveUserDetail.getCustomInstance(getActivity()).getUID());
+                map.put("UserName",ActiveUserDetail.getCustomInstance(getActivity()).getUserName());
+
 
                 return map;
+
+
             }
         };
 
         RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
         queue.add(request);
 
+    }
+
+    public void check()
+    {
+        Bundle bundle=ActiveUserDetail.getCustomInstance(getActivity()).getUserFullDetailAsBundle();
+        Log.d("shared preferences ","UID > "+bundle.getString("UID")+" phone "+bundle.getString("PhoneNumber")+" username "+bundle.getString("UserName")+" fname "+bundle.getString("FirstName")+" lname "+bundle.getString("LastName")+" Iactive "+bundle.getString("IsActive")+" userType "+bundle.getString("UserType")+" LoginType "+bundle.getString("LoginType")+" email "+bundle.getString("Email")+" Password "+bundle.getString("Password"));
     }
 
 

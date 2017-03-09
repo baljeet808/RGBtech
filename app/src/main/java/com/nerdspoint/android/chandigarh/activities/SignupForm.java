@@ -82,7 +82,7 @@ public class SignupForm extends AppCompatActivity {
         finish();
     }
 
-    public void signup(View v)
+    public void signup(final View v)
     {
                 if(mobile.getText().length()==10)
                 {
@@ -107,37 +107,43 @@ public class SignupForm extends AppCompatActivity {
 
                                             if(editText.getText().length()>1) {
 
-                                                SaveUser(mobile.getText().toString(), Email.getText().toString(), Password.getText().toString(),editText.getText().toString());
+                                                SaveUser(v,mobile.getText().toString(), Email.getText().toString(), Password.getText().toString(),editText.getText().toString());
                                             }
                                             else
                                             {
-                                                Snackbar.make(getCurrentFocus(),"give a UserName for future login reference ",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                                                Snackbar.make(v.findFocus(),"give a UserName for future login reference ",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                                             }
                                         }
                                     });
                                     alert.show();
                                 }
                                 else{
-                                    Snackbar.make(getCurrentFocus(),"Password does not match",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                                    Snackbar.make(v.findFocus(),"Password does not match",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                                     }
                             }else
                             {
-                                Snackbar.make(getCurrentFocus(),"Password should be atleast of 5 letters",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                                Snackbar.make(v.findFocus(),"Password should be atleast of 5 letters",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                             }
                         }else
                         {
-                            Snackbar.make(getCurrentFocus(),"invalid email",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                            Snackbar.make(v.findFocus(),"invalid email",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                         }
 
                 }else
                 {
-                    Snackbar.make(getCurrentFocus(),"please correct mobile number",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                    Snackbar.make(v.findFocus(),"please correct mobile number",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                 }
 
     }
 
-    private void SaveUser(final String Mobile, final String email, final String password, final String userName)
+    private void SaveUser(final View v,final String Mobile, final String email, final String password, final String userName)
     {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        final AlertDialog alert = builder.create();
+        alert.setTitle("Registering");
+        final ProgressBar progressBar = new ProgressBar(getApplicationContext());
+        alert.setView(progressBar);
+        alert.show();
 
         StringRequest request = new StringRequest(Request.Method.POST, signup_url, new Response.Listener<String>() {
 
@@ -150,9 +156,15 @@ public class SignupForm extends AppCompatActivity {
                 }
                 if(response.equals("User Successfully Registered"))
                 {
-                  //  alert.cancel();
-                    Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                    alert.cancel();
+                 //   Snackbar.make(v.findFocus(),"Moving to next fragment",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
 
+                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setLoginType("Simple");
+                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setEmailAddress(email);
+                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setUserName(userName);
+                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setPhoneNumber(Mobile);
+                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setPassword(password);
+                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setIsActive("true");
 
                    profileUpdation profileUpdation = new profileUpdation();
                     fragmentManager =getSupportFragmentManager();
@@ -161,19 +173,20 @@ public class SignupForm extends AppCompatActivity {
                     fragmentTransaction.commit();
                     holder.setVisibility(View.GONE);
 
-                 //   Snackbar.make(getCurrentFocus(),"Moving to next Step",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                 // Snackbar.make(v.findFocus(),"Moving to next Step",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
 
                 }
                 else
                 {
-                    Snackbar.make(getCurrentFocus(),response.toString(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                    Log.d("response",response);
+                  //  Snackbar.make(v.findFocus(),response.toString(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("ERROR","error => "+error.toString());
-                Snackbar.make(getCurrentFocus(),error.getMessage(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+            //    Snackbar.make(v.findFocus(),error.getMessage(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
             }
         }
         )

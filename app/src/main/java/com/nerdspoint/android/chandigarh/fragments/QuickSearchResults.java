@@ -12,10 +12,10 @@ import com.nerdspoint.android.chandigarh.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ChangePassword extends Fragment {
+public class QuickSearchResults extends Fragment {
 
 
-    public ChangePassword() {
+    public QuickSearchResults() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class ChangePassword extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_change_password, container, false);
+        return inflater.inflate(R.layout.fragment_quick_search_results, container, false);
     }
 
 }
