@@ -44,6 +44,7 @@ public class DBHandler {
         _openHelper = new SimpleSQLiteOpenHelper(context);
         this.context = context;
 
+
     }
 
     /**
