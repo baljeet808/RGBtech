@@ -44,7 +44,6 @@ public class DBHandler {
         _openHelper = new SimpleSQLiteOpenHelper(context);
         this.context = context;
 
-
     }
 
     /**
@@ -85,7 +84,7 @@ public class DBHandler {
             updateOfflineTable("ShopMasterTable",colNames,"ShopID",ActiveUserDetail.getCustomInstance(context).getLastShopID());
             updateOfflineTable("Product",colNames1,"ProductID",ActiveUserDetail.getCustomInstance(context).getLastProductID());
             updateOfflineTable("Category",colNames2,"CategoryID",ActiveUserDetail.getCustomInstance(context).getLastCategoryID());
-            updateOfflineTable("CustomProductDetail",colNames3,"ProductID",ActiveUserDetail.getCustomInstance(context).getLastProductID());
+          //  updateOfflineTable("CustomProductDetail",colNames3,"ProductID",ActiveUserDetail.getCustomInstance(context).getLastProductID());
 
     }
 
