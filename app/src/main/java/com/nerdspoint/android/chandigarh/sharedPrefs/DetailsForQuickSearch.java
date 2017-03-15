@@ -5,4 +5,6 @@ package com.nerdspoint.android.chandigarh.sharedPrefs;
  */
 
 public class DetailsForQuickSearch  {
+
+    //kjhvv v
 }
