@@ -63,7 +63,7 @@
 
 
         <Button
-        android:text="Login"
+        android:text="@string/loginE"
         android:layout_width="200dp"
         android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"

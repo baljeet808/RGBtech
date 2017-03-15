@@ -69,8 +69,37 @@ public class ActiveUserDetail {
     {
         return sharedPreferences.getString("LoginType","Simple");
     }
+    public boolean getIsFirstSync(){ return sharedPreferences.getBoolean("FirstSync",true);}
+    public int getLastProductID(){ return  sharedPreferences.getInt("ProductID",0);}
+
+    public void setLastProductID(int ID)
+    {
+        editor.putInt("ProductID",ID);
+        editor.apply();
+    }
+
+    public int getLastCategoryID(){ return  sharedPreferences.getInt("CategoryID",0);}
+
+    public void setLastCateegoryID(int ID)
+    {
+        editor.putInt("CategoryID",ID);
+        editor.apply();
+    }
+
+    public int getLastShopID(){ return  sharedPreferences.getInt("ShopID",0);}
+
+    public void setLastShopID(int ID)
+    {
+        editor.putInt("ShopID",ID);
+        editor.apply();
+    }
 
 
+    public void setIsFirstSync(boolean value)
+    {
+        editor.putBoolean("FirstSync",value);
+        editor.apply();
+    }
     public void setPhoneNumber(String phoneNumber)
     {
         editor.putString("PhoneNumber",phoneNumber);editor.apply();

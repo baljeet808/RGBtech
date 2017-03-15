@@ -22,7 +22,8 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="15pt"
-
+                android:id="@+id/et_quickSearch"
+                android:inputType="textAutoComplete"
                 android:background="@drawable/roundedpeachboarder"
                 android:drawableLeft="@drawable/places_ic_search"
                 android:textColor="#000"
