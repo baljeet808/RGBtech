@@ -50,56 +50,15 @@ public class Splash extends AppCompatActivity {
          typeface=  Typeface.createFromAsset(getAssets(),"waltograph42.ttf");
         textView.setTypeface(typeface);
 
-        fetchCategories();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent i = new Intent(Splash.this,LoginActivity.class);
+                startActivity(i);
+                finish();
+            }
+        },3000);
     }
 
-    public void fetchCategories()
-    {
 
-        StringRequest request = new StringRequest(Request.Method.POST, fetchCategories_url, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d("Response", response+"Done");
-               try
-                {
-                    CategoriesDetail.getCustomInstance(getApplicationContext()).clearCategories();
-                    JSONArray jsonArray = new JSONArray(response);
-                    for(int i=0;i<jsonArray.length();i++)
-                    {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        CategoriesDetail.getCustomInstance(getApplicationContext()).setCID(i,jsonObject.getString("CategoryID"));
-                        CategoriesDetail.getCustomInstance(getApplicationContext()).setCategory(i,jsonObject.getString("CategoryName"));
-                    }
-                    CategoriesDetail.getCustomInstance(getApplicationContext()).setCategoryCount(jsonArray.length());
-                    Intent i = new Intent(Splash.this,LoginActivity.class);
-                    startActivity(i);
-                    finish();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("ERROR","error => "+error.toString());
-
-                  }
-        }
-        )
-        {
-            @Override
-            protected Map getParams() throws AuthFailureError {
-                Map map = new HashMap<>() ;
-
-                return map;
-            }
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        queue.add(request);
-
-    }
 }

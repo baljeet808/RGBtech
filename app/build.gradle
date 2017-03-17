@@ -36,5 +36,6 @@ dependencies {
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     compile 'com.desarrollodroide:fragmenttransactionextended:1'
     compile 'com.android.support:support-v4:25.2.0'
+
     testCompile 'junit:junit:4.12'
 }

@@ -111,27 +111,27 @@ public class SignupForm extends AppCompatActivity {
                                             }
                                             else
                                             {
-                                                Snackbar.make(v.findFocus(),"give a UserName for future login reference ",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                                     //           Snackbar.make(v.findFocus(),"give a UserName for future login reference ",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                                             }
                                         }
                                     });
                                     alert.show();
                                 }
                                 else{
-                                    Snackbar.make(v.findFocus(),"Password does not match",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                             //       Snackbar.make(v.findFocus(),"Password does not match",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                                     }
                             }else
                             {
-                                Snackbar.make(v.findFocus(),"Password should be atleast of 5 letters",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                          //      Snackbar.make(v.findFocus(),"Password should be atleast of 5 letters",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                             }
                         }else
                         {
-                            Snackbar.make(v.findFocus(),"invalid email",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                       //     Snackbar.make(v.findFocus(),"invalid email",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                         }
 
                 }else
                 {
-                    Snackbar.make(v.findFocus(),"please correct mobile number",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                  //  Snackbar.make(v.findFocus(),"please correct mobile number",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                 }
 
     }

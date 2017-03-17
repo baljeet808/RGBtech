@@ -17,12 +17,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.fragments.Advrts;
+import com.nerdspoint.android.chandigarh.fragments.EditProfile;
 import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
 import com.nerdspoint.android.chandigarh.fragments.profileUpdation;
 import com.nerdspoint.android.chandigarh.fragments.shopRegistration;
@@ -39,6 +42,8 @@ public class MainPage extends AppCompatActivity
     TextView tv_home,tv_maps,tv_notifications,tv_compare,tv_shopManager;
     TabHost host;
     RelativeLayout main_fragment_holder;
+    ImageView profile1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +52,7 @@ public class MainPage extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+       profile1=(ImageView)findViewById(R.id.imageView);
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
 
@@ -95,6 +100,15 @@ public class MainPage extends AppCompatActivity
         fragmentTransaction.add(R.id.frag_holder2,updation);
         fragmentTransaction.commit();
 
+    }
+
+    public void  profile(View view)
+    {
+        EditProfile editProfile = new EditProfile();
+        fragmentManager =getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frag_holder,editProfile);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -222,4 +236,6 @@ public class MainPage extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }

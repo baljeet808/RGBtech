@@ -1,0 +1,111 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nerdspoint.android.chandigarh.fragments.EditProfile">
+
+
+
+
+<ImageView
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+
+    android:layout_marginStart="17dp"
+    android:layout_marginTop="36dp"
+    android:id="@+id/UserImage"
+android:background="@drawable/logo"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:hint="First Name"
+        android:textSize="20dp"
+
+        android:layout_alignTop="@+id/UserImage"
+        android:layout_toEndOf="@+id/UserImage"
+        android:layout_marginStart="39dp"
+        android:id="@+id/FirstName"
+
+
+
+
+        />
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/FirstName"
+        android:layout_alignStart="@+id/FirstName"
+        android:layout_marginTop="15dp"
+        android:hint="Last Name"
+        android:id="@+id/LastName"
+        android:textSize="20dp"
+        android:onClick="edit"
+        />
+   <TextView
+    android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="25dp"
+    android:hint="UserName"
+    android:textSize="20dp"
+    android:id="@+id/Username"
+       android:layout_below="@+id/UserImage"
+       android:layout_alignParentStart="true"
+       android:onClick="edit"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email id"
+        android:textSize="20dp"
+        android:id="@+id/Email"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/Username"
+        android:layout_alignParentStart="true"
+        android:onClick="edit"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phone Number"
+        android:textSize="20dp"
+        android:layout_below="@+id/Email"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp"
+        android:id="@+id/PhoneNumber"
+        android:onClick="edit"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:layout_below="@+id/PhoneNumber"
+        android:textSize="20dp"
+        android:layout_marginTop="25dp"
+        android:id="@+id/Password"
+        android:onClick="edit"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="DONE"
+        android:id="@+id/DONE"
+        android:layout_below="@+id/Password"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp"
+        android:onClick="update"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</RelativeLayout>
