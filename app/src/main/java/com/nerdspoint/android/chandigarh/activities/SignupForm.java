@@ -164,7 +164,7 @@ public class SignupForm extends AppCompatActivity {
                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setUserName(userName);
                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setPhoneNumber(Mobile);
                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setPassword(password);
-                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setIsActive("true");
+                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setIsActive(true);
 
                    profileUpdation profileUpdation = new profileUpdation();
                     fragmentManager =getSupportFragmentManager();

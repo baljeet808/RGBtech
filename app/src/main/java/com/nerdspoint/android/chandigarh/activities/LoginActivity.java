@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setPhoneNumber(jsonObject.getString("PhoneNumber"));
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setUserType(jsonObject.getString("UserType"));
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setUID(jsonObject.getString("UID"));
-                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setIsActive("Login");
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setIsActive(true);
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setLoginType("Simple");
 
                                     Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();

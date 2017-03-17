@@ -20,16 +20,21 @@
             android:title="LogOut" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Network Settings">
         <menu>
+            <item
+                android:id="@+id/nav_netStatus"
+                android:icon="@mipmap/ic_settings_remote_black_24dp"
+                android:title="Internet > "
+                />
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Share" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_offline"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="Sync for Offline Mode" />
         </menu>
     </item>
 

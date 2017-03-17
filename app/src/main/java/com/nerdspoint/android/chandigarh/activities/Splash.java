@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -20,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.fragments.profileUpdation;
+import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 import com.nerdspoint.android.chandigarh.sharedPrefs.CategoriesDetail;
 
@@ -36,7 +38,6 @@ public class Splash extends AppCompatActivity {
 
     TextView textView;
     public Typeface typeface;
-    private static String fetchCategories_url="https://baljeet808singh.000webhostapp.com/chandigarh/category_fetch.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,20 +45,33 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         textView = (TextView) findViewById(R.id.textView6);
-       // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 
-         typeface=  Typeface.createFromAsset(getAssets(),"waltograph42.ttf");
+
+
+        typeface = Typeface.createFromAsset(getAssets(), "waltograph42.ttf");
         textView.setTypeface(typeface);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent i = new Intent(Splash.this,LoginActivity.class);
-                startActivity(i);
-                finish();
-            }
-        },3000);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getIsActive()) {
+                       Intent j = new Intent(Splash.this,MainPage.class);
+                        startActivity(j);
+                        finish();
+                    }
+                    else
+                    {
+                        Intent j = new Intent(Splash.this, LoginActivity.class);
+                        startActivity(j);
+                        finish();
+                    }
+                }
+            }, 3000);
+
+
+
     }
 
 

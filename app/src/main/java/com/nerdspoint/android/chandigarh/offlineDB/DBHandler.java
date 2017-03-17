@@ -30,9 +30,18 @@ package com.nerdspoint.android.chandigarh.offlineDB;
         import java.util.Map;
 
 
-public class DBHandler {
-    private SQLiteOpenHelper _openHelper;
+public class DBHandler extends SQLiteOpenHelper
+{
+
     Context context;
+    int progress=0;
+
+
+    String[] colNames = {"ShopID", "UID", "ShopName", "ShopAddress", "PinCode", "Sector", "SCO", "Latitude", "Longitude", "CategoryID"};
+    String[] colNames1 = {"ProductID", "ProductName", "CategoryID", "Price"};
+    String[] colNames2 = {"CategoryID", "CategoryName"};
+    String[] colNames3 = {"ProductID", "CategoryID", "ShopID", "ProductName", "Price", "IsActive"};
+
 
     private String update_url = "https://baljeet808singh.000webhostapp.com/chandigarh/offlineUpdate.php";
 
@@ -41,7 +50,7 @@ public class DBHandler {
      * @param context The current context for the application or activity
      */
     public DBHandler(Context context) {
-        _openHelper = new SimpleSQLiteOpenHelper(context);
+        super(context, "OfflineDB.db", null, 1);
         this.context = context;
 
     }
@@ -49,30 +58,14 @@ public class DBHandler {
     /**
      * This is an internal class that handles the creation of all database tables
      */
-    class SimpleSQLiteOpenHelper extends SQLiteOpenHelper {
-        SimpleSQLiteOpenHelper(Context context) {
 
-            super(context, "OfflineDB.db", null, 1);
-
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        }
+    public int checkProgress()
+    {
+        return progress;
     }
 
     public void syncOffline()
     {
-        String[] colNames = {"ShopID", "UID", "ShopName", "ShopAddress", "PinCode", "Sector", "SCO", "Latitude", "Longitude", "CategoryID"};
-        String[] colNames1 = {"ProductID", "ProductName", "CategoryID", "Price"};
-        String[] colNames2 = {"CategoryID", "CategoryName"};
-        String[] colNames3 = {"ProductID", "CategoryID", "ShopID", "ProductName", "Price", "IsActive"};
-
 
         if(ActiveUserDetail.getCustomInstance(context).getIsFirstSync()) {
                 CreateTable("ShopMasterTable", colNames, 10);
@@ -128,6 +121,11 @@ public class DBHandler {
 
                         }
                     }
+                    if(progress==100)
+                    {
+                        progress=0;
+                    }
+                    progress=progress+25;
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -143,11 +141,10 @@ public class DBHandler {
         )
         {
             @Override
-            protected Map getParams() throws AuthFailureError {
-                Map map = new HashMap() ;
+            protected Map<String,String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>() ;
                 map.put("tableName",TableName);
-                map.put("coloumName",ColoumName);
-                map.put("value",Value);
+                map.put("value",Value+"");
                 return map;
             }
         };
@@ -161,7 +158,7 @@ public class DBHandler {
      * @return A cursor suitable for use in a SimpleCursorAdapter
      */
     public Cursor getAll(String tableName) {
-        SQLiteDatabase db = _openHelper.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         if (db == null) {
             return null;
         }
@@ -176,7 +173,7 @@ public class DBHandler {
 
     public void CreateTable(String tableName,String[] coloms,int colCount)
     {
-        SQLiteDatabase db = _openHelper.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         if (db == null) {
             return;
         }
@@ -200,7 +197,7 @@ public class DBHandler {
     }
 
     public ContentValues get(long id,String tableName) {
-        SQLiteDatabase db = _openHelper.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         if (db == null) {
             return null;
         }
@@ -218,7 +215,7 @@ public class DBHandler {
 
 
     public long add(String TableName,ContentValues row) {
-        SQLiteDatabase db = _openHelper.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         if (db == null) {
             return 0;
         }
@@ -227,4 +224,13 @@ public class DBHandler {
         return id;
     }
 
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
 }
