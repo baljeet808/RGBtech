@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -20,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.fragments.profileUpdation;
+import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 import com.nerdspoint.android.chandigarh.sharedPrefs.CategoriesDetail;
 
@@ -36,7 +38,6 @@ public class Splash extends AppCompatActivity {
 
     TextView textView;
     public Typeface typeface;
-    private static String fetchCategories_url="https://baljeet808singh.000webhostapp.com/chandigarh/category_fetch.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,62 +45,34 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         textView = (TextView) findViewById(R.id.textView6);
-       // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 
-         typeface=  Typeface.createFromAsset(getAssets(),"waltograph42.ttf");
+
+
+        typeface = Typeface.createFromAsset(getAssets(), "waltograph42.ttf");
         textView.setTypeface(typeface);
 
-        fetchCategories();
-    }
 
-    public void fetchCategories()
-    {
-
-        StringRequest request = new StringRequest(Request.Method.POST, fetchCategories_url, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d("Response", response+"Done");
-               try
-                {
-                    CategoriesDetail.getCustomInstance(getApplicationContext()).clearCategories();
-                    JSONArray jsonArray = new JSONArray(response);
-                    for(int i=0;i<jsonArray.length();i++)
-                    {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        CategoriesDetail.getCustomInstance(getApplicationContext()).setCID(i,jsonObject.getString("CategoryID"));
-                        CategoriesDetail.getCustomInstance(getApplicationContext()).setCategory(i,jsonObject.getString("CategoryName"));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getIsActive()) {
+                       Intent j = new Intent(Splash.this,MainPage.class);
+                        startActivity(j);
+                        finish();
                     }
-                    CategoriesDetail.getCustomInstance(getApplicationContext()).setCategoryCount(jsonArray.length());
-                    Intent i = new Intent(Splash.this,LoginActivity.class);
-                    startActivity(i);
-                    finish();
+                    else
+                    {
+                        Intent j = new Intent(Splash.this, LoginActivity.class);
+                        startActivity(j);
+                        finish();
+                    }
                 }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("ERROR","error => "+error.toString());
+            }, 3000);
 
-                  }
-        }
-        )
-        {
-            @Override
-            protected Map getParams() throws AuthFailureError {
-                Map map = new HashMap<>() ;
 
-                return map;
-            }
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        queue.add(request);
 
     }
+
+
 }

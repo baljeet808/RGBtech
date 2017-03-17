@@ -61,9 +61,9 @@ public class ActiveUserDetail {
     {
         return sharedPreferences.getString("UserType","nerdspoint");
     }
-    public String getIsActive()
+    public boolean getIsActive()
     {
-        return sharedPreferences.getString("IsActive","logout");
+        return sharedPreferences.getBoolean("IsActive",false);
     }
     public String getLoginType()
     {
@@ -133,9 +133,9 @@ public class ActiveUserDetail {
     {
         editor.putString("UserType",userType);editor.apply();
     }
-    public void setIsActive(String isActive)
+    public void setIsActive(Boolean isActive)
     {
-        editor.putString("IsActive",isActive);editor.apply();
+        editor.putBoolean("IsActive",isActive);editor.apply();
     }
     public void setLoginType(String loginType)
     {
@@ -156,6 +156,12 @@ public class ActiveUserDetail {
         bundle.putString("IsActive",sharedPreferences.getString("IsActive","logOut"));
         bundle.putString("LoginType",sharedPreferences.getString("LoginType","Simple"));
         return bundle;
+    }
+
+    public void logoutUser()
+    {
+        editor.clear();
+        editor.apply();
     }
 
 }
