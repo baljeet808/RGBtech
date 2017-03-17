@@ -57,7 +57,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
         Password.setText(ActiveUserDetail.getCustomInstance(getActivity()).getPassword());
         Email.setText(ActiveUserDetail.getCustomInstance(getActivity()).getEmailAddress());
         UserName.setText(ActiveUserDetail.getCustomInstance(getActivity()).getUserName());
-        UID.setText(ActiveUserDetail.getCustomInstance(getActivity()).getUID());
+
         FirstName.setOnClickListener(this);
         LastName.setOnClickListener(this);
         Email.setOnClickListener(this);

@@ -27,7 +27,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ import android.widget.Toast;
 
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.fragments.Advrts;
+import com.nerdspoint.android.chandigarh.fragments.EditProfile;
 import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
 import com.nerdspoint.android.chandigarh.fragments.profileUpdation;
 import com.nerdspoint.android.chandigarh.fragments.shopRegistration;
@@ -61,7 +64,7 @@ public class MainPage extends AppCompatActivity
     MenuItem menuItem,menuItem1;
     Menu menu;
     BroadcastReceiver br;
-    Animation anim;
+    RelativeLayout popPup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,14 +72,9 @@ public class MainPage extends AppCompatActivity
         setContentView(R.layout.activity_main_page);
 
 
-        anim = new ScaleAnimation(
-                    1f, 2f, // Start and end values for the X axis scaling
-                    1f, 2f, // Start and end values for the Y axis scaling
-                    Animation.RELATIVE_TO_SELF, 1f, // Pivot point of X scaling
-                    Animation.RELATIVE_TO_SELF, 1f); // Pivot point of Y scaling
-            anim.setFillAfter(true); // Needed to keep the result of the animation
-            anim.setDuration(1000);
-            anim.setRepeatCount(Animation.INFINITE);
+
+
+
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -105,8 +103,16 @@ public class MainPage extends AppCompatActivity
         navigationView = (NavigationView) drawer.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View view = navigationView.getHeaderView(0);
 
+        popPup= (RelativeLayout) view.findViewById(R.id.popPup);
 
+        Animation animFadein = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.fade);
+
+        TextView textView=(TextView) popPup.findViewById(R.id.count);
+        textView.startAnimation(animFadein);
+        textView.setText("10");
 
         menu = navigationView.getMenu();
         menuItem= menu.findItem(R.id.nav_netStatus);
@@ -137,6 +143,17 @@ public class MainPage extends AppCompatActivity
         fragmentTransaction.add(R.id.frag_holder2,updation);
         fragmentTransaction.commit();
 
+    }
+
+
+    public void profile(View v)
+    {
+        EditProfile editProfile = new EditProfile();
+
+        fragmentManager =getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frag_holder2,editProfile);
+        fragmentTransaction.commit();
     }
 
     private void checkInternetConnection() {
