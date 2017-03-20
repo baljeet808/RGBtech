@@ -97,6 +97,7 @@ public class DBHandler extends SQLiteOpenHelper
                     JSONArray jsonArray = new JSONArray(response);
                     for(int j=0;j<jsonArray.length();j++)
                     {
+
                         JSONObject jsonObject= jsonArray.getJSONObject(j);
                         ContentValues row = new ContentValues();
                         for(int k =0;k<colNames.length;k++)
