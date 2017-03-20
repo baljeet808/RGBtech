@@ -44,6 +44,7 @@ import com.nerdspoint.android.chandigarh.fragments.EditProfile;
 import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
 import com.nerdspoint.android.chandigarh.fragments.profileUpdation;
 import com.nerdspoint.android.chandigarh.fragments.shopRegistration;
+import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.permissionCheck.checkInternet;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -74,6 +75,9 @@ public class MainPage extends AppCompatActivity
     TabHost.TabSpec spec;
     FrameLayout tabContent;
     LinearLayout layout;
+    String count="0";
+    TextView textView,Name,userType;
+    DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,14 +117,27 @@ public class MainPage extends AppCompatActivity
 
         View view = navigationView.getHeaderView(0);
 
+        Name=(TextView) view.findViewById(R.id.Name);
+        userType=(TextView) view.findViewById(R.id.UserType);
+
         popPup= (RelativeLayout) view.findViewById(R.id.popPup);
 
         animFadein = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.fade);
 
-        TextView textView=(TextView) popPup.findViewById(R.id.count);
+        textView=(TextView) popPup.findViewById(R.id.count);
         textView.startAnimation(animFadein);
-        textView.setText("10");
+        textView.setText(count);
+        popPup.setVisibility(View.GONE);
+
+        popPup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                sync();
+                Snackbar.make(getCurrentFocus(),"Syncing.. ",Snackbar.LENGTH_INDEFINITE).setAction("Action",null).show();
+            }
+        });
 
         menu = navigationView.getMenu();
         menuItem= menu.findItem(R.id.nav_netStatus);
@@ -186,6 +203,13 @@ public class MainPage extends AppCompatActivity
         host.setCurrentTab(2);
     }
 
+
+
+    public void sync()
+    {
+        db.syncOffline();
+    }
+
     private void checkInternetConnection() {
 
         if (br == null) {
@@ -205,7 +229,8 @@ public class MainPage extends AppCompatActivity
                     if (state == NetworkInfo.State.CONNECTED) {
                         menuItem.setTitle("Internet Status > Online");
                         popPup.setVisibility(View.VISIBLE);
-                        setPopPup();
+                        setPopPup(popPup,R.id.count);
+                        textView.startAnimation(animFadein);
                         checkInternet.getCustomInstance(getApplicationContext()).setState(state);
                     } else {
                         menuItem.setTitle("Internet Status > Offline");
@@ -223,9 +248,12 @@ public class MainPage extends AppCompatActivity
     }
 
 
-    public void setPopPup()
+    public void setPopPup(RelativeLayout popPup,int countID)
     {
-
+        db = new DBHandler(getApplicationContext());
+        db.getDBStatus(popPup,countID,ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastProductID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCategoryID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastShopID());
+        this.count =db.getCount();
+        textView.setText(this.count);
     }
 
     @Override

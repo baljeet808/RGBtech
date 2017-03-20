@@ -11,6 +11,9 @@ package com.nerdspoint.android.chandigarh.offlineDB;
         import android.database.sqlite.SQLiteDatabase;
         import android.database.sqlite.SQLiteOpenHelper;
         import android.util.Log;
+        import android.view.View;
+        import android.widget.RelativeLayout;
+        import android.widget.TextView;
         import android.widget.Toast;
 
         import com.android.volley.AuthFailureError;
@@ -35,6 +38,7 @@ public class DBHandler extends SQLiteOpenHelper
 
     Context context;
     int progress=0;
+    String count;
 
 
     String[] colNames = {"ShopID", "UID", "ShopName", "ShopAddress", "PinCode", "Sector", "SCO", "Latitude", "Longitude", "CategoryID"};
@@ -44,6 +48,7 @@ public class DBHandler extends SQLiteOpenHelper
 
 
     private String update_url = "https://baljeet808singh.000webhostapp.com/chandigarh/offlineUpdate.php";
+    private String count_url ="https://baljeet808singh.000webhostapp.com/chandigarh/CountNewData.php";
 
     /**
      * Construct a new database helper object
@@ -55,9 +60,67 @@ public class DBHandler extends SQLiteOpenHelper
 
     }
 
+
+    public String getCount()
+    {
+        return count;
+    }
+
     /**
      * This is an internal class that handles the creation of all database tables
      */
+
+    public void getDBStatus(final RelativeLayout poppup, final int id, final int PValue, final int SValue, final int CValue)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, count_url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+
+                Log.d("Response", response);
+
+                if(response.contains("fail") || response.contains("<br") )
+                {
+                    count="not running";
+                    TextView textView= (TextView) poppup.findViewById(id);
+                    textView.setText(count);
+                }else
+                {
+                    count=(response);
+                    TextView textView= (TextView) poppup.findViewById(id);
+                    textView.setText(count);
+
+                }
+
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+                Log.d("ERROR","error => "+error.toString());
+            }
+        }
+        )
+        {
+            @Override
+            protected Map<String,String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>() ;
+                map.put("PValue",""+PValue);
+                map.put("CValue",""+CValue);
+                map.put("SValue",""+SValue);
+
+                return map;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+
+
+    }
 
     public int checkProgress()
     {
@@ -178,7 +241,7 @@ public class DBHandler extends SQLiteOpenHelper
         if (db == null) {
             return;
         }
-        String sql = "CREATE TABLE "+tableName+ "(";
+        String sql = "CREATE TABLE IF NOT EXISTS "+tableName+ "(";
         for(int i=0 ;i<colCount;i++ )
         {
             if(i==(colCount-1))
