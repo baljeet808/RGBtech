@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.Layout;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,7 +30,9 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -61,10 +64,16 @@ public class MainPage extends AppCompatActivity
     TextView tv_home,tv_maps,tv_notifications,tv_compare,tv_shopManager;
     TabHost host;
     RelativeLayout main_fragment_holder;
-    MenuItem menuItem,menuItem1;
+    MenuItem menuItem;
     Menu menu;
     BroadcastReceiver br;
     RelativeLayout popPup;
+    Animation animFadein;
+    ActionBarDrawerToggle toggle;
+    DrawerLayout drawer;
+    TabHost.TabSpec spec;
+    FrameLayout tabContent;
+    LinearLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +81,14 @@ public class MainPage extends AppCompatActivity
         setContentView(R.layout.activity_main_page);
 
 
-
-
-
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
+
+        tabContent=(FrameLayout) findViewById(android.R.id.tabcontent);
 
         main_fragment_holder=(RelativeLayout) findViewById(R.id.Main_Fragment_Holder);
 
@@ -92,8 +99,8 @@ public class MainPage extends AppCompatActivity
         tv_shopManager=(TextView) findViewById(R.id.tv_shopManager);
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
@@ -103,11 +110,12 @@ public class MainPage extends AppCompatActivity
         navigationView = (NavigationView) drawer.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         View view = navigationView.getHeaderView(0);
 
         popPup= (RelativeLayout) view.findViewById(R.id.popPup);
 
-        Animation animFadein = AnimationUtils.loadAnimation(getApplicationContext(),
+        animFadein = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.fade);
 
         TextView textView=(TextView) popPup.findViewById(R.id.count);
@@ -116,11 +124,11 @@ public class MainPage extends AppCompatActivity
 
         menu = navigationView.getMenu();
         menuItem= menu.findItem(R.id.nav_netStatus);
-        menuItem1 = menu.findItem(R.id.nav_offline);
+
 
         checkInternetConnection();
 
-        TabHost.TabSpec spec = host.newTabSpec("Advertisements");
+        spec = host.newTabSpec("Advertisements");
         spec.setContent(R.id.frag_holder);
         spec.setIndicator("Advertisements");
         host.addTab(spec);
@@ -148,12 +156,33 @@ public class MainPage extends AppCompatActivity
 
     public void profile(View v)
     {
-        EditProfile editProfile = new EditProfile();
 
-        fragmentManager =getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frag_holder2,editProfile);
-        fragmentTransaction.commit();
+        EditProfile editProfile = new EditProfile();
+        Toast.makeText(getApplicationContext(),"profile working",Toast.LENGTH_SHORT).show();
+        if(drawer.isDrawerOpen(GravityCompat.START))
+        {
+            drawer.closeDrawer(GravityCompat.START);
+
+        }
+
+        if(layout==null) {
+            layout = new LinearLayout(getApplicationContext());
+            layout.setId(R.id.my_layout);
+            tabContent.addView(layout);
+
+
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.my_layout, editProfile);
+            fragmentTransaction.commit();
+
+            spec = host.newTabSpec("Edit Profile");
+            spec.setContent(R.id.my_layout);
+            spec.setIndicator("Edit profile");
+            host.addTab(spec);
+
+        }
+        host.setCurrentTab(2);
     }
 
     private void checkInternetConnection() {
@@ -174,15 +203,12 @@ public class MainPage extends AppCompatActivity
 
                     if (state == NetworkInfo.State.CONNECTED) {
                         menuItem.setTitle("Internet Status > Online");
-                        menuItem1.setVisible(true);
-                        menuItem1.setVisible(true);
-                        menuItem1.setEnabled(true);
-                        menuItem1.setIcon(R.drawable.label_blue_new);
+                        popPup.setVisibility(View.VISIBLE);
+                        setPopPup();
                         checkInternet.getCustomInstance(getApplicationContext()).setState(state);
                     } else {
                         menuItem.setTitle("Internet Status > Offline");
-                        menuItem1.setEnabled(false);
-                        menuItem1.setVisible(false);
+                        popPup.setVisibility(View.GONE);
                         checkInternet.getCustomInstance(getApplicationContext()).setState(state);
                     }
 
@@ -196,6 +222,11 @@ public class MainPage extends AppCompatActivity
     }
 
 
+    public void setPopPup()
+    {
+
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -207,52 +238,37 @@ public class MainPage extends AppCompatActivity
     }
     public void bottomToolbar(View v)
     {
+        if(view!= null) {
+            view.clearAnimation();
+            view.setBackgroundResource(R.drawable.backgraoundwithborder);
+        }
+            view = v;
+        v.startAnimation(animFadein);
+        v.setBackgroundResource(R.drawable.topdownborderbackground);
         switch(v.getId())
         {
             case R.id.tv_home :
             {
+
                 host.setVisibility(View.VISIBLE);
                 main_fragment_holder.setVisibility(View.GONE);
-                v.setBackgroundResource(R.drawable.topdownborderbackground);
-                tv_compare.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_maps.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_notifications.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_shopManager.setBackgroundResource(R.drawable.backgraoundwithborder);
+
             }break;
             case R.id.tv_shopManager :
             {
-                v.setBackgroundResource(R.drawable.topdownborderbackground);
-                tv_compare.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_maps.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_notifications.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_home.setBackgroundResource(R.drawable.backgraoundwithborder);
+
             }break;
             case R.id.tv_maps :
             {
 
-                v.setBackgroundResource(R.drawable.topdownborderbackground);
-                tv_compare.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_home.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_notifications.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_shopManager.setBackgroundResource(R.drawable.backgraoundwithborder);
             }break;
             case R.id.tv_notifications :
             {
 
-                v.setBackgroundResource(R.drawable.topdownborderbackground);
-                tv_compare.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_home.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_maps.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_shopManager.setBackgroundResource(R.drawable.backgraoundwithborder);
             }break;
             case R.id.tv_compare :
             {
 
-                v.setBackgroundResource(R.drawable.topdownborderbackground);
-                tv_maps.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_home.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_notifications.setBackgroundResource(R.drawable.backgraoundwithborder);
-                tv_shopManager.setBackgroundResource(R.drawable.backgraoundwithborder);
             }break;
         }
     }
@@ -313,8 +329,6 @@ public class MainPage extends AppCompatActivity
             startActivity(o);
             finish();
         } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_offline) {
 
         }
         else if(id == R.id.nav_netStatus)

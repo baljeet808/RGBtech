@@ -31,10 +31,7 @@
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Share" />
-            <item
-                android:id="@+id/nav_offline"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Sync for Offline Mode" />
+
         </menu>
     </item>
 
