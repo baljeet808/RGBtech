@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.Layout;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,17 +24,32 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class EditProfile extends Fragment implements View.OnClickListener {
 
-    TextView FirstName,LastName,Phone,Password,Email,UserName,UID;
+    TextView FirstName,LastName,PhoneNumber,Password,Email,UserName;
+    String UID;
     Button Submit;
-    String[] messahes={"enter firstname","eter lastname","enter userName","enter email","eter phome","enter password"};
+    private String EditProfile_URL="https://baljeet808singh.000webhostapp.com/chandigarh/EditProfile.php";
+
+    String[] messahes={"enter First Name","enter Last Name","enter userName","enter email","enter phone","enter password"};
     public EditProfile() {
         // Required empty public constructor
     }
@@ -46,26 +63,28 @@ public class EditProfile extends Fragment implements View.OnClickListener {
 
         FirstName=(TextView) view.findViewById(R.id.FirstName);
         LastName=(TextView) view.findViewById(R.id.LastName);
-        Phone=(TextView) view.findViewById(R.id.PhoneNumber);
+        PhoneNumber=(TextView) view.findViewById(R.id.PhoneNumber);
         Password=(TextView) view.findViewById(R.id.Password);
         Email=(TextView) view.findViewById(R.id.Email);
         UserName=(TextView) view.findViewById(R.id.Username);
 
          FirstName.setText(ActiveUserDetail.getCustomInstance(getActivity()).getFirstName());
         LastName.setText(ActiveUserDetail.getCustomInstance(getActivity()).getLastName());
-        Phone.setText(ActiveUserDetail.getCustomInstance(getActivity()).getPhoneNumber());
+        PhoneNumber.setText(ActiveUserDetail.getCustomInstance(getActivity()).getPhoneNumber());
         Password.setText(ActiveUserDetail.getCustomInstance(getActivity()).getPassword());
         Email.setText(ActiveUserDetail.getCustomInstance(getActivity()).getEmailAddress());
         UserName.setText(ActiveUserDetail.getCustomInstance(getActivity()).getUserName());
 
+        UID=(ActiveUserDetail.getCustomInstance(getActivity()).getUID());
         FirstName.setOnClickListener(this);
         LastName.setOnClickListener(this);
         Email.setOnClickListener(this);
-        Phone.setOnClickListener(this);
+        PhoneNumber.setOnClickListener(this);
         Password.setOnClickListener(this);
         UserName.setOnClickListener(this);
 
         Submit=(Button) view.findViewById(R.id.DONE);
+        Submit.setOnClickListener(this);
 
 
         return view;
@@ -73,8 +92,12 @@ public class EditProfile extends Fragment implements View.OnClickListener {
     }
     @Override
     public void onClick(final View view) {
-
-            final String MobilePattern = "[7-9]{10}";
+        if(view.getId()==R.id.DONE)
+        {
+            update(view);
+            return;
+        }
+            //final String MobilePattern = "[7-9]{10}";
             final EditText editText=new EditText(getActivity());
             final EditText confirmPass = new EditText(getActivity());
             confirmPass.setHint("retype password");
@@ -181,13 +204,13 @@ public class EditProfile extends Fragment implements View.OnClickListener {
                         }break;
                         case R.id.PhoneNumber :
                         {
-                             if(editText.getText().toString().matches(MobilePattern)) {
-                                 Phone.setText(editText.getText());
+                             if(editText.getText().toString().length()==10) {
+                                 PhoneNumber.setText(editText.getText());
                              }
 
                             else
                             {
-                                Toast.makeText(getActivity(),"number incorrect ",Toast.LENGTH_LONG).show();
+                               Toast.makeText(getActivity(),"number incorrect ",Toast.LENGTH_LONG).show();
                             }
                         }break;
                         case R.id.Password :
@@ -266,6 +289,77 @@ public class EditProfile extends Fragment implements View.OnClickListener {
         builder.show();
 
     }
+
+
+
+    public void update(View view)
+    {
+
+
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog alert = builder.create();
+        alert.setTitle("Updating");
+        final ProgressBar progressBar = new ProgressBar(getActivity());
+        alert.setView(progressBar);
+        alert.show();
+
+        StringRequest request = new StringRequest(Request.Method.POST, EditProfile_URL, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d("Response", response+"Done");
+
+                if(response.equals("success"))
+                {
+
+                   alert.cancel();
+
+                    Toast.makeText(getActivity(), "update success", Toast.LENGTH_SHORT).show();
+
+
+                }
+                else
+                {
+                    Log.d("response",response);
+                 alert.cancel();
+                    Toast.makeText(getActivity(), "update Fail", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("ERROR","error => "+error.toString());
+                alert.cancel();
+                //    Snackbar.make(v.findFocus(),error.getMessage(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+            }
+        }
+        )
+        {
+            @Override
+            protected Map getParams() throws AuthFailureError {
+                Map map = new HashMap<>() ;
+                map.put("UserName",UserName.getText().toString());
+                map.put("Email",Email.getText().toString());
+                map.put("Password",Password.getText().toString());
+                map.put("PhoneNumber",PhoneNumber.getText().toString());
+                map.put("FirstName",FirstName.getText().toString());
+                map.put("LastName",LastName.getText().toString());
+                map.put("UID",UID);
+
+
+                return map;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        queue.add(request);
+
+
+
+
+    }
+
 
 
 }

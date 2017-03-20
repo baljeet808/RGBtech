@@ -119,6 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setPhoneNumber(jsonObject.getString("PhoneNumber"));
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setUserType(jsonObject.getString("UserType"));
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setUID(jsonObject.getString("UID"));
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setPassword(jsonObject.getString("Password"));
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setIsActive(true);
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setLoginType("Simple");
 

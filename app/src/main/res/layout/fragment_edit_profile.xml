@@ -23,16 +23,15 @@ android:background="@drawable/logo"
         android:layout_height="wrap_content"
         android:hint="First Name"
         android:textSize="20dp"
+        android:drawableLeft="@drawable/contact"
+        android:drawablePadding="10dp"
 
-        android:layout_alignTop="@+id/UserImage"
-        android:layout_toEndOf="@+id/UserImage"
-        android:layout_marginStart="39dp"
+
+        android:layout_marginStart="43dp"
         android:id="@+id/FirstName"
 
-
-
-
-        />
+        android:layout_alignTop="@+id/UserImage"
+        android:layout_toEndOf="@+id/UserImage" />
     <TextView
         android:layout_width="150dp"
         android:layout_height="wrap_content"
@@ -40,6 +39,8 @@ android:background="@drawable/logo"
         android:layout_alignStart="@+id/FirstName"
         android:layout_marginTop="15dp"
         android:hint="Last Name"
+        android:drawableLeft="@drawable/contact"
+        android:drawablePadding="10dp"
         android:id="@+id/LastName"
         android:textSize="20dp"
         android:onClick="edit"
@@ -49,7 +50,10 @@ android:background="@drawable/logo"
        android:layout_height="wrap_content"
        android:layout_marginTop="25dp"
     android:hint="UserName"
+       android:paddingLeft="10dp"
     android:textSize="20dp"
+       android:drawableLeft="@drawable/uername"
+       android:drawablePadding="10dp"
     android:id="@+id/Username"
        android:layout_below="@+id/UserImage"
        android:layout_alignParentStart="true"
@@ -57,7 +61,10 @@ android:background="@drawable/logo"
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+       android:paddingLeft="10dp"
         android:hint="Email id"
+        android:drawablePadding="10dp"
+        android:drawableLeft="@drawable/cmail"
         android:textSize="20dp"
         android:id="@+id/Email"
         android:layout_marginTop="25dp"
@@ -69,22 +76,34 @@ android:background="@drawable/logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Phone Number"
+        android:paddingLeft="10dp"
         android:textSize="20dp"
-        android:layout_below="@+id/Email"
-        android:layout_alignParentStart="true"
         android:layout_marginTop="25dp"
         android:id="@+id/PhoneNumber"
-        android:onClick="edit"/>
+        android:drawablePadding="10dp"
+        android:onClick="edit"
+
+
+        android:inputType="phone"
+        android:drawableLeft="@drawable/cphone"
+
+        android:layout_below="@+id/Email"
+        android:layout_alignParentStart="true" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
-        android:layout_below="@+id/PhoneNumber"
+        android:drawablePadding="10dp"
         android:textSize="20dp"
+        android:paddingLeft="10dp"
+        android:drawableLeft="@drawable/key"
+
+
         android:layout_marginTop="25dp"
         android:id="@+id/Password"
         android:onClick="edit"
-        />
+        android:layout_below="@+id/PhoneNumber"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="match_parent"
@@ -94,7 +113,7 @@ android:background="@drawable/logo"
         android:layout_below="@+id/Password"
         android:layout_alignParentStart="true"
         android:layout_marginTop="25dp"
-        android:onClick="update"/>
+         />
 
 
 
