@@ -25,6 +25,7 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.MyViewHolder>{
     public ShopAdapter(Context context, List<ShopDetails> list) {
         this.context = context;
         this.list = list;
+
     }
 
     @Override

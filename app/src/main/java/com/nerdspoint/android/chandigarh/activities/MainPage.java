@@ -80,7 +80,7 @@ public class MainPage extends AppCompatActivity
     String count="0";
     TextView textView,Name,userType;
     DBHandler db;
-    EditText serachBar;
+    EditText searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +91,9 @@ public class MainPage extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        serachBar=(EditText) toolbar.findViewById(R.id.et_quickSearch);
+        searchBar=(EditText) toolbar.findViewById(R.id.et_quickSearch);
+
+
 
 
 

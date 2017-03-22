@@ -33,6 +33,7 @@ public class TestStackAdapter extends StackAdapter<Integer> {
             ColorItemViewHolder h = (ColorItemViewHolder) holder;
             h.onBind(data, position);
         }
+
     }
 
     @Override

@@ -34,6 +34,7 @@ public class checkInternet {
     }
 
 
+
     public void setState(NetworkInfo.State state)
     {
         this.state=state;

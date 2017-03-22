@@ -52,6 +52,7 @@ public class DBHandler extends SQLiteOpenHelper
     String count;
 
 
+
     String[] colNames = {"ShopID", "UID", "ShopName", "ShopAddress", "PinCode", "Sector", "SCO", "Latitude", "Longitude", "CategoryID"};
     String[] colNames1 = {"ProductID", "ProductName", "CategoryID", "Price"};
     String[] colNames2 = {"CategoryID", "CategoryName"};

@@ -22,6 +22,7 @@ public class CategoriesDetail {
     Cursor cursor;
 
 
+
     public CategoriesDetail(Context context)
     {
         this.context=context;

@@ -49,6 +49,7 @@ public class Splash extends AppCompatActivity {
 
 
 
+
         typeface = Typeface.createFromAsset(getAssets(), "waltograph42.ttf");
         textView.setTypeface(typeface);
 

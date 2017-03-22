@@ -17,6 +17,7 @@ public class ActiveUserDetail {
     static ActiveUserDetail classObject;
 
 
+
     public ActiveUserDetail(Context context)
     {
         this.context=context;

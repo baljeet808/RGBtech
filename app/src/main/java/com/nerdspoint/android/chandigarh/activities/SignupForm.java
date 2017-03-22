@@ -45,6 +45,7 @@ public class SignupForm extends AppCompatActivity {
     View view;
 
 
+
     FragmentManager fragmentManager;
 
     Boolean isLocationSet=false;
