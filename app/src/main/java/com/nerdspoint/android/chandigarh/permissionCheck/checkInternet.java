@@ -33,6 +33,7 @@ public class checkInternet {
         return classObject;
     }
 
+
     public void setState(NetworkInfo.State state)
     {
         this.state=state;

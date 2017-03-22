@@ -3,6 +3,7 @@ package com.nerdspoint.android.chandigarh.sharedPrefs;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 /**
  * Created by android on 06-03-2017.
@@ -31,6 +32,7 @@ public class ActiveUserDetail {
         }
         return classObject;
     }
+
 
     public String getUID()
     {
@@ -71,11 +73,20 @@ public class ActiveUserDetail {
     }
     public boolean getIsFirstSync(){ return sharedPreferences.getBoolean("FirstSync",true);}
     public int getLastProductID(){ return  sharedPreferences.getInt("ProductID",0);}
+    public int getTotalRecords(){return sharedPreferences.getInt("Records",0);}
+
+
+    public void setTotalRecords(int records)
+    {
+        editor.putInt("Records",records);
+        editor.apply();
+    }
 
     public void setLastProductID(int ID)
     {
         editor.putInt("ProductID",ID);
         editor.apply();
+        Log.d("  last product id ","  \t\t\t\t\t\t\t\t\t"+ID);
     }
 
     public int getLastCategoryID(){ return  sharedPreferences.getInt("CategoryID",0);}
@@ -84,6 +95,7 @@ public class ActiveUserDetail {
     {
         editor.putInt("CategoryID",ID);
         editor.apply();
+        Log.d("  last Category id ","  \t\t\t\t\t\t\t\t\t"+ID);
     }
 
     public int getLastShopID(){ return  sharedPreferences.getInt("ShopID",0);}
@@ -92,9 +104,19 @@ public class ActiveUserDetail {
     {
         editor.putInt("ShopID",ID);
         editor.apply();
+        Log.d("  last shop id ","  \t\t\t\t\t\t\t\t\t"+ID);
 
     }
 
+    public int getLastCustomPID(){ return  sharedPreferences.getInt("CustomPID",0);}
+
+    public void setLastCustomPID(int ID)
+    {
+        editor.putInt("CustomPID",ID);
+        editor.apply();
+        Log.d("  last custom P id ","  \t\t\t\t\t\t\t\t\t"+ID);
+
+    }
 
     public void setIsFirstSync(boolean value)
     {
