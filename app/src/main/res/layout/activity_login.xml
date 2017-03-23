@@ -38,6 +38,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
         android:hint="Password"
+        android:inputType="textPassword"
         android:gravity="center"
         android:background="@drawable/roundedborder"
         android:id="@+id/editText2"

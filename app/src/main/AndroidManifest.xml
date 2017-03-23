@@ -31,6 +31,9 @@
             android:name=".activities.MainPage"
             android:label="@string/title_activity_main_page"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="35b5764c1de1dd9e57fb9247ca6e1653b8eb0563" />
     </application>
 
 </manifest>

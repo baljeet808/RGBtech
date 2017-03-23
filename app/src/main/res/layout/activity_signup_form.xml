@@ -22,13 +22,16 @@
             android:layout_height="match_parent"
             android:background="#424242"
             android:id="@+id/holder"
-            android:padding="10dp">
+            android:padding="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
             <ImageView
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/signupicon"                />
+                android:background="@drawable/signupicon"
+                android:id="@+id/imageView4" />
 
 
             <TextView
@@ -68,7 +71,7 @@
                 android:drawableLeft="@drawable/password"
                 android:drawablePadding="20dp"
                 android:hint="Password"
-                android:inputType="text" />
+                android:inputType="textPassword" />
 
             <EditText
                 android:id="@+id/confirmpassword"
@@ -80,8 +83,18 @@
                 android:background="@drawable/roundedborder"
                 android:drawableLeft="@drawable/confpass"
                 android:drawablePadding="20dp"
-                android:hint="Conf_Pass"
-                android:inputType="text" />
+                android:hint="Retype "
+                android:inputType="textPassword"
+
+                />
+
+            <com.digits.sdk.android.DigitsAuthButton
+                android:id="@+id/auth_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mobileNo"
+                android:layout_alignStart="@+id/mobileNo" />
+
 
             <EditText
                 android:id="@+id/mobileNo"
@@ -97,27 +110,29 @@
                 android:ems="10"
                 android:hint="Contact Number"
                 android:layout_marginBottom="15dp"
-                android:inputType="text" />
+                android:inputType="number" />
 
             <Button
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/btnBack"
-                android:layout_below="@id/mobileNo"
                 android:background="@drawable/back"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/mobileNo"
+                android:layout_marginStart="16dp" />
 
             <Button
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="7dp"
                 android:text="Continue"
                 android:background="#13b586"
                 android:id="@+id/button4"
-                android:layout_below="@+id/mobileNo"
-                android:layout_toEndOf="@+id/btnBack"
-                android:onClick="signup"/>
+                android:onClick="signup"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/imageView4" />
 
 
         </RelativeLayout>
