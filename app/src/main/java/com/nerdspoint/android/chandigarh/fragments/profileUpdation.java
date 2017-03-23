@@ -25,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.activities.LoginActivity;
 import com.nerdspoint.android.chandigarh.activities.MainPage;
+import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class profileUpdation extends Fragment {
     CheckBox visitor,shopOwner;
     String userType;
     Button skip,update;
-    private static String signup_url="https://baljeet808singh.000webhostapp.com/chandigarh/update_user.php";
+    private static String signup1_url="/update_user.php";
 
 
     public profileUpdation() {
@@ -47,11 +48,15 @@ public class profileUpdation extends Fragment {
     }
 
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_profile_updation, container, false);
+
+        signup1_url= ipAddress.getCustomInstance(getActivity()).getIp()+signup1_url;
 
         fname= (EditText) view.findViewById(R.id.fname);
         lname= (EditText) view.findViewById(R.id.lname);
@@ -120,7 +125,7 @@ public class profileUpdation extends Fragment {
         alert.show();
 
 
-        StringRequest request = new StringRequest(Request.Method.POST, signup_url, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, signup1_url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("Response", response+"Done");
@@ -134,10 +139,10 @@ public class profileUpdation extends Fragment {
                     ActiveUserDetail.getCustomInstance(getActivity()).setLastName(lname.getText().toString());
                     ActiveUserDetail.getCustomInstance(getActivity()).setUserType(userType);
                     ActiveUserDetail.getCustomInstance(getActivity()).setUID(response);
-                    check();
                     Intent h = new Intent(getActivity(),MainPage.class);
                     startActivity(h);
                     getActivity().finish();
+
 
                 }
                 else
@@ -178,11 +183,7 @@ public class profileUpdation extends Fragment {
 
     }
 
-    public void check()
-    {
-        Bundle bundle=ActiveUserDetail.getCustomInstance(getActivity()).getUserFullDetailAsBundle();
-        Log.d("shared preferences ","UID > "+bundle.getString("UID")+" phone "+bundle.getString("PhoneNumber")+" username "+bundle.getString("UserName")+" fname "+bundle.getString("FirstName")+" lname "+bundle.getString("LastName")+" Iactive "+bundle.getString("IsActive")+" userType "+bundle.getString("UserType")+" LoginType "+bundle.getString("LoginType")+" email "+bundle.getString("Email")+" Password "+bundle.getString("Password"));
-    }
+
 
 
 

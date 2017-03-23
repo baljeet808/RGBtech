@@ -16,3 +16,4 @@ public class ShopDetails {
     public String price;
 
 }
+

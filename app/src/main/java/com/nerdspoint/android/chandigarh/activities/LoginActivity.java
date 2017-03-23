@@ -2,10 +2,12 @@ package com.nerdspoint.android.chandigarh.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -26,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.nerdspoint.android.chandigarh.R;
+import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
 import java.util.HashMap;
@@ -37,21 +40,29 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private EditText et_username,et_password;
 
-    private String login_URL="https://baljeet808singh.000webhostapp.com/chandigarh/login.php";                  // paste login file url in this string    it will check that user is present or not
-                                                    // by matching email and password in the database
-                                                    // sending arguments name > UserName, password use same in php file
-                                                      // positive response >> "success" negative response >> "fail"
+    private String login_URL="/login.php";
+    // paste login file url in this string    it will check that user is present or not
+    // by matching email and password in the database
+    // sending arguments name > UserName, password use same in php file
+    // positive response >> "success" negative response >> "fail"
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        login_URL= ipAddress.getCustomInstance(getApplicationContext()).getIp()+login_URL;
 
         et_username = (EditText) findViewById(R.id.editText);
         et_password = (EditText) findViewById(R.id.editText2);
         sharedPreferences = getSharedPreferences("userDetail",MODE_PRIVATE);     // SharedPreferences Name >> usrDetail
         editor= sharedPreferences.edit();                                       // SharedPreferences contain >>  email , password , location, sex , age, interests,name , type  of user
         editor.apply();
+
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+
+        Toast.makeText(getApplicationContext(),"address "+ip,Toast.LENGTH_LONG).show();
     }
+
 
 
     public void skip(View v)
@@ -112,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                                     JSONArray jsonArray = new JSONArray(response);
                                     JSONObject jsonObject = jsonArray.getJSONObject(0);
 
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).logoutUser();
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setEmailAddress(jsonObject.getString("Email"));
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setLastName(jsonObject.getString("LastName"));
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setFirstName(jsonObject.getString("FirstName"));

@@ -27,6 +27,7 @@ import com.android.volley.toolbox.Volley;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.activities.LoginActivity;
 import com.nerdspoint.android.chandigarh.activities.MainPage;
+import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 import com.nerdspoint.android.chandigarh.sharedPrefs.CategoriesDetail;
 
@@ -39,16 +40,19 @@ import java.util.Map;
  */
 public class shopRegistration extends Fragment {
 
-    private static String shopRegistering_url="https://baljeet808singh.000webhostapp.com/chandigarh/shop.php";
+    private static String shopRegistering_url="/shop.php";
 
     ArrayList list;
     ArrayAdapter adapter;
     Spinner spinner;
     EditText tv_shopname,tv_shopAddress,tv_pincode,tv_SCO;
 
+
     public shopRegistration() {
         // Required empty public constructor
     }
+
+
 
 
     @Override
@@ -56,6 +60,10 @@ public class shopRegistration extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_shop_registration, container, false);
+
+        shopRegistering_url= ipAddress.getCustomInstance(getActivity()).getIp()+shopRegistering_url;
+
+
 
         list = new ArrayList();
 

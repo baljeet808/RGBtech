@@ -30,6 +30,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,6 +45,7 @@ import com.nerdspoint.android.chandigarh.fragments.EditProfile;
 import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
 import com.nerdspoint.android.chandigarh.fragments.profileUpdation;
 import com.nerdspoint.android.chandigarh.fragments.shopRegistration;
+import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.permissionCheck.checkInternet;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -68,12 +70,17 @@ public class MainPage extends AppCompatActivity
     Menu menu;
     BroadcastReceiver br;
     RelativeLayout popPup;
+    Toolbar toolbar;
     Animation animFadein;
     ActionBarDrawerToggle toggle;
     DrawerLayout drawer;
     TabHost.TabSpec spec;
     FrameLayout tabContent;
-    LinearLayout layout;
+    LinearLayout layout,layout2,layout3;
+    String count="0";
+    TextView textView,Name,userType;
+    DBHandler db;
+    EditText searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,9 +88,16 @@ public class MainPage extends AppCompatActivity
         setContentView(R.layout.activity_main_page);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        searchBar=(EditText) toolbar.findViewById(R.id.et_quickSearch);
+
+
+
+
+
+        db = new DBHandler(getApplicationContext());
 
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
@@ -107,20 +121,38 @@ public class MainPage extends AppCompatActivity
 
 
 
+
         navigationView = (NavigationView) drawer.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
         View view = navigationView.getHeaderView(0);
 
+        Name=(TextView) view.findViewById(R.id.Name);
+        userType=(TextView) view.findViewById(R.id.UserType);
+
+        Name.setText(ActiveUserDetail.getCustomInstance(getApplicationContext()).getFirstName()+" "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastName());
+
+        userType.setText(ActiveUserDetail.getCustomInstance(getApplicationContext()).getUserType());
+
         popPup= (RelativeLayout) view.findViewById(R.id.popPup);
 
         animFadein = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.fade);
 
-        TextView textView=(TextView) popPup.findViewById(R.id.count);
+        textView=(TextView) popPup.findViewById(R.id.count);
         textView.startAnimation(animFadein);
-        textView.setText("10");
+        textView.setText(count);
+        popPup.setVisibility(View.GONE);
+
+        popPup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                sync();
+                Snackbar.make(getCurrentFocus(),"Syncing.. ",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+            }
+        });
 
         menu = navigationView.getMenu();
         menuItem= menu.findItem(R.id.nav_netStatus);
@@ -128,28 +160,45 @@ public class MainPage extends AppCompatActivity
 
         checkInternetConnection();
 
+
+        layout3 = new LinearLayout(getApplicationContext());
+        layout3.setId(R.id.my_layout3);
+        tabContent.addView(layout3);
+
+
         spec = host.newTabSpec("Advertisements");
-        spec.setContent(R.id.frag_holder);
+        spec.setContent(R.id.my_layout3);
         spec.setIndicator("Advertisements");
         host.addTab(spec);
 
-        spec = host.newTabSpec("Profile");
-        spec.setContent(R.id.frag_holder2);
-        spec.setIndicator("Profile");
-        host.addTab(spec);
+        if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getFirstName().equals("nerdspoint"))
+        {
+
+
+            layout2 = new LinearLayout(getApplicationContext());
+            layout2.setId(R.id.my_layout2);
+            tabContent.addView(layout2);
+
+            spec = host.newTabSpec("Profile");
+            spec.setContent(R.id.my_layout2);
+            spec.setIndicator("Profile");
+            host.addTab(spec);
+
+            profileUpdation updation = new profileUpdation();
+
+            fragmentManager =getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.my_layout2,updation);
+            fragmentTransaction.commit();
+
+        }
 
         Advrts advrts = new Advrts();
         fragmentManager =getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frag_holder,advrts);
+        fragmentTransaction.add(R.id.my_layout3,advrts);
         fragmentTransaction.commit();
 
-        profileUpdation updation = new profileUpdation();
-
-        fragmentManager =getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frag_holder2,updation);
-        fragmentTransaction.commit();
 
     }
 
@@ -162,6 +211,7 @@ public class MainPage extends AppCompatActivity
         if(drawer.isDrawerOpen(GravityCompat.START))
         {
             drawer.closeDrawer(GravityCompat.START);
+
 
 
         }
@@ -183,7 +233,22 @@ public class MainPage extends AppCompatActivity
             host.addTab(spec);
 
         }
-        host.setCurrentTab(2);
+        if(layout2==null) {
+            host.setCurrentTab(1);
+        }
+        else
+        {
+            host.setCurrentTab(2);
+        }
+    }
+
+
+
+    public void sync()
+    {
+        db.syncOffline();
+        popPup.setVisibility(View.GONE);
+        Snackbar.make(getCurrentFocus(),"Offline Database Updated",Snackbar.LENGTH_SHORT).show();
     }
 
     private void checkInternetConnection() {
@@ -204,8 +269,10 @@ public class MainPage extends AppCompatActivity
 
                     if (state == NetworkInfo.State.CONNECTED) {
                         menuItem.setTitle("Internet Status > Online");
+                        setPopPup(popPup,R.id.count);
                         popPup.setVisibility(View.VISIBLE);
-                        setPopPup();
+
+                        textView.startAnimation(animFadein);
                         checkInternet.getCustomInstance(getApplicationContext()).setState(state);
                     } else {
                         menuItem.setTitle("Internet Status > Offline");
@@ -223,8 +290,11 @@ public class MainPage extends AppCompatActivity
     }
 
 
-    public void setPopPup()
+    public void setPopPup(RelativeLayout popPup,int countID)
     {
+        Toast.makeText(getApplicationContext(),"last shopid "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastShopID()+" Last ProductID "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastProductID()+" Category id "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCategoryID()+" customPID "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCustomPID()+" ",Toast.LENGTH_LONG).show();
+
+        db.getDBStatus(popPup,countID,ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastProductID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastShopID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCategoryID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCustomPID());
 
     }
 
@@ -243,7 +313,7 @@ public class MainPage extends AppCompatActivity
             view.clearAnimation();
             view.setBackgroundResource(R.drawable.backgraoundwithborder);
         }
-            view = v;
+        view = v;
         v.startAnimation(animFadein);
         v.setBackgroundResource(R.drawable.topdownborderbackground);
         switch(v.getId())
@@ -334,7 +404,7 @@ public class MainPage extends AppCompatActivity
         }
         else if(id == R.id.nav_netStatus)
         {
-
+            db.getDBStatus(popPup,R.id.count,ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastProductID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastShopID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCategoryID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCustomPID());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

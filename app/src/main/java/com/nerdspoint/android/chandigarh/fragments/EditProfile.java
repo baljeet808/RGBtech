@@ -32,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.nerdspoint.android.chandigarh.R;
+import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
     TextView FirstName,LastName,PhoneNumber,Password,Email,UserName;
     String UID;
     Button Submit;
-    private String EditProfile_URL="https://baljeet808singh.000webhostapp.com/chandigarh/EditProfile.php";
+    private String EditProfile_URL="/EditProfile.php";
 
     String[] messahes={"enter First Name","enter Last Name","enter userName","enter email","enter phone","enter password"};
     public EditProfile() {
@@ -55,11 +56,15 @@ public class EditProfile extends Fragment implements View.OnClickListener {
     }
 
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-       View view =inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        View view =inflater.inflate(R.layout.fragment_edit_profile, container, false);
+
+        EditProfile_URL= ipAddress.getCustomInstance(getActivity()).getIp()+EditProfile_URL;
 
         FirstName=(TextView) view.findViewById(R.id.FirstName);
         LastName=(TextView) view.findViewById(R.id.LastName);
@@ -68,7 +73,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
         Email=(TextView) view.findViewById(R.id.Email);
         UserName=(TextView) view.findViewById(R.id.Username);
 
-         FirstName.setText(ActiveUserDetail.getCustomInstance(getActivity()).getFirstName());
+        FirstName.setText(ActiveUserDetail.getCustomInstance(getActivity()).getFirstName());
         LastName.setText(ActiveUserDetail.getCustomInstance(getActivity()).getLastName());
         PhoneNumber.setText(ActiveUserDetail.getCustomInstance(getActivity()).getPhoneNumber());
         Password.setText(ActiveUserDetail.getCustomInstance(getActivity()).getPassword());
@@ -97,92 +102,92 @@ public class EditProfile extends Fragment implements View.OnClickListener {
             update(view);
             return;
         }
-            //final String MobilePattern = "[7-9]{10}";
-            final EditText editText=new EditText(getActivity());
-            final EditText confirmPass = new EditText(getActivity());
-            confirmPass.setHint("retype password");
+        //final String MobilePattern = "[7-9]{10}";
+        final EditText editText=new EditText(getActivity());
+        final EditText confirmPass = new EditText(getActivity());
+        confirmPass.setHint("retype password");
 
 
-       final AlertDialog.Builder builder=new AlertDialog.Builder(view.getContext());
+        final AlertDialog.Builder builder=new AlertDialog.Builder(view.getContext());
 
-       if(view.getId()==R.id.Password)
-       {
-           editText.setHint("enter password");
-           LinearLayout layout= new LinearLayout(getActivity());
-           layout.setOrientation(LinearLayout.VERTICAL);
-           layout.addView(editText);
-           layout.addView(confirmPass);
-           builder.setView(layout);
-           confirmPass.addTextChangedListener(new TextWatcher() {
+        if(view.getId()==R.id.Password)
+        {
+            editText.setHint("enter password");
+            LinearLayout layout= new LinearLayout(getActivity());
+            layout.setOrientation(LinearLayout.VERTICAL);
+            layout.addView(editText);
+            layout.addView(confirmPass);
+            builder.setView(layout);
+            confirmPass.addTextChangedListener(new TextWatcher() {
 
-               @Override
-               public void onTextChanged(CharSequence s, int start, int before,
-                                         int count) {
-                   if(confirmPass.getText().toString().equals(editText.getText().toString()))
-                   {
-                       confirmPass.setTextColor(Color.BLACK);
-                   }else
-                   {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before,
+                                          int count) {
+                    if(confirmPass.getText().toString().equals(editText.getText().toString()))
+                    {
+                        confirmPass.setTextColor(Color.BLACK);
+                    }else
+                    {
 
-                       confirmPass.setTextColor(Color.RED);
-                       confirmPass.setError("password not matched");
-                   }
+                        confirmPass.setTextColor(Color.RED);
+                        confirmPass.setError("password not matched");
+                    }
 
-               }
+                }
 
-               @Override
-               public void beforeTextChanged(CharSequence s, int start, int count,
-                                             int after) {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count,
+                                              int after) {
 
-               }
+                }
 
-               @Override
-               public void afterTextChanged(Editable s) {
-
-
-               }
-
-           });
-       }
-       else if(view.getId()==R.id.PhoneNumber)
-       {
-              editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-           builder.setView(editText);
-           editText.addTextChangedListener(new TextWatcher() {
-
-           @Override
-           public void onTextChanged(CharSequence s, int start, int before,
-                                     int count) {
-               if(editText.getText().toString().length()>10 || editText.getText().toString().length()<10)
-               {
-                   editText.setTextColor(Color.RED);
-                   editText.setError("number should be of 10 digits");
-               }else
-               {
-                   editText.setTextColor(Color.BLACK);
-
-               }
-
-           }
-
-           @Override
-           public void beforeTextChanged(CharSequence s, int start, int count,
-                                         int after) {
-
-           }
-
-           @Override
-           public void afterTextChanged(Editable s) {
+                @Override
+                public void afterTextChanged(Editable s) {
 
 
-           }
+                }
 
-       });
-       }
-       else
-       {
-           builder.setView(editText);
-       }
+            });
+        }
+        else if(view.getId()==R.id.PhoneNumber)
+        {
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+            builder.setView(editText);
+            editText.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before,
+                                          int count) {
+                    if(editText.getText().toString().length()>10 || editText.getText().toString().length()<10)
+                    {
+                        editText.setTextColor(Color.RED);
+                        editText.setError("number should be of 10 digits");
+                    }else
+                    {
+                        editText.setTextColor(Color.BLACK);
+
+                    }
+
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count,
+                                              int after) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+
+                }
+
+            });
+        }
+        else
+        {
+            builder.setView(editText);
+        }
 
 
         builder.setCancelable(false);
@@ -204,13 +209,13 @@ public class EditProfile extends Fragment implements View.OnClickListener {
                         }break;
                         case R.id.PhoneNumber :
                         {
-                             if(editText.getText().toString().length()==10) {
-                                 PhoneNumber.setText(editText.getText());
-                             }
+                            if(editText.getText().toString().length()==10) {
+                                PhoneNumber.setText(editText.getText());
+                            }
 
                             else
                             {
-                               Toast.makeText(getActivity(),"number incorrect ",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(),"number incorrect ",Toast.LENGTH_LONG).show();
                             }
                         }break;
                         case R.id.Password :
@@ -313,7 +318,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
                 if(response.equals("success"))
                 {
 
-                   alert.cancel();
+                    alert.cancel();
 
                     Toast.makeText(getActivity(), "update success", Toast.LENGTH_SHORT).show();
 
@@ -322,7 +327,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
                 else
                 {
                     Log.d("response",response);
-                 alert.cancel();
+                    alert.cancel();
                     Toast.makeText(getActivity(), "update Fail", Toast.LENGTH_SHORT).show();
                 }
             }
