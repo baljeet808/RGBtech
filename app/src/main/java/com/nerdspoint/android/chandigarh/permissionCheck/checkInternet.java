@@ -3,6 +3,7 @@ package com.nerdspoint.android.chandigarh.permissionCheck;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.sip.SipSession;
@@ -19,10 +20,17 @@ public class checkInternet {
     Context context;
     static checkInternet classObject;
     NetworkInfo.State state;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
 
     public checkInternet(Context context)
     {
         this.context=context;
+
+        sharedPreferences= context.getSharedPreferences("connectionDetail",Context.MODE_PRIVATE);
+        editor=sharedPreferences.edit();
+        editor.apply();
     }
 
     public static synchronized checkInternet getCustomInstance(Context context)
@@ -37,11 +45,17 @@ public class checkInternet {
 
     public void setState(NetworkInfo.State state)
     {
-        this.state=state;
+        if(state== NetworkInfo.State.DISCONNECTED) {
+            editor.putBoolean("connected", false);
+        }
+        else
+        {
+            editor.putBoolean("connected",true);
+        }
     }
-    public NetworkInfo.State getState()
+    public boolean isConnected()
     {
-        return state;
+        return  sharedPreferences.getBoolean("connected",false);
     }
 
 }

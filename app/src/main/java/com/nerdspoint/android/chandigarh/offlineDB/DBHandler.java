@@ -6,6 +6,7 @@ package com.nerdspoint.android.chandigarh.offlineDB;
 
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -13,10 +14,15 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.RelativeLayout;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +33,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.nerdspoint.android.chandigarh.R;
+import com.nerdspoint.android.chandigarh.activities.MainPage;
+import com.nerdspoint.android.chandigarh.adapters.populateSearchArray;
+import com.nerdspoint.android.chandigarh.adapters.quickSearchAdapter;
+import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
 import org.json.JSONArray;
@@ -47,14 +58,18 @@ public class DBHandler extends SQLiteOpenHelper
 {
 
 
-    Context context;
+
     int progress=0;
     String count;
+
+    AutoCompleteTextView searchBar;
+
+    Context context;
 
 
 
     String[] colNames = {"ShopID", "UID", "ShopName", "ShopAddress", "PinCode", "Sector", "SCO", "Latitude", "Longitude", "CategoryID"};
-    String[] colNames1 = {"ProductID", "ProductName", "CategoryID", "Price"};
+    String[] colNames1 = {"ProductID", "ProductName", "CategoryID"};
     String[] colNames2 = {"CategoryID", "CategoryName"};
     String[] colNames3 = {"CustomPID","ProductID", "CategoryID", "ShopID", "ProductName", "Price", "IsActive"};
 
@@ -99,7 +114,7 @@ public class DBHandler extends SQLiteOpenHelper
 
                 if(response.contains("fail") || response.contains("<br") )
                 {
-                    count="not running";
+                    count="!";
                     TextView textView= (TextView) poppup.findViewById(id);
                     textView.setText(count);
                 }else
@@ -112,7 +127,7 @@ public class DBHandler extends SQLiteOpenHelper
                     else {
                         // poppup.setVisibility(View.GONE);
                         TextView textView = (TextView) poppup.findViewById(id);
-                        textView.setText("Updated");
+                        textView.setText("0");
                         //   Toast.makeText(context,"already updated",Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -160,12 +175,17 @@ public class DBHandler extends SQLiteOpenHelper
 
 
 
-    public void syncOffline()
+    public void syncOffline(AutoCompleteTextView searchBar)
     {
+
+
+        this.searchBar= searchBar;
+
+
 
         if(ActiveUserDetail.getCustomInstance(context).getIsFirstSync()) {
             CreateTable("ShopMasterTable", colNames, 10);
-            CreateTable("Product", colNames1, 4);
+            CreateTable("Product", colNames1, 3);
             CreateTable("Category", colNames2, 2);
             CreateTable("CustomProductDetail", colNames3, 7);
             ActiveUserDetail.getCustomInstance(context).setIsFirstSync(false);
@@ -277,7 +297,15 @@ public class DBHandler extends SQLiteOpenHelper
     }
 
 
-
+    public Cursor getShop(String shopName)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if(db== null)
+        {
+            return null;
+        }
+        return db.rawQuery("select ShopID, ShopName, ShopAddress, UID, Sector, SCO from ShopMasterTable where ShopName LIKE '%"+shopName+"%'",null);
+    }
 
 
 
@@ -327,7 +355,9 @@ public class DBHandler extends SQLiteOpenHelper
         ActiveUserDetail.getCustomInstance(context).setLastCustomPID(Integer.parseInt(id5));
 
         Toast.makeText(context,"last shopid "+ActiveUserDetail.getCustomInstance(context).getLastShopID()+" Last ProductID "+ActiveUserDetail.getCustomInstance(context).getLastProductID()+" Category id "+ActiveUserDetail.getCustomInstance(context).getLastCategoryID()+" customPID "+ActiveUserDetail.getCustomInstance(context).getLastCustomPID()+" ",Toast.LENGTH_LONG).show();
+        populateSearchArray.getCustomInstance(context,searchBar).populate();
     }
+
 
 
 

@@ -14,6 +14,8 @@ public class ShopDetails {
     public String address;
     public String productName;
     public String price;
+    public String ShopID;
+
 
 }
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ShopDetails;
@@ -37,18 +38,26 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.MyViewHolder>{
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+
         ShopDetails details = list.get(position);
-        String shopName = details.shopName;
+        final String shopName = details.shopName;
         String product = details.productName;
         String price = details.price;
         String contactNumber = details.contactNumber;
         String address = details.address;
+        final String ShopId= details.ShopID;
 
         holder.shopName.setText(shopName);
         holder.contactNumber.setText(contactNumber);
         holder.address.setText(address);
         holder.price.setText(price);
         holder.product.setText(product);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
     }
 
@@ -56,6 +65,8 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.MyViewHolder>{
     public int getItemCount() {
         return list.size();
     }
+
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
