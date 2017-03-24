@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nerdspoint.android.chandigarh.fragments.ForgetPass">
+
+
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Enter the new Password"
+        android:id="@+id/NewPass"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Re-type the new Password"
+        android:id="@+id/ReTypePass"
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/NewPass"
+        android:layout_alignParentStart="true" />
+
+
+
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="change"
+        android:id="@+id/change"
+
+
+        android:layout_above="@+id/cancel"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="20dp" />
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="cancel"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="19dp" />
+
+</RelativeLayout>

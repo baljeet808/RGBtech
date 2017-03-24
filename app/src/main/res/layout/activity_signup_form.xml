@@ -16,108 +16,136 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_container"
-    >
+    android:layout_alignParentTop="true"
+    android:layout_alignParentStart="true">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#424242"
             android:id="@+id/holder"
-            android:padding="10dp">
+            android:padding="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
             <ImageView
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/signupicon"                />
+                android:layout_marginTop="12dp"
+                android:background="@drawable/signupicon"
+                android:id="@+id/imageView4"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
 
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="38dp"
-                android:text="SIGN UP" />
+                android:layout_alignEnd="@+id/imageView4"
+                android:layout_alignTop="@+id/imageView4"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="23dp"
+                android:text="SIGN UP"
+                android:textColor="@color/cast_intro_overlay_background_color" />
 
 
             <EditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@+id/textView3"
-                android:layout_marginTop="104dp"
                 android:background="@drawable/roundedborder"
                 android:hint="E-Mail Address"
-                android:layout_alignParentRight="true"
                 android:drawableLeft="@drawable/e_mail"
                 android:drawablePadding="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
+
                 android:inputType="text"
-                />
+                android:layout_below="@+id/imageView4"
+                android:layout_alignParentStart="true" />
+
 
             <EditText
                 android:id="@+id/password"
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+
+                android:layout_alignStart="@+id/mobileNo"
+
                 android:layout_below="@+id/email"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
                 android:background="@drawable/roundedborder"
                 android:drawableLeft="@drawable/password"
                 android:drawablePadding="20dp"
                 android:hint="Password"
-                android:inputType="text" />
+                android:inputType="textPassword" />
 
             <EditText
                 android:id="@+id/confirmpassword"
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@+id/email"
-                android:layout_marginLeft="170dp"
-                android:layout_marginTop="15dp"
+                android:layout_alignParentEnd="true"
+
+                android:layout_below="@+id/password"
+                android:layout_marginTop="10dp"
+
+                android:layout_weight="0"
                 android:background="@drawable/roundedborder"
                 android:drawableLeft="@drawable/confpass"
                 android:drawablePadding="20dp"
-                android:hint="Conf_Pass"
-                android:inputType="text" />
+                android:hint="Retype "
+                android:inputType="textPassword" />
+
+
+
+
 
             <EditText
                 android:id="@+id/mobileNo"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@+id/password"
-                android:layout_centerHorizontal="true"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/confirmpassword"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/roundedborder"
                 android:drawableLeft="@drawable/contactno"
                 android:drawablePadding="20dp"
                 android:ems="10"
                 android:hint="Contact Number"
-                android:layout_marginBottom="15dp"
-                android:inputType="text" />
+                android:inputType="number" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/mobileNo"
+                android:id="@+id/otp"
+                android:text="Send OTP to the number"
+                android:gravity="center"
+
+                />
 
             <Button
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/btnBack"
-                android:layout_below="@id/mobileNo"
                 android:background="@drawable/back"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/mobileNo"
+                android:layout_marginStart="16dp"
+                android:onClick="back"/>
 
             <Button
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="7dp"
                 android:text="Continue"
                 android:background="#13b586"
                 android:id="@+id/button4"
-                android:layout_below="@+id/mobileNo"
-                android:layout_toEndOf="@+id/btnBack"
-                android:onClick="signup"/>
+                android:onClick="signup"
+
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/imageView4" />
 
 
         </RelativeLayout>
