@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -28,6 +29,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.digits.sdk.android.AuthCallback;
+import com.digits.sdk.android.AuthConfig;
+import com.digits.sdk.android.Digits;
 import com.digits.sdk.android.DigitsAuthButton;
 import com.digits.sdk.android.DigitsException;
 import com.digits.sdk.android.DigitsSession;
@@ -42,6 +45,7 @@ public class SignupForm extends AppCompatActivity {
 
     EditText mobile,Email,Password,ConfirmPassword,userName;
     CheckBox visitor,shopowner;
+    Button Back,OTP;
     RelativeLayout holder;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -62,31 +66,49 @@ public class SignupForm extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("userDetail",MODE_PRIVATE);     // SharedPreferences Name >> usrDetail
         editor= sharedPreferences.edit();                                       // SharedPreferences contain >>  email , password , location, sex , age, interests,name , type  of user
         editor.apply();
+        OTP=(Button)findViewById(R.id.otp);
 
 
         holder = (RelativeLayout) findViewById(R.id.holder);
         mobile = (EditText) findViewById(R.id.mobileNo);
         Email = (EditText) findViewById(R.id.email);
+        Back=(Button)findViewById(R.id.btnBack);
 
         Password=(EditText) findViewById(R.id.password);
         ConfirmPassword=(EditText) findViewById(R.id.confirmpassword);
 
-        DigitsAuthButton digitsButton = (DigitsAuthButton) findViewById(R.id.auth_button);
-        digitsButton.setText("Verify your phone Number");
-
-        digitsButton.setCallback(new AuthCallback() {
+        OTP.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void success(DigitsSession session, String phoneNumber) {
-                // TODO: associate the session userID with your user model
-                Toast.makeText(getApplicationContext(), "Au.thentication successful for "
-                        + phoneNumber, Toast.LENGTH_LONG).show();
-            }
+            public void onClick(View v) {
+                AuthConfig.Builder builder = new AuthConfig.Builder();
 
-            @Override
-            public void failure(DigitsException exception) {
-                Log.d("Digits", "Sign in with Digits failure", exception);
+                builder.withPhoneNumber("+91 7696443513");
+
+
+                builder.withAuthCallBack(new AuthCallback() {
+                    @Override
+                    public void success(DigitsSession session, String Number) {
+                        Toast.makeText(getApplicationContext(), "Authentication successful for "
+                                + Number, Toast.LENGTH_LONG).show();
+
+                        // Do something
+                    }
+
+                    @Override
+                    public void failure(DigitsException error) {
+                        // Do something
+                        Log.d("Digits", "Sign in with Digits failure", error);
+                    }
+                });
+
+                AuthConfig authConfig = builder.build();
+
+                Digits.authenticate(authConfig);
             }
         });
+
+
+
 
     }
 
@@ -228,6 +250,12 @@ public class SignupForm extends AppCompatActivity {
         queue.add(request);
 
 
+    }
+    public void back(View view)
+    {
+         Intent intent=new Intent(this,LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
 

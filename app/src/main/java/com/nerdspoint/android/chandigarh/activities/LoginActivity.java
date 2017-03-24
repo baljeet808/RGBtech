@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private EditText et_username,et_password;
+    private TextView ForgotPass;
 
     private String login_URL="/login.php";
     // paste login file url in this string    it will check that user is present or not
@@ -50,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         login_URL= ipAddress.getCustomInstance(getApplicationContext()).getIp()+login_URL;
-
+        ForgotPass=(TextView)findViewById(R.id.ForgotPass);
         et_username = (EditText) findViewById(R.id.editText);
         et_password = (EditText) findViewById(R.id.editText2);
         sharedPreferences = getSharedPreferences("userDetail",MODE_PRIVATE);     // SharedPreferences Name >> usrDetail
@@ -83,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void forgotPassword(View view)
     {
-        Intent i = new Intent(LoginActivity.this,MainPage.class);
+        Intent i = new Intent(this,FogotPassword.class);
         startActivity(i);
         finish();
         Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
