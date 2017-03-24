@@ -94,6 +94,10 @@ public class MainPage extends AppCompatActivity
     ArrayList<String> items,itemsCopy;
     String temp="";
 
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +114,7 @@ public class MainPage extends AppCompatActivity
         searchType=(TextView) toolbar.findViewById(R.id.tv_search_type);
 
         if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getIsFirstSync()) {
+
 
                 db.syncOffline(searchBar);
             }

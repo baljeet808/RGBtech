@@ -120,7 +120,7 @@ public class DBHandler extends SQLiteOpenHelper
                 }else
                 {
                     count=(response);
-                    if(Integer.parseInt(response)>5) {
+                    if(Integer.parseInt(response)>0) {
                         TextView textView = (TextView) poppup.findViewById(id);
                         textView.setText(count);
                     }
@@ -227,8 +227,8 @@ public class DBHandler extends SQLiteOpenHelper
 
 
 
-                Log.d("Response", response);
-                Toast.makeText(context, ""+response, Toast.LENGTH_SHORT).show();
+               // Log.d("Response", response);
+              //  Toast.makeText(context, ""+response, Toast.LENGTH_SHORT).show();
 
 
                 try {
@@ -248,7 +248,7 @@ public class DBHandler extends SQLiteOpenHelper
                     }
 
                     progress=progress+25;
-                    Toast.makeText(context, ""+progress, Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(context, ""+progress, Toast.LENGTH_SHORT).show();
                     // updateLastIds();
                     if(TableName.equals("ShopMasterTable"))
                     {
@@ -262,7 +262,7 @@ public class DBHandler extends SQLiteOpenHelper
                         UpdateCustomProductDetailTable();
                     }else if(TableName.equals("CustomProductDetail"))
                     {
-                        Toast.makeText(context,"tables saved ",Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(context,"tables saved ",Toast.LENGTH_SHORT).show();
                         updateLastIds();
 
                     }
@@ -276,8 +276,8 @@ public class DBHandler extends SQLiteOpenHelper
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
-                Log.d("ERROR","error => "+error.toString());
+              //  Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+              //  Log.d("ERROR","error => "+error.toString());
             }
         }
         )
@@ -330,31 +330,31 @@ public class DBHandler extends SQLiteOpenHelper
         cursor2.moveToFirst();
 
         String id = cursor2.getString(0);
-        Toast.makeText(context, ""+id, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(context, ""+id, Toast.LENGTH_SHORT).show();
         ActiveUserDetail.getCustomInstance(context).setLastShopID(Integer.parseInt(id));
 
         Cursor cursor3= db1.rawQuery("select MAX(ProductID) from Product", null);
 
         cursor3.moveToFirst();
         String id3 = cursor3.getString(0);
-        Toast.makeText(context, ""+id3, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(context, ""+id3, Toast.LENGTH_SHORT).show();
         ActiveUserDetail.getCustomInstance(context).setLastProductID(Integer.parseInt(id3));
 
         Cursor cursor4= db1.rawQuery("select MAX(CategoryID) from Category", null);
 
         cursor4.moveToFirst();
         String id4 = cursor4.getString(0);
-        Toast.makeText(context, ""+id4, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(context, ""+id4, Toast.LENGTH_SHORT).show();
         ActiveUserDetail.getCustomInstance(context).setLastCateegoryID(Integer.parseInt(id4));
 
         Cursor cursor5= db1.rawQuery("select MAX(CustomPID) from CustomProductDetail", null);
 
         cursor5.moveToFirst();
         String id5 = cursor5.getString(0);
-        Toast.makeText(context, ""+id5, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(context, ""+id5, Toast.LENGTH_SHORT).show();
         ActiveUserDetail.getCustomInstance(context).setLastCustomPID(Integer.parseInt(id5));
 
-        Toast.makeText(context,"last shopid "+ActiveUserDetail.getCustomInstance(context).getLastShopID()+" Last ProductID "+ActiveUserDetail.getCustomInstance(context).getLastProductID()+" Category id "+ActiveUserDetail.getCustomInstance(context).getLastCategoryID()+" customPID "+ActiveUserDetail.getCustomInstance(context).getLastCustomPID()+" ",Toast.LENGTH_LONG).show();
+      //  Toast.makeText(context,"last shopid "+ActiveUserDetail.getCustomInstance(context).getLastShopID()+" Last ProductID "+ActiveUserDetail.getCustomInstance(context).getLastProductID()+" Category id "+ActiveUserDetail.getCustomInstance(context).getLastCategoryID()+" customPID "+ActiveUserDetail.getCustomInstance(context).getLastCustomPID()+" ",Toast.LENGTH_LONG).show();
         populateSearchArray.getCustomInstance(context,searchBar).populate();
     }
 

@@ -48,6 +48,7 @@ public class Splash extends AppCompatActivity {
     TextView textView;
     public Typeface typeface;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

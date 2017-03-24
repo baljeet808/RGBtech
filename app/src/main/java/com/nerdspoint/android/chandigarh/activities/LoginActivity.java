@@ -59,10 +59,10 @@ public class LoginActivity extends AppCompatActivity {
         editor= sharedPreferences.edit();                                       // SharedPreferences contain >>  email , password , location, sex , age, interests,name , type  of user
         editor.apply();
 
-        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+       /* WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-
-        Toast.makeText(getApplicationContext(),"address "+ip,Toast.LENGTH_LONG).show();
+*/
+     //   Toast.makeText(getApplicationContext(),"address "+ip,Toast.LENGTH_LONG).show();
     }
 
 
