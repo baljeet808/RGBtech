@@ -9,8 +9,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -45,8 +49,10 @@ public class Splash extends AppCompatActivity {
 
     //create objects here
 
-    TextView textView;
+    TextView textView,companyName;
     public Typeface typeface;
+    ImageView logo,imageView88;
+    Animation animation,translate,animationBack,bounce,fade_in,fade;
 
 
     @Override
@@ -56,29 +62,69 @@ public class Splash extends AppCompatActivity {
         Fabric.with(this, new TwitterCore(authConfig), new Digits.Builder().build());
         setContentView(R.layout.activity_splash);
 
+        animation= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.scalefade);
+        translate=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.translate);
+        animationBack= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.scale);
+        bounce= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.bounce);
+        fade_in=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fade_in);
+        fade=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fade);
+
+
+
         textView = (TextView) findViewById(R.id.textView6);
+        companyName=(TextView) findViewById(R.id.companyName);
+        logo = (ImageView) findViewById(R.id.imageView2);
+        imageView88 = (ImageView) findViewById(R.id.imageView88);
 
 
         typeface = Typeface.createFromAsset(getAssets(), "waltograph42.ttf");
         textView.setTypeface(typeface);
+        companyName.setTypeface(typeface);
 
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getIsActive()) {
-                       Intent j = new Intent(Splash.this,MainPage.class);
-                        startActivity(j);
-                        finish();
+                    imageView88.startAnimation(animation);
+                    textView.startAnimation(translate);
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                imageView88.startAnimation(animationBack);
+                //Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                       textView.startAnimation(bounce);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                companyName.startAnimation(fade_in);
+                                companyName.setVisibility(View.VISIBLE);
+                                companyName.startAnimation(fade);
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getIsActive()) {
+                                            Intent j = new Intent(Splash.this,MainPage.class);
+                                            startActivity(j);
+                                            finish();
+                                        }
+                                        else
+                                        {
+                                            Intent j = new Intent(Splash.this, LoginActivity.class);
+                                            startActivity(j);
+                                            finish();
+                                        }
+                                    }
+                                },500);
+                            }
+                        }, 200);
                     }
-                    else
-                    {
-                        Intent j = new Intent(Splash.this, LoginActivity.class);
-                        startActivity(j);
-                        finish();
-                    }
-                }
-            }, 3000);
+                },600);
+            }
+        }, 2200);
 
 
 

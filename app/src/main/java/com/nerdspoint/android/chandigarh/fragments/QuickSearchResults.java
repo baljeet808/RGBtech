@@ -93,7 +93,10 @@ public class QuickSearchResults extends Fragment {
                 searchtype=searchType.getText().toString();
 
                 main_fragment_holder.setVisibility(View.VISIBLE);
-                host.setVisibility(View.GONE);
+                host.setVisibility(View.VISIBLE);
+
+
+                host.setCurrentTabByTag("Search Result");
 
 
                 queryValue=value;
@@ -119,7 +122,7 @@ public class QuickSearchResults extends Fragment {
                             cursor.moveToNext();
                         }
                     }
-                    shopAdapter = new RecyclerAdapter(getActivity(),list,null,"shop");
+                    shopAdapter = new RecyclerAdapter(getActivity(),getActivity(),list,null,"shop");
                     recyclerView.setAdapter(shopAdapter);
                     shopAdapter.notifyDataSetChanged();
 
@@ -170,7 +173,7 @@ public class QuickSearchResults extends Fragment {
                             cursor.moveToNext();
                         }
                     }
-                    shopAdapter = new RecyclerAdapter(getActivity(),null,list2,"product");
+                    shopAdapter = new RecyclerAdapter(getActivity(),getActivity(),null,list2,"product");
                     recyclerView.setAdapter(shopAdapter);
                     shopAdapter.notifyDataSetChanged();
 

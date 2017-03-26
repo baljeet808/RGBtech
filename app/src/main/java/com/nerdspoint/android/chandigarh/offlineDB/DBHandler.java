@@ -123,9 +123,10 @@ public class DBHandler extends SQLiteOpenHelper
                     if(Integer.parseInt(response)>0) {
                         TextView textView = (TextView) poppup.findViewById(id);
                         textView.setText(count);
+
                     }
                     else {
-                        // poppup.setVisibility(View.GONE);
+                         poppup.setVisibility(View.GONE);
                         TextView textView = (TextView) poppup.findViewById(id);
                         textView.setText("0");
                         //   Toast.makeText(context,"already updated",Toast.LENGTH_SHORT).show();
@@ -178,7 +179,7 @@ public class DBHandler extends SQLiteOpenHelper
     public void syncOffline(AutoCompleteTextView searchBar)
     {
 
-        Toast.makeText(context, "sync started", Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(context, "sync started", Toast.LENGTH_SHORT).show();
         this.searchBar= searchBar;
 
 
@@ -248,7 +249,7 @@ public class DBHandler extends SQLiteOpenHelper
                     }
 
                     progress=progress+25;
-                  Toast.makeText(context, ""+progress, Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(context, ""+progress, Toast.LENGTH_SHORT).show();
                     // updateLastIds();
                     if(TableName.equals("ShopMasterTable"))
                     {
@@ -262,7 +263,7 @@ public class DBHandler extends SQLiteOpenHelper
                         UpdateCustomProductDetailTable();
                     }else if(TableName.equals("CustomProductDetail"))
                     {
-                        Toast.makeText(context,"tables saved ",Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(context,"tables saved ",Toast.LENGTH_SHORT).show();
                         updateLastIds();
 
                     }
@@ -270,13 +271,13 @@ public class DBHandler extends SQLiteOpenHelper
                 } catch (JSONException e) {
                     e.printStackTrace();
                     progress=progress+25;
-                     Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-               Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+              // Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
               //  Log.d("ERROR","error => "+error.toString());
             }
         }
@@ -315,7 +316,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select ShopName, ShopAddress, UID, Sector, SCO , ShopContactNo from ShopMasterTable where ShopID = "+shopId+"",null);
+        return db.rawQuery("select ShopName, ShopAddress, UID, Sector, SCO , ShopContactNo , CategoryID from ShopMasterTable where ShopID = "+shopId+"",null);
     }
 
     public Cursor getCategory(String CategoryName)
@@ -348,6 +349,17 @@ public class DBHandler extends SQLiteOpenHelper
         return db.rawQuery("select CategoryID from Category where CategoryName = '"+categoryName+"'",null);
     }
 
+    public Cursor getCategoryName (String categoryID)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if(db== null)
+        {
+            return null;
+        }
+        return db.rawQuery("select CategoryName from Category where CategoryID = '"+categoryID+"'",null);
+
+    }
+
 
     public Cursor getAll(String tableName) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -370,31 +382,31 @@ public class DBHandler extends SQLiteOpenHelper
         cursor2.moveToFirst();
 
         String id = cursor2.getString(0);
-        Toast.makeText(context, ""+id, Toast.LENGTH_SHORT).show();
+     //   Toast.makeText(context, ""+id, Toast.LENGTH_SHORT).show();
         ActiveUserDetail.getCustomInstance(context).setLastShopID(Integer.parseInt(id));
 
         Cursor cursor3= db1.rawQuery("select MAX(ProductID) from Product", null);
 
         cursor3.moveToFirst();
         String id3 = cursor3.getString(0);
-       Toast.makeText(context, ""+id3, Toast.LENGTH_SHORT).show();
+     //  Toast.makeText(context, ""+id3, Toast.LENGTH_SHORT).show();
         ActiveUserDetail.getCustomInstance(context).setLastProductID(Integer.parseInt(id3));
 
         Cursor cursor4= db1.rawQuery("select MAX(CategoryID) from Category", null);
 
         cursor4.moveToFirst();
         String id4 = cursor4.getString(0);
-        Toast.makeText(context, ""+id4, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(context, ""+id4, Toast.LENGTH_SHORT).show();
         ActiveUserDetail.getCustomInstance(context).setLastCateegoryID(Integer.parseInt(id4));
 
         Cursor cursor5= db1.rawQuery("select MAX(CustomPID) from CustomProductDetail", null);
 
         cursor5.moveToFirst();
         String id5 = cursor5.getString(0);
-        Toast.makeText(context, ""+id5, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(context, ""+id5, Toast.LENGTH_SHORT).show();
         ActiveUserDetail.getCustomInstance(context).setLastCustomPID(Integer.parseInt(id5));
 
-        Toast.makeText(context,"last shopid "+ActiveUserDetail.getCustomInstance(context).getLastShopID()+" Last ProductID "+ActiveUserDetail.getCustomInstance(context).getLastProductID()+" Category id "+ActiveUserDetail.getCustomInstance(context).getLastCategoryID()+" customPID "+ActiveUserDetail.getCustomInstance(context).getLastCustomPID()+" ",Toast.LENGTH_LONG).show();
+       // Toast.makeText(context,"last shopid "+ActiveUserDetail.getCustomInstance(context).getLastShopID()+" Last ProductID "+ActiveUserDetail.getCustomInstance(context).getLastProductID()+" Category id "+ActiveUserDetail.getCustomInstance(context).getLastCategoryID()+" customPID "+ActiveUserDetail.getCustomInstance(context).getLastCustomPID()+" ",Toast.LENGTH_LONG).show();
         populateSearchArray.getCustomInstance(context,searchBar).populate("Category");
     }
 
@@ -452,7 +464,7 @@ public class DBHandler extends SQLiteOpenHelper
 
         //  Log.i("haiyang:createDB=","\t\t\t\t\t\t\t\t"+sql);
         db.execSQL(sql);
-        Toast.makeText(context,"created "+tableName,Toast.LENGTH_SHORT).show();
+     //   Toast.makeText(context,"created "+tableName,Toast.LENGTH_SHORT).show();
 
         db.close();
 
