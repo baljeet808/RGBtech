@@ -11,7 +11,7 @@ public class ServerOrLocalCheck {
 
 Context context;
 
-    boolean OnServer= true;            //     make it true if you want to run this project with online functionality
+    boolean OnServer= false;            //     make it true if you want to run this project with online functionality
 
     static ServerOrLocalCheck check;
 

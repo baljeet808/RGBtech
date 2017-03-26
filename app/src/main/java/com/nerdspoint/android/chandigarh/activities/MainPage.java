@@ -92,7 +92,7 @@ public class MainPage extends AppCompatActivity
     DBHandler db;
     AutoCompleteTextView searchBar;
     ArrayList<String> items,itemsCopy;
-    String temp="";
+    String temp="Category";
 
 
 
@@ -120,8 +120,7 @@ public class MainPage extends AppCompatActivity
             }
             else
             {
-                populateSearchArray.getCustomInstance(getApplicationContext(),searchBar).populate();
-
+                populateSearchArray.getCustomInstance(getApplicationContext(),searchBar).populate(temp);
             }
 
         items=new ArrayList<String>();
@@ -425,6 +424,8 @@ public class MainPage extends AppCompatActivity
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                     searchType.setText(temp);
+                populateSearchArray.getCustomInstance(getApplicationContext(),searchBar).populate(temp);
+
             }
         });
         alert.show();
