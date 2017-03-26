@@ -49,9 +49,9 @@ public class populateSearchArray
     }
 
 
-    public void populate()
+    public void populate(String tableName)
     {
-        searchBar.setAdapter(quickSearchAdapter.getCustomInstance(context).getArrayAdapter());
+        searchBar.setAdapter(quickSearchAdapter.getCustomInstance(context).getArrayAdapter(tableName));
         searchBar.setThreshold(1);
     }
 

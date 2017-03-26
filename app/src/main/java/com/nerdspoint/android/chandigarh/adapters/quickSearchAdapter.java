@@ -36,13 +36,22 @@ public class quickSearchAdapter {
         return adapter;
     }
 
-    public ArrayAdapter getArrayAdapter ()
+    public ArrayAdapter getArrayAdapter (String tableNAme)
     {
         handler = new DBHandler(context);
         items= new ArrayList<String>();
-        addProducts();
-        addCategories();
-        addShops();
+        if(tableNAme.equals("Category"))
+        {
+            addCategories();
+        }
+        else if(tableNAme.equals("Product")) {
+            addProducts();
+        }
+        else
+        {
+            addShops();
+        }
+
         arrayAdapter = new ArrayAdapter(context,android.R.layout.simple_list_item_1,items);
 
         return  arrayAdapter;
