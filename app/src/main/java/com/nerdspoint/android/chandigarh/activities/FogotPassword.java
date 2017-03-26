@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static android.R.attr.phoneNumber;
+import static android.R.attr.sessionService;
 
 public class FogotPassword extends AppCompatActivity {
   private Button Back,verify,OTP;
@@ -103,7 +104,7 @@ public class FogotPassword extends AppCompatActivity {
     }
     public  void MOB(String Number)
     {
-        AuthConfig.Builder builder = new AuthConfig.Builder();
+        final AuthConfig.Builder builder = new AuthConfig.Builder();
 
         builder.withPhoneNumber("+91 "+Number);
 
@@ -115,16 +116,11 @@ public class FogotPassword extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Authentication successful for "
                         + Number, Toast.LENGTH_LONG).show();
 
-                ForgetPass forgetPass = new ForgetPass();
-                fragmentManager =getSupportFragmentManager();
-                main.setVisibility(View.INVISIBLE);
-                Bundle bundle=new Bundle();
-                bundle.putString("PhoneNumber",Number);
-                forgetPass.setArguments(bundle);
-                passfrag.setVisibility(View.VISIBLE);
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.Pass_holder,forgetPass);
-                fragmentTransaction.commit();
+
+                PassFrag();
+
+
+
 
             }
 
@@ -184,8 +180,19 @@ public class FogotPassword extends AppCompatActivity {
 
     }
 
-
-
+    public  void PassFrag()
+    {
+        ForgetPass forgetPass = new ForgetPass();
+        fragmentManager =getSupportFragmentManager();
+        main.setVisibility(View.INVISIBLE);
+        Bundle bundle=new Bundle();
+        bundle.putString("PhoneNumber",Number);
+        forgetPass.setArguments(bundle);
+        passfrag.setVisibility(View.VISIBLE);
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.Pass_holder,forgetPass);
+        fragmentTransaction.commit();
+    }
 
 
 }

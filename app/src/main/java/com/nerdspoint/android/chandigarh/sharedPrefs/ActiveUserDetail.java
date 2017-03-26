@@ -37,7 +37,7 @@ public class ActiveUserDetail {
 
     public String getUID()
     {
-        return sharedPreferences.getString("UID","1");
+        return sharedPreferences.getString("UID","0");
     }
     public String getUserName()
     {

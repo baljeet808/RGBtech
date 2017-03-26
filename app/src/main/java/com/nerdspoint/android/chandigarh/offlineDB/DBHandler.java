@@ -307,6 +307,15 @@ public class DBHandler extends SQLiteOpenHelper
         return db.rawQuery("select ShopID, ShopName, ShopAddress, UID, Sector, SCO from ShopMasterTable where ShopName LIKE '%"+shopName+"%'",null);
     }
 
+    public Cursor getCategoryID(String categoryName)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if(db== null)
+        {
+            return null;
+        }
+        return db.rawQuery("select CategoryID from Category where CategoryName = '"+categoryName+"'",null);
+    }
 
 
     public Cursor getAll(String tableName) {
