@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,8 @@ import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.wasabeef.blurry.Blurry;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
@@ -51,6 +54,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
     String UID;
     Button Submit;
     private String EditProfile_URL="/EditProfile.php";
+    RelativeLayout edit_profilento;
 
     String[] messahes={"enter First Name","enter Last Name","enter userName","enter email","enter phone","enter password"};
     public EditProfile() {
@@ -65,10 +69,9 @@ public class EditProfile extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_edit_profile, container, false);
-
+        edit_profilento= (RelativeLayout) view.findViewById(R.id.edit_profilento);
 
         EditProfile_URL= ipAddress.getCustomInstance(getActivity()).getIp()+EditProfile_URL;
-
         FirstName=(TextView) view.findViewById(R.id.FirstName);
         LastName=(TextView) view.findViewById(R.id.LastName);
         PhoneNumber=(TextView) view.findViewById(R.id.PhoneNumber);
@@ -193,10 +196,10 @@ public class EditProfile extends Fragment implements View.OnClickListener {
         }
 
 
-        builder.setCancelable(false);
         builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Blurry.delete((ViewGroup) edit_profilento.getRootView());
                 if(editText.getText().length()>1)
                 {
 
@@ -255,6 +258,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                Blurry.delete((ViewGroup) edit_profilento.getRootView());
 
             }
         });
@@ -294,8 +298,14 @@ public class EditProfile extends Fragment implements View.OnClickListener {
             break;
 
         }
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                Blurry.delete((ViewGroup) edit_profilento.getRootView());
+            }
+        });
         builder.show();
-
+        Blurry.with(getActivity().getApplicationContext()).radius(20).sampling(2).onto((ViewGroup) edit_profilento.getRootView() );
     }
 
 

@@ -1,5 +1,6 @@
 package com.nerdspoint.android.chandigarh.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
@@ -10,8 +11,10 @@ import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,12 +38,15 @@ import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.wasabeef.blurry.Blurry;
+
 public class LoginActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private EditText et_username,et_password;
     private TextView ForgotPass;
+    RelativeLayout login_activity;
 
     private String login_URL="/login.php";
     // paste login file url in this string    it will check that user is present or not
@@ -58,6 +64,10 @@ public class LoginActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("userDetail",MODE_PRIVATE);     // SharedPreferences Name >> usrDetail
         editor= sharedPreferences.edit();                                       // SharedPreferences contain >>  email , password , location, sex , age, interests,name , type  of user
         editor.apply();
+        login_activity=(RelativeLayout) findViewById(R.id.activity_login);
+
+
+
 
        /* WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
@@ -107,7 +117,14 @@ public class LoginActivity extends AppCompatActivity {
                     alert.setTitle("Loging In");
                     final ProgressBar progressBar = new ProgressBar(getApplicationContext());
                     alert.setView(progressBar);
+                    alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            Blurry.delete((ViewGroup) login_activity.getRootView());
+                        }
+                    });
                     alert.show();
+                    Blurry.with(getApplicationContext()).radius(25).sampling(2).onto((ViewGroup) login_activity.getRootView());
                     Log.d("alert dialog","\t\t\talert started");
                     StringRequest request = new StringRequest(Request.Method.POST, login_URL, new Response.Listener<String>() {
 
@@ -118,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                             {
 
                                 alert.cancel();
-
+                                Blurry.delete((ViewGroup) login_activity.getRootView());
                                 Snackbar.make(getCurrentFocus(),"LOGIN SUCCESSFUL",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                                 try {
 
@@ -152,6 +169,7 @@ public class LoginActivity extends AppCompatActivity {
                             else
                             {
                                 alert.cancel();
+                                Blurry.delete((ViewGroup) login_activity.getRootView());
                                 Snackbar.make(getCurrentFocus(),"LOGIN FAILED",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                             }
                         }
@@ -160,6 +178,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onErrorResponse(VolleyError error) {
                             Log.d("ERROR","error => "+error.toString());
                             alert.cancel();
+                            Blurry.delete((ViewGroup) login_activity.getRootView());
                             Snackbar.make(getCurrentFocus(),error.getMessage(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                         }
                     }
