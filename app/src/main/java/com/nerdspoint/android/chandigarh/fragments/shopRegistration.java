@@ -198,6 +198,7 @@ public class shopRegistration extends Fragment {
 
 
 
+
                   return params;
 
 
