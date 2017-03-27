@@ -1,5 +1,6 @@
 package com.nerdspoint.android.chandigarh.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nerdspoint.android.chandigarh.R;
+import com.nerdspoint.android.chandigarh.activities.MainPage;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ProductDetails;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ShopDetails;
 
@@ -26,7 +28,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     List<ProductDetails> list1;
     String type;
 
-    public RecyclerAdapter(Context context, List<ShopDetails> list, List<ProductDetails>  list1,  String type) {
+    public RecyclerAdapter(Activity activity,Context context, List<ShopDetails> list, List<ProductDetails>  list1, String type) {
         this.context = context;
             this.list1=list1;
         this.list = list;
@@ -82,7 +84,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, ""+shopName, Toast.LENGTH_SHORT).show();
+
+                    ((MainPage)context).showShop(ShopId);
                 }
             });
         }
@@ -120,7 +123,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, ""+productDetails.ProductName, Toast.LENGTH_SHORT).show();
+                    ((MainPage)context).showShop(productDetails.ShopID);
                 }
             });
         }

@@ -2,24 +2,17 @@ package com.nerdspoint.android.chandigarh.activities;
 
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.text.Layout;
-import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,18 +22,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -48,22 +35,17 @@ import android.widget.Toast;
 
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.adapters.populateSearchArray;
-import com.nerdspoint.android.chandigarh.adapters.quickSearchAdapter;
 import com.nerdspoint.android.chandigarh.fragments.Advrts;
 import com.nerdspoint.android.chandigarh.fragments.EditProfile;
 import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
+import com.nerdspoint.android.chandigarh.fragments.ShopPage;
 import com.nerdspoint.android.chandigarh.fragments.profileUpdation;
 import com.nerdspoint.android.chandigarh.fragments.shopRegistration;
 import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.permissionCheck.checkInternet;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -79,20 +61,20 @@ public class MainPage extends AppCompatActivity
     MenuItem menuItem;
     Menu menu;
     BroadcastReceiver br;
-    RelativeLayout popPup;
+    RelativeLayout popPup,compareLayout;
     Toolbar toolbar;
     Animation animFadein;
     ActionBarDrawerToggle toggle;
     DrawerLayout drawer;
     TabHost.TabSpec spec;
     FrameLayout tabContent;
-    LinearLayout layout,layout2,layout3;
+    LinearLayout layout,layout2,layout3,layout4;
     String count="0";
     TextView textView,Name,userType,searchType;
     DBHandler db;
     AutoCompleteTextView searchBar;
     ArrayList<String> items,itemsCopy;
-    String temp="Category";
+    String temp="Shops",shopID;
 
 
 
@@ -115,12 +97,25 @@ public class MainPage extends AppCompatActivity
 
         if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getIsFirstSync()) {
 
+            try {
 
                 db.syncOffline(searchBar);
+                 }
+                  catch (Exception e)
+                 {
+                   Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                 }
             }
             else
             {
-                populateSearchArray.getCustomInstance(getApplicationContext(),searchBar).populate(temp);
+                try {
+                    populateSearchArray.getCustomInstance(getApplicationContext(), searchBar).populate(temp);
+                    }
+                    catch (Exception e)
+                    {
+                        Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
             }
 
         items=new ArrayList<String>();
@@ -129,6 +124,7 @@ public class MainPage extends AppCompatActivity
 
 
         host = (TabHost)findViewById(R.id.tabHost);
+
         host.setup();
 
         tabContent=(FrameLayout) findViewById(android.R.id.tabcontent);
@@ -136,14 +132,48 @@ public class MainPage extends AppCompatActivity
         main_fragment_holder=(RelativeLayout) findViewById(R.id.Main_Fragment_Holder);
         main_fragment_holder.setVisibility(View.INVISIBLE);
 
+        compareLayout=(RelativeLayout) findViewById(R.id.compare_main_frag);
+        compareLayout.setVisibility(View.INVISIBLE);
+
         final QuickSearchResults searchResults = new QuickSearchResults();
+
+        layout3 = new LinearLayout(getApplicationContext());
+        layout3.setId(R.id.my_layout3);
+        tabContent.addView(layout3);
+        //  checkInternetConnection();
+
+
+        spec = host.newTabSpec("Advertisements");
+        spec.setContent(R.id.my_layout3);
+        spec.setIndicator("Advertisements");
+        host.addTab(spec);
+
+        Advrts advrts = new Advrts();
+
+        fragmentManager =getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.my_layout3,advrts);
+        fragmentTransaction.commit();
+
+
+
+
+        layout4 = new LinearLayout(getApplicationContext());
+        layout4.setId(R.id.my_layout4);
+        tabContent.addView(layout4);
+
+        layout4.setVisibility(View.INVISIBLE);
+
+        spec = host.newTabSpec("Search Result");
+        spec.setContent(R.id.my_layout4);
+        spec.setIndicator("Search Results");
+        host.addTab(spec);
 
 
         fragmentManager =getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.Main_Fragment_Holder,searchResults);
+        fragmentTransaction.add(R.id.my_layout4,searchResults);
         fragmentTransaction.commit();
-
 
 
 
@@ -191,6 +221,7 @@ public class MainPage extends AppCompatActivity
             public void onClick(View v) {
 
                 sync();
+                popPup.setVisibility(View.GONE);
                 Snackbar.make(getCurrentFocus(),"Syncing.. ",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
             }
         });
@@ -198,16 +229,6 @@ public class MainPage extends AppCompatActivity
         menu = navigationView.getMenu();
         menuItem= menu.findItem(R.id.nav_netStatus);
 
-        layout3 = new LinearLayout(getApplicationContext());
-        layout3.setId(R.id.my_layout3);
-        tabContent.addView(layout3);
-      //  checkInternetConnection();
-
-
-        spec = host.newTabSpec("Advertisements");
-        spec.setContent(R.id.my_layout3);
-        spec.setIndicator("Advertisements");
-        host.addTab(spec);
 
         if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getFirstName().equals("nerdspoint"))
         {
@@ -229,15 +250,23 @@ public class MainPage extends AppCompatActivity
             fragmentTransaction.add(R.id.my_layout2,updation);
             fragmentTransaction.commit();
 
+
+
+
         }
 
-        Advrts advrts = new Advrts();
-        fragmentManager =getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.my_layout3,advrts);
-        fragmentTransaction.commit();
+
 
         checkInternetConnection();
+    }
+
+    public void  showShop(String shopID)
+    {
+        this.shopID=shopID;
+
+        bottomToolbar(findViewById(R.id.tv_compare));
+
+
     }
 
 
@@ -271,13 +300,8 @@ public class MainPage extends AppCompatActivity
             host.addTab(spec);
 
         }
-        if(layout2==null) {
-            host.setCurrentTab(1);
-        }
-        else
-        {
-            host.setCurrentTab(2);
-        }
+
+        host.setCurrentTabByTag("Edit Profile");
     }
 
 
@@ -285,7 +309,6 @@ public class MainPage extends AppCompatActivity
     public void sync()
     {
         db.syncOffline(searchBar);
-        popPup.setVisibility(View.GONE);
         Snackbar.make(getCurrentFocus(),"Offline Database Updated",Snackbar.LENGTH_SHORT).show();
     }
 
@@ -352,12 +375,6 @@ public class MainPage extends AppCompatActivity
 
 
 
-
-    public void moveToCompare()
-    {
-
-
-    }
 
 
 
@@ -454,7 +471,8 @@ public class MainPage extends AppCompatActivity
             {
 
                 host.setVisibility(View.VISIBLE);
-                main_fragment_holder.setVisibility(View.GONE);
+                main_fragment_holder.setVisibility(View.VISIBLE);
+                compareLayout.setVisibility(View.GONE);
 
             }break;
             case R.id.tv_shopManager :
@@ -472,6 +490,22 @@ public class MainPage extends AppCompatActivity
             case R.id.tv_compare :
             {
 
+                ShopPage shopPage= new ShopPage();
+
+                Bundle bundle= new Bundle();
+                bundle.putString("SHOPID",shopID);
+
+                shopPage.setArguments(bundle);
+
+                fragmentManager =getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.compare_main_frag,shopPage);
+                fragmentTransaction.commit();
+
+                   main_fragment_holder.setVisibility(View.GONE);
+                    host.setVisibility(View.GONE);
+                    compareLayout.setVisibility(View.VISIBLE);
+               // Toast.makeText(this, "working", Toast.LENGTH_SHORT).show();
             }break;
         }
     }
