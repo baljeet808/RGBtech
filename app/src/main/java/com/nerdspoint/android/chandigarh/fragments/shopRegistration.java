@@ -1,13 +1,16 @@
 package com.nerdspoint.android.chandigarh.fragments;
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.database.Cursor;
 import android.icu.util.ULocale;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.test.mock.MockPackageManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -31,6 +35,7 @@ import com.android.volley.toolbox.Volley;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.activities.LoginActivity;
 import com.nerdspoint.android.chandigarh.activities.MainPage;
+import com.nerdspoint.android.chandigarh.adapters.GPSTracker;
 import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
@@ -40,18 +45,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class shopRegistration extends Fragment {
+    private static final int REQUEST_CODE_PERMISSION = 2;
+    String mPermission = Manifest.permission.ACCESS_FINE_LOCATION;
 
     private static String shopRegistering_url="/shop.php";
-
+    GPSTracker gps;
     ArrayList list;
     ArrayAdapter adapter;
     Spinner spinner;
     EditText tv_shopname,tv_shopAddress,tv_pincode,tv_SCO,tv_Sctor,tv_Shopnumber;
     Button PinOnmap,Submit;
+    TextView longitude1, latitude1;
     String cid;
 
 
@@ -70,7 +80,19 @@ public class shopRegistration extends Fragment {
         shopRegistering_url="/shop.php";
         shopRegistering_url= ipAddress.getCustomInstance(getActivity()).getIp()+shopRegistering_url;
 
+        try {
+            if (ActivityCompat.checkSelfPermission(getActivity(), mPermission)
+                    != MockPackageManager.PERMISSION_GRANTED) {
 
+                ActivityCompat.requestPermissions(getActivity(), new String[]{mPermission},
+                        REQUEST_CODE_PERMISSION);
+
+                // If any permission above not allowed by user, this condition will
+                // execute every time, else your else part will work
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         list = new ArrayList();
@@ -95,6 +117,9 @@ public class shopRegistration extends Fragment {
         tv_Shopnumber=(EditText)view.findViewById(R.id.ShopNumber);
         PinOnmap=(Button)view.findViewById(R.id.mapPin);
         Submit=(Button)view.findViewById(R.id.submit);
+        longitude1=(TextView)view.findViewById(R.id.longitude);
+        latitude1=(TextView)view.findViewById(R.id.latitude);
+
 
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +157,30 @@ public class shopRegistration extends Fragment {
         });
 
 
+      PinOnmap.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              gps = new GPSTracker(getActivity());
 
+              // check if GPS enabled
+              if(gps.canGetLocation()){
+
+                  double latitude = gps.getLatitude();
+                  double longitude = gps.getLongitude();
+                  latitude1.setText(""+longitude);
+                  longitude1.setText(""+latitude);
+
+
+
+              }else{
+                  // can't get location
+                  // GPS or Network is not enabled
+                  // Ask user to enable GPS/network in settings
+                  gps.showSettingsAlert();
+              }
+
+          }
+      });
 
         return view;
     }
@@ -192,8 +240,8 @@ public class shopRegistration extends Fragment {
                   params.put("Sector",tv_Sctor.getText().toString());
                   params.put("SCO",tv_SCO.getText().toString());
                   params.put("CategoryID",cid);
-                  params.put("Latitude","10.20.1");
-                  params.put("Longitude","12.5.2.1");
+                  params.put("Latitude",  latitude1.getText().toString() );
+                  params.put("Longitude",longitude1.getText().toString());
                   params.put("UID",ActiveUserDetail.getCustomInstance(getActivity()).getUID());
 
 

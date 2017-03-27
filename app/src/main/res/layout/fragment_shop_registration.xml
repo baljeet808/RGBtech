@@ -17,7 +17,7 @@
         android:orientation="vertical"
         android:padding="10dp"
 
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true">
 
         <EditText
@@ -103,15 +103,34 @@
             android:layout_marginTop="22dp"
             android:layout_below="@+id/SCO"
             android:layout_alignParentStart="true" />
+        <TextView
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            android:text="latitude"
+            android:background="@drawable/roundedborder"
+            android:id="@+id/latitude"
+            android:layout_below="@+id/mapPin"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            android:text="longitude"
+            android:background="@drawable/roundedborder"
+            android:id="@+id/longitude"
+            android:layout_below="@+id/mapPin"
+            android:layout_alignEnd="@+id/mapPin" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/mapPin"
-            android:layout_alignParentStart="true"
             android:hint="shop Phone number"
             android:inputType="number"
             android:background="@drawable/roundedborder"
-            android:id="@+id/ShopNumber"/>
+            android:id="@+id/ShopNumber"
+            android:layout_below="@+id/latitude"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="15dp" />
 
 
         <TextView
@@ -125,6 +144,8 @@
             android:textColor="@color/color_1"
             android:textSize="30dp"
             android:textStyle="bold" />
+
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -132,7 +153,7 @@
             android:id="@+id/mapPin"
             android:layout_alignBaseline="@+id/Sector"
             android:layout_alignBottom="@+id/Sector"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignEnd="@+id/SCO" />
 
 
         <ImageView
