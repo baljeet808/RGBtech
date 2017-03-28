@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.HeaderViewListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -58,7 +59,7 @@ public class QuickSearchResults extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_quick_search_results, container, false);
@@ -135,7 +136,7 @@ public class QuickSearchResults extends Fragment {
                         while (!cursor.isAfterLast())
                         {
                             CategoryDetalis categoryDetalis = new CategoryDetalis();
-                            categoryDetalis.CategoryID=cursor.getString(cursor.getColumnIndex("CategoryID"));
+                            categoryDetalis.CategoryID=queryValue;
                             categoryDetalis.ProductID=cursor.getString(cursor.getColumnIndex("ProductID"));
                             categoryDetalis.ProductName=cursor.getString(cursor.getColumnIndex("ProductName"));
                             list1.add(categoryDetalis);

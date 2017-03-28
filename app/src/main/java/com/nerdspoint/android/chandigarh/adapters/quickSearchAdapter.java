@@ -25,6 +25,7 @@ public class quickSearchAdapter {
     {
         this.context=context;
 
+
     }
 
     public static synchronized quickSearchAdapter getCustomInstance (Context context)

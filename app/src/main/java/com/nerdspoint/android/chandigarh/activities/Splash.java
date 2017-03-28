@@ -62,6 +62,7 @@ public class Splash extends AppCompatActivity {
         Fabric.with(this, new TwitterCore(authConfig), new Digits.Builder().build());
         setContentView(R.layout.activity_splash);
 
+
         animation= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.scalefade);
         translate=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.translate);
         animationBack= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.scale);

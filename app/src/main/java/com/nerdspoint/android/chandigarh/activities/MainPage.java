@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AutoCompleteTextView;
@@ -32,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.adapters.populateSearchArray;
@@ -47,6 +49,8 @@ import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.blurry.Blurry;
+
 public class MainPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -61,7 +65,7 @@ public class MainPage extends AppCompatActivity
     MenuItem menuItem;
     Menu menu;
     BroadcastReceiver br;
-    RelativeLayout popPup,compareLayout;
+    RelativeLayout popPup,compareLayout,content_main;
     Toolbar toolbar;
     Animation animFadein;
     ActionBarDrawerToggle toggle;
@@ -80,6 +84,7 @@ public class MainPage extends AppCompatActivity
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,11 +94,12 @@ public class MainPage extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         db = new DBHandler(getApplicationContext());
+        content_main= (RelativeLayout) findViewById(R.id.content_main_page);
 
         searchBar=(AutoCompleteTextView) toolbar.findViewById(R.id.et_quickSearch);
         searchType=(TextView) toolbar.findViewById(R.id.tv_search_type);
+
 
         if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getIsFirstSync()) {
 
@@ -109,8 +115,9 @@ public class MainPage extends AppCompatActivity
             else
             {
                 try {
-                    populateSearchArray.getCustomInstance(getApplicationContext(), searchBar).populate(temp);
-                    }
+                    populateSearchArray.getCustomInstance(getApplicationContext(), searchBar).populate(searchType.getText().toString());
+
+                }
                     catch (Exception e)
                     {
                         Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -251,14 +258,17 @@ public class MainPage extends AppCompatActivity
             fragmentTransaction.commit();
 
 
-
-
         }
-
-
 
         checkInternetConnection();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
 
     public void  showShop(String shopID)
     {
@@ -368,14 +378,12 @@ public class MainPage extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            android.os.Process.killProcess(android.os.Process.myPid());
         }
+
+
+
     }
-
-
-
-
-
-
 
 
     public void changeSearchType(View v)
@@ -438,14 +446,23 @@ public class MainPage extends AppCompatActivity
         layout.addView(checkBox2);
 
         alert.setView(layout);
+        alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                Blurry.delete((ViewGroup) content_main.getRootView());
+            }
+        });
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                     searchType.setText(temp);
+                Blurry.delete((ViewGroup) content_main.getRootView());
                 populateSearchArray.getCustomInstance(getApplicationContext(),searchBar).populate(temp);
 
             }
         });
         alert.show();
+        Blurry.with(getApplicationContext()).radius(25).sampling(2).onto((ViewGroup) content_main.getRootView());
+
     }
 
 
@@ -570,4 +587,5 @@ public class MainPage extends AppCompatActivity
 
         return true;
     }
+
 }
