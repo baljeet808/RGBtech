@@ -1,0 +1,29 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fcf"
+    tools:context="com.nerdspoint.android.chandigarh.fragments.categoriesMenu">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Categories"
+        android:textSize="20dp"
+        android:textColor="#000"
+        android:fontFamily="sans-serif-smallcaps"
+        android:elevation="20dp"
+        android:background="@drawable/backgraoundwithborder"
+        android:id="@+id/head"/>
+  <ListView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/category_lists"
+      android:layout_below="@id/head"
+      >
+
+
+  </ListView>
+
+</RelativeLayout>

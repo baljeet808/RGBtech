@@ -1,0 +1,27 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nerdspoint.android.chandigarh.fragments.productMenu">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Product"
+        android:textSize="20dp"
+        android:textColor="#000"
+        android:fontFamily="sans-serif-smallcaps"
+        android:elevation="20dp"
+        android:background="@drawable/backgraoundwithborder"
+        android:id="@+id/head1"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/product_lists"
+        android:layout_below="@id/head1"
+        >
+
+
+    </ListView>
+</RelativeLayout>

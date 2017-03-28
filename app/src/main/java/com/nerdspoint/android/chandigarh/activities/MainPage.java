@@ -41,6 +41,9 @@ import com.nerdspoint.android.chandigarh.fragments.Advrts;
 import com.nerdspoint.android.chandigarh.fragments.EditProfile;
 import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
 import com.nerdspoint.android.chandigarh.fragments.ShopPage;
+import com.nerdspoint.android.chandigarh.fragments.categoriesMenu;
+import com.nerdspoint.android.chandigarh.fragments.customProductList;
+import com.nerdspoint.android.chandigarh.fragments.productMenu;
 import com.nerdspoint.android.chandigarh.fragments.profileUpdation;
 import com.nerdspoint.android.chandigarh.fragments.shopRegistration;
 import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
@@ -79,7 +82,8 @@ public class MainPage extends AppCompatActivity
     AutoCompleteTextView searchBar;
     ArrayList<String> items,itemsCopy;
     String temp="Shops",shopID;
-
+    boolean fragmentFlag=true;
+    boolean fragmentFlag1=true;
 
 
 
@@ -101,29 +105,6 @@ public class MainPage extends AppCompatActivity
         searchType=(TextView) toolbar.findViewById(R.id.tv_search_type);
 
 
-        if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getIsFirstSync()) {
-
-            try {
-
-                db.syncOffline(searchBar);
-                 }
-                  catch (Exception e)
-                 {
-                   Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-                 }
-            }
-            else
-            {
-                try {
-                    populateSearchArray.getCustomInstance(getApplicationContext(), searchBar).populate(searchType.getText().toString());
-
-                }
-                    catch (Exception e)
-                    {
-                        Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-            }
 
         items=new ArrayList<String>();
         itemsCopy=new ArrayList<String>();
@@ -221,7 +202,6 @@ public class MainPage extends AppCompatActivity
         textView=(TextView) popPup.findViewById(R.id.count);
         textView.startAnimation(animFadein);
         textView.setText(count);
-        popPup.setVisibility(View.GONE);
 
         popPup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,6 +216,31 @@ public class MainPage extends AppCompatActivity
         menu = navigationView.getMenu();
         menuItem= menu.findItem(R.id.nav_netStatus);
 
+
+        if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getIsFirstSync()) {
+
+            try {
+
+                db.syncOffline(searchBar);
+                popPup.setVisibility(View.INVISIBLE);
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+        else
+        {
+            try {
+                populateSearchArray.getCustomInstance(getApplicationContext(), searchBar).populate(searchType.getText().toString());
+
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        }
 
         if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getFirstName().equals("nerdspoint"))
         {
@@ -258,6 +263,8 @@ public class MainPage extends AppCompatActivity
             fragmentTransaction.commit();
 
 
+
+
         }
 
         checkInternetConnection();
@@ -277,6 +284,66 @@ public class MainPage extends AppCompatActivity
         bottomToolbar(findViewById(R.id.tv_compare));
 
 
+    }
+
+
+    public  void setCustomPRoductstoList(String productName)
+    {
+        Bundle bundle= new Bundle();
+        bundle.putString("product",productName);
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        if(fragmentFlag1) {
+            customProductList productList = new customProductList();
+                productList.setArguments(bundle);
+            fragmentTransaction.add(R.id.frag_Product_list_holder, productList);
+            fragmentFlag1=false;
+
+        }
+        else {
+            customProductList productList = new customProductList();
+            productList.setArguments(bundle);
+            fragmentTransaction.replace(R.id.frag_Product_list_holder,productList);
+        }
+        fragmentTransaction.commit();
+    }
+
+    public  void setProductsToFragmentHolder(String category)
+    {
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        Bundle bundle= new Bundle();
+        bundle.putString("category",category);
+
+        productMenu products = new productMenu();
+        products.setArguments(bundle);
+            fragmentTransaction.replace(R.id.frag_menu_holder,products);
+        fragmentTransaction.commit();
+    }
+
+    public void setCategoriesToFragmentHolder(View view)
+    {
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        if(fragmentFlag) {
+            categoriesMenu categories = new categoriesMenu();
+
+
+            fragmentTransaction.add(R.id.frag_menu_holder, categories);
+fragmentFlag=false;
+        }
+        else {
+            categoriesMenu categories = new categoriesMenu();
+            fragmentTransaction.replace(R.id.frag_menu_holder,categories);
+        }
+        fragmentTransaction.commit();
     }
 
 
@@ -343,7 +410,7 @@ public class MainPage extends AppCompatActivity
                     if (state == NetworkInfo.State.CONNECTED) {
                         menuItem.setTitle("Internet Status > Online");
                         setPopPup(popPup,R.id.count);
-                        popPup.setVisibility(View.VISIBLE);
+
 
                         textView.startAnimation(animFadein);
                         checkInternet.getCustomInstance(getApplicationContext()).setState(state);
@@ -398,16 +465,11 @@ public class MainPage extends AppCompatActivity
         layout.setOrientation(LinearLayout.VERTICAL);
         final CheckBox checkBox = new CheckBox(getApplicationContext());
         checkBox.setText("Product");
-        final CheckBox checkBox1 = new CheckBox(getApplicationContext());
-        checkBox1.setText("Category");
+
         final CheckBox checkBox2 = new CheckBox(getApplicationContext());
         checkBox2.setText("Shops");
 
-
-        if(type.equals("Category"))
-        {
-                checkBox1.setChecked(true);
-        }else if(type.equals("Product"))
+         if(type.equals("Product"))
         {
             checkBox.setChecked(true);
         }else {
@@ -418,31 +480,23 @@ public class MainPage extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 temp="Product";
-                checkBox1.setChecked(false);
-                checkBox2.setChecked(false);
-            }
-        });
-        checkBox1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                temp = "Category";
-                checkBox.setChecked(false);
-                checkBox2.setChecked(false);
 
+                checkBox2.setChecked(false);
             }
         });
+
         checkBox2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 temp = "Shops";
-                checkBox1.setChecked(false);
+
                 checkBox.setChecked(false);
 
             }
         });
 
         layout.addView(checkBox);
-        layout.addView(checkBox1);
+
         layout.addView(checkBox2);
 
         alert.setView(layout);
@@ -455,6 +509,7 @@ public class MainPage extends AppCompatActivity
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                     searchType.setText(temp);
+
                 Blurry.delete((ViewGroup) content_main.getRootView());
                 populateSearchArray.getCustomInstance(getApplicationContext(),searchBar).populate(temp);
 

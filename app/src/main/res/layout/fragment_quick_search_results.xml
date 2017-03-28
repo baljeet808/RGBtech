@@ -22,15 +22,60 @@
         android:text="responsees"
         android:gravity="center"
         android:layout_alignRight="@id/tv_query"/>
+    <Button
+        android:layout_width="90dp"
+        android:layout_height="25dp"
+        android:id="@+id/floating_button"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="40dp"
+        android:text="Category"
+        android:background="@drawable/backgraoundwithborder"
+        android:elevation="15dp"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_shopDetails"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="invisible"
         android:layout_below="@id/tv_query"
         android:layout_marginTop="20dp"
         >
 
     </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layout_for_categories"
+        android:visibility="visible"
+        >
+
+<RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:id="@+id/frag_menu_holder"
+    android:layout_marginTop="20dp"
+        android:elevation="15dp"
+        >
+
+
+
+
+    </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginTop="68dp"
+            android:id="@+id/frag_Product_list_holder"
+            >
+
+
+
+        </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>
