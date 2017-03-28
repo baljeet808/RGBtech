@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF8A80">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="488dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="12dp"
+            android:background="#757575"
+            android:padding="10dp"
+            >
+
+            <TextView
+                android:id="@+id/add_products"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="ADD PRODUCTS"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"/>
+            <Spinner
+                android:id="@+id/products_category"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@+id/add_products"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                />
+            <TextView
+                android:id="@+id/products_name"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:text="Products Name"
+                android:textSize="25dp"
+                android:gravity="center|center_horizontal"
+                android:layout_below="@+id/products_category"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:background="#FF8A80"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_toEndOf="@id/products_name"
+                android:layout_below="@id/products_category"
+                android:background="#13b586"
+                android:layout_marginRight="10dp"
+                android:text="SELECT"/>
+
+            <ListView
+                android:id="@+id/listView_Products"
+                android:layout_width="match_parent"
+                android:layout_height="360dp"
+                android:layout_below="@id/products_name">
+            </ListView>
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:background="#13b586"
+                android:text="SAVE"
+                android:textStyle="bold"
+                android:layout_below="@id/listView_Products"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/save_products"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="20dp"/>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
+
