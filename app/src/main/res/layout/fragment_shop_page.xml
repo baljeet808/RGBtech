@@ -13,8 +13,7 @@
         android:id="@+id/holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#BDBDBD">
-
+        android:background="#FFF">
         <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
