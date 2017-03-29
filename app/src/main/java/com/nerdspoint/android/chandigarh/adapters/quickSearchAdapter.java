@@ -41,11 +41,8 @@ public class quickSearchAdapter {
     {
         handler = new DBHandler(context);
         items= new ArrayList<String>();
-        if(tableNAme.equals("Category"))
-        {
-            addCategories();
-        }
-        else if(tableNAme.equals("Product")) {
+
+      if(tableNAme.equals("Product")) {
             addProducts();
         }
         else
