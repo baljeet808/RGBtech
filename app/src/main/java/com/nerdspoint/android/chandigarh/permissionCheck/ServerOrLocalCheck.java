@@ -25,8 +25,6 @@ Context context;
             check= new ServerOrLocalCheck(context);
         }
 
-
-
         return check;
     }
 

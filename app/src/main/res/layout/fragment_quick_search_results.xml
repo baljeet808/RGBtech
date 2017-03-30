@@ -30,7 +30,7 @@
         android:layout_marginTop="40dp"
         android:text="Category"
         android:background="@drawable/backgraoundwithborder"
-        android:elevation="15dp"
+        android:elevation="25dp"
         />
 
     <android.support.v7.widget.RecyclerView
@@ -39,7 +39,7 @@
         android:layout_height="match_parent"
         android:visibility="invisible"
         android:layout_below="@id/tv_query"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="68dp"
         >
 
     </android.support.v7.widget.RecyclerView>

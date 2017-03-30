@@ -14,13 +14,16 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -44,7 +47,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -57,12 +62,14 @@ import static android.net.sip.SipErrorCode.TIME_OUT;
 public class DBHandler extends SQLiteOpenHelper
 {
 
-
+    String VendorFname,VendorLname,VendorCnumber,UID;
 
     int progress=0;
     String count;
 
     AutoCompleteTextView searchBar;
+
+    View userProfile;
 
     Context context;
 
@@ -75,6 +82,7 @@ public class DBHandler extends SQLiteOpenHelper
 
 
     private String update_url = "/offlineUpdate.php";
+    private String vendorProfile_url = "/ballu.php";
 
 
     private String count_url ="/CountNewData.php";
@@ -86,6 +94,8 @@ public class DBHandler extends SQLiteOpenHelper
         this.context = context;
         update_url=ipAddress.getCustomInstance(context).getIp()+update_url;
         count_url=ipAddress.getCustomInstance(context).getIp()+count_url;
+        vendorProfile_url=ipAddress.getCustomInstance(context).getIp()+vendorProfile_url;
+
     }
 
 
@@ -123,13 +133,14 @@ public class DBHandler extends SQLiteOpenHelper
                     if(Integer.parseInt(response)>0) {
                         TextView textView = (TextView) poppup.findViewById(id);
                         textView.setText(count);
-
+                        poppup.setVisibility(View.VISIBLE);
+                        Toast.makeText(context, "values to update "+response, Toast.LENGTH_SHORT).show();
                     }
                     else {
                          poppup.setVisibility(View.GONE);
                         TextView textView = (TextView) poppup.findViewById(id);
                         textView.setText("0");
-                        //   Toast.makeText(context,"already updated",Toast.LENGTH_SHORT).show();
+                           Toast.makeText(context,"already updated",Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -139,7 +150,7 @@ public class DBHandler extends SQLiteOpenHelper
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //  Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+                  Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
                 Log.d("ERROR","error => "+error.toString());
             }
         }
@@ -215,9 +226,107 @@ public class DBHandler extends SQLiteOpenHelper
     }
 
 
+    public void getVendorProfile(final String ShopId)
+    {
+
+        StringRequest request = new StringRequest(Request.Method.POST, vendorProfile_url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
 
 
 
+                // Log.d("Response", response);
+                Toast.makeText(context, ""+response, Toast.LENGTH_SHORT).show();
+
+
+                try {
+
+                    JSONArray jsonArray = new JSONArray(response);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    VendorFname= jsonObject.getString("FirstName");
+                    VendorLname = jsonObject.getString("LastName");
+                    VendorCnumber = jsonObject.getString("PhoneNumber");
+                    UID = jsonObject.getString("UID");
+                    setVendorProfile();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, "catch showing "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context,"on response error -"+error.toString(), Toast.LENGTH_LONG).show();
+                //  Log.d("ERROR","error => "+error.toString());
+            }
+        }
+        )
+        {
+            @Override
+            protected Map<String,String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>() ;
+                map.put("ShopID",ShopId);
+                return map;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+
+    }
+
+    public void setVendorProfile()
+    {
+        TextView ownerFname = (TextView) userProfile.findViewById(R.id.owner_Fname);
+        TextView ownerLname = (TextView) userProfile.findViewById(R.id.owner_Sname);
+        final TextView Contactt = (TextView) userProfile.findViewById(R.id.owner_contactno);
+        Contactt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                try {
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse(Contactt.getText().toString()));
+                    context.startActivity(intent);
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(context, "call failed because "+e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+        ownerFname.setText(VendorFname);
+        ownerLname.setText(VendorLname);
+        Contactt.setText(VendorCnumber);
+
+        ListView shopsOwned = (ListView) userProfile.findViewById(R.id.shop_owned);
+
+        List<String> shops;
+        ArrayAdapter adapter;
+
+        shops = new ArrayList<>();
+        Cursor cursor = getOwnedShops(UID);
+
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                shops.add(cursor.getString(cursor.getColumnIndex("ShopName")));
+                cursor.moveToNext();
+            }
+        }
+        adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, shops);
+
+        shopsOwned.setAdapter(adapter);
+        shopsOwned.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(context, "" + parent.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     public void updateOfflineTable(final String TableName,final String[] colNames,final String ColoumName,final int Value)
     {
@@ -229,7 +338,7 @@ public class DBHandler extends SQLiteOpenHelper
 
 
                // Log.d("Response", response);
-              //  Toast.makeText(context, ""+response, Toast.LENGTH_SHORT).show();
+               Toast.makeText(context, ""+response, Toast.LENGTH_SHORT).show();
 
 
                 try {
@@ -249,7 +358,7 @@ public class DBHandler extends SQLiteOpenHelper
                     }
 
                     progress=progress+25;
-                //  Toast.makeText(context, ""+progress, Toast.LENGTH_SHORT).show();
+                 Toast.makeText(context, ""+progress, Toast.LENGTH_SHORT).show();
                     // updateLastIds();
                     if(TableName.equals("ShopMasterTable"))
                     {
@@ -263,7 +372,7 @@ public class DBHandler extends SQLiteOpenHelper
                         UpdateCustomProductDetailTable();
                     }else if(TableName.equals("CustomProductDetail"))
                     {
-                      //  Toast.makeText(context,"tables saved ",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"tables saved ",Toast.LENGTH_SHORT).show();
                         updateLastIds();
 
                     }
@@ -271,13 +380,13 @@ public class DBHandler extends SQLiteOpenHelper
                 } catch (JSONException e) {
                     e.printStackTrace();
                     progress=progress+25;
-                    // Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                     Toast.makeText(context, "catch showing "+e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-              // Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+               Toast.makeText(context,"on response error -"+error.toString(), Toast.LENGTH_LONG).show();
               //  Log.d("ERROR","error => "+error.toString());
             }
         }
@@ -390,6 +499,15 @@ public class DBHandler extends SQLiteOpenHelper
         return db.rawQuery("select * from "+tableName+"", null);
     }
 
+    public Cursor getOwnedShops(String UID)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if (db == null) {
+            return null;
+        }
+        return db.rawQuery("Select ShopName from ShopMasterTable where UID = "+UID+"", null);
+    }
+
 
 
 
@@ -485,7 +603,7 @@ public class DBHandler extends SQLiteOpenHelper
 
         //  Log.i("haiyang:createDB=","\t\t\t\t\t\t\t\t"+sql);
         db.execSQL(sql);
-     //   Toast.makeText(context,"created "+tableName,Toast.LENGTH_SHORT).show();
+       Toast.makeText(context,"created "+tableName,Toast.LENGTH_SHORT).show();
 
         db.close();
 
@@ -513,4 +631,13 @@ public class DBHandler extends SQLiteOpenHelper
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
+    public View getShopOwnerDetail(String shopid,View view) {
+
+
+        this.userProfile = view;
+        getVendorProfile(shopid);
+
+        return userProfile;
+         }
 }

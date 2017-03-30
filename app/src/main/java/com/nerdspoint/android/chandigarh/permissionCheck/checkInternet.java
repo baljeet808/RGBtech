@@ -43,15 +43,14 @@ public class checkInternet {
 
 
 
-    public void setState(NetworkInfo.State state)
+    public void setState(boolean state)
     {
-        if(state== NetworkInfo.State.DISCONNECTED) {
-            editor.putBoolean("connected", false);
-        }
-        else
-        {
-            editor.putBoolean("connected",true);
-        }
+
+            editor.putBoolean("connected", state);
+        editor.apply();
+
+
+
     }
     public boolean isConnected()
     {

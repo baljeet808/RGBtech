@@ -30,6 +30,7 @@ public class customProductList extends Fragment {
     Cursor cursor;
     ListView listView;
     String queryValue;
+
     public customProductList() {
         // Required empty public constructor
     }

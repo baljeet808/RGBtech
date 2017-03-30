@@ -120,8 +120,7 @@ public class QuickSearchResults extends Fragment implements View.OnClickListener
 
                 searchtype=searchType.getText().toString();
 
-                main_fragment_holder.setVisibility(View.VISIBLE);
-                host.setVisibility(View.VISIBLE);
+                ((MainPage)getActivity()).setSearchPageVisibleOnly();
 
 
                 host.setCurrentTabByTag("Search Result");
@@ -223,6 +222,8 @@ public class QuickSearchResults extends Fragment implements View.OnClickListener
         recyclerView.setVisibility(View.INVISIBLE);
         categoryLinearLayout.setVisibility(View.VISIBLE);
         ((MainPage)getActivity()).setCategoriesToFragmentHolder(v);
-        Toast.makeText(getActivity(), "onclick running", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getActivity(), "onclick running", Toast.LENGTH_SHORT).show();
+        query.setVisibility(View.INVISIBLE);
+        resultCounts.setVisibility(View.INVISIBLE);
     }
 }

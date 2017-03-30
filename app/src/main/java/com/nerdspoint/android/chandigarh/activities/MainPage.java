@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -64,7 +65,7 @@ public class MainPage extends AppCompatActivity
     FragmentManager fragmentManager;
     TextView tv_home,tv_maps,tv_notifications,tv_compare,tv_shopManager;
     TabHost host;
-    RelativeLayout main_fragment_holder;
+    RelativeLayout main_fragment_holder,ShopManager_layout,Maps_layout,Notification_layout,Compare_layout;
     MenuItem menuItem;
     Menu menu;
     BroadcastReceiver br;
@@ -79,11 +80,13 @@ public class MainPage extends AppCompatActivity
     String count="0";
     TextView textView,Name,userType,searchType;
     DBHandler db;
+    DrawerLayout mainPage;
     AutoCompleteTextView searchBar;
     ArrayList<String> items,itemsCopy;
     String temp="Shops",shopID;
     boolean fragmentFlag=true;
     boolean fragmentFlag1=true;
+    AlertDialog dialog;
 
 
 
@@ -94,6 +97,7 @@ public class MainPage extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
+        mainPage= (DrawerLayout) findViewById(R.id.drawer_layout);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -119,6 +123,17 @@ public class MainPage extends AppCompatActivity
 
         main_fragment_holder=(RelativeLayout) findViewById(R.id.Main_Fragment_Holder);
         main_fragment_holder.setVisibility(View.INVISIBLE);
+
+        ShopManager_layout=(RelativeLayout) findViewById(R.id.Shop_manager_holder);
+        ShopManager_layout.setVisibility(View.INVISIBLE);
+
+
+        Notification_layout=(RelativeLayout) findViewById(R.id.Notification_holder);
+        Notification_layout.setVisibility(View.INVISIBLE);
+
+
+        Maps_layout=(RelativeLayout) findViewById(R.id.maps_holder);
+        Maps_layout.setVisibility(View.INVISIBLE);
 
         compareLayout=(RelativeLayout) findViewById(R.id.compare_main_frag);
         compareLayout.setVisibility(View.INVISIBLE);
@@ -220,7 +235,7 @@ public class MainPage extends AppCompatActivity
         if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getIsFirstSync()) {
 
             try {
-
+                Toast.makeText(this, "syncing for first time", Toast.LENGTH_LONG).show();
                 db.syncOffline(searchBar);
                 popPup.setVisibility(View.INVISIBLE);
             }
@@ -262,10 +277,31 @@ public class MainPage extends AppCompatActivity
             fragmentTransaction.add(R.id.my_layout2,updation);
             fragmentTransaction.commit();
 
-
-
-
         }
+
+        shopRegistration registration = new shopRegistration();
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        fragmentTransaction.add(R.id.Shop_manager_holder,registration);
+        fragmentTransaction.commit();
+
+
+
+        ShopPage shopPage= new ShopPage();
+
+        Bundle bundle= new Bundle();
+        bundle.putString("SHOPID","0");
+
+        shopPage.setArguments(bundle);
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        fragmentTransaction.add(R.id.compare_main_frag,shopPage);
+        fragmentTransaction.commit();
 
         checkInternetConnection();
     }
@@ -281,7 +317,30 @@ public class MainPage extends AppCompatActivity
     {
         this.shopID=shopID;
 
-        bottomToolbar(findViewById(R.id.tv_compare));
+        host.setVisibility(View.INVISIBLE);
+        ShopManager_layout.setVisibility(View.INVISIBLE);
+        Maps_layout.setVisibility(View.INVISIBLE);
+        main_fragment_holder.setVisibility(View.INVISIBLE);
+        Notification_layout.setVisibility(View.INVISIBLE);
+        compareLayout.setVisibility(View.VISIBLE);
+
+
+
+
+        ShopPage shopPage= new ShopPage();
+
+        Bundle bundle= new Bundle();
+        bundle.putString("SHOPID",shopID);
+
+        shopPage.setArguments(bundle);
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        fragmentTransaction.replace(R.id.compare_main_frag,shopPage);
+        fragmentTransaction.commit();
+
 
 
     }
@@ -346,6 +405,16 @@ fragmentFlag=false;
         fragmentTransaction.commit();
     }
 
+    public void setSearchPageVisibleOnly()
+    {
+        host.setVisibility(View.VISIBLE);
+        ShopManager_layout.setVisibility(View.INVISIBLE);
+        Maps_layout.setVisibility(View.INVISIBLE);
+        main_fragment_holder.setVisibility(View.INVISIBLE);
+        Notification_layout.setVisibility(View.INVISIBLE);
+        compareLayout.setVisibility(View.INVISIBLE);
+
+    }
 
     public void profile(View v)
     {
@@ -386,7 +455,8 @@ fragmentFlag=false;
     public void sync()
     {
         db.syncOffline(searchBar);
-        Snackbar.make(getCurrentFocus(),"Offline Database Updated",Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(getCurrentFocus(), "Offline Database Updated", Snackbar.LENGTH_SHORT).show();
+
     }
 
 
@@ -408,16 +478,16 @@ fragmentFlag=false;
                     NetworkInfo.State state = info.getState();
 
                     if (state == NetworkInfo.State.CONNECTED) {
-                        menuItem.setTitle("Internet Status > Online");
+                        menuItem.setTitle("Check New Data");
                         setPopPup(popPup,R.id.count);
 
 
                         textView.startAnimation(animFadein);
-                        checkInternet.getCustomInstance(getApplicationContext()).setState(state);
+                        checkInternet.getCustomInstance(getApplicationContext()).setState(true);
                     } else {
-                        menuItem.setTitle("Internet Status > Offline");
+                        menuItem.setTitle("Check New Data > Offline");
                         popPup.setVisibility(View.GONE);
-                        checkInternet.getCustomInstance(getApplicationContext()).setState(state);
+                        checkInternet.getCustomInstance(getApplicationContext()).setState(false);
                     }
 
                 }
@@ -521,12 +591,6 @@ fragmentFlag=false;
     }
 
 
-
-
-
-
-
-
     public void bottomToolbar(View v)
     {
         searchBar.setText("");
@@ -541,42 +605,62 @@ fragmentFlag=false;
         {
             case R.id.tv_home :
             {
-
                 host.setVisibility(View.VISIBLE);
-                main_fragment_holder.setVisibility(View.VISIBLE);
-                compareLayout.setVisibility(View.GONE);
+                ShopManager_layout.setVisibility(View.INVISIBLE);
+                Maps_layout.setVisibility(View.INVISIBLE);
+                main_fragment_holder.setVisibility(View.INVISIBLE);
+                Notification_layout.setVisibility(View.INVISIBLE);
+                compareLayout.setVisibility(View.INVISIBLE);
+
+
 
             }break;
             case R.id.tv_shopManager :
             {
+                searchBar.setText("");
+                host.setVisibility(View.INVISIBLE);
+                ShopManager_layout.setVisibility(View.VISIBLE);
+                Maps_layout.setVisibility(View.INVISIBLE);
+                main_fragment_holder.setVisibility(View.INVISIBLE);
+                Notification_layout.setVisibility(View.INVISIBLE);
+                compareLayout.setVisibility(View.INVISIBLE);
+
+
 
             }break;
             case R.id.tv_maps :
             {
+                searchBar.setText("");
+                host.setVisibility(View.INVISIBLE);
+                ShopManager_layout.setVisibility(View.INVISIBLE);
+                Maps_layout.setVisibility(View.VISIBLE);
+                main_fragment_holder.setVisibility(View.INVISIBLE);
+                Notification_layout.setVisibility(View.INVISIBLE);
+                compareLayout.setVisibility(View.INVISIBLE);
 
             }break;
             case R.id.tv_notifications :
             {
+                searchBar.setText("");
+                host.setVisibility(View.INVISIBLE);
+                ShopManager_layout.setVisibility(View.INVISIBLE);
+                Maps_layout.setVisibility(View.INVISIBLE);
+                main_fragment_holder.setVisibility(View.INVISIBLE);
+                Notification_layout.setVisibility(View.VISIBLE);
+                compareLayout.setVisibility(View.INVISIBLE);
 
             }break;
             case R.id.tv_compare :
             {
+                searchBar.setText("");
+                host.setVisibility(View.INVISIBLE);
+                ShopManager_layout.setVisibility(View.INVISIBLE);
+                Maps_layout.setVisibility(View.INVISIBLE);
+                main_fragment_holder.setVisibility(View.INVISIBLE);
+                Notification_layout.setVisibility(View.INVISIBLE);
+                compareLayout.setVisibility(View.VISIBLE);
 
-                ShopPage shopPage= new ShopPage();
 
-                Bundle bundle= new Bundle();
-                bundle.putString("SHOPID",shopID);
-
-                shopPage.setArguments(bundle);
-
-                fragmentManager =getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.compare_main_frag,shopPage);
-                fragmentTransaction.commit();
-
-                   main_fragment_holder.setVisibility(View.GONE);
-                    host.setVisibility(View.GONE);
-                    compareLayout.setVisibility(View.VISIBLE);
                // Toast.makeText(this, "working", Toast.LENGTH_SHORT).show();
             }break;
         }
@@ -610,18 +694,18 @@ fragmentFlag=false;
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+
         } else if (id == R.id.nav_addShop) {
-            searchBar.setText("");
-            main_fragment_holder.setVisibility(View.VISIBLE);
-            host.setVisibility(View.GONE);
-            shopRegistration registration = new shopRegistration();
-            fragmentManager =getSupportFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.Main_Fragment_Holder,registration);
-            fragmentTransaction.commit();
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
 
         } else if (id == R.id.nav_slideshow) {
 
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
 
         } else if (id == R.id.nav_manage) {
             searchBar.setText("");
@@ -629,16 +713,50 @@ fragmentFlag=false;
             Intent o = new Intent(MainPage.this,LoginActivity.class);
             startActivity(o);
             finish();
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+
         } else if (id == R.id.nav_share) {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
 
         }
         else if(id == R.id.nav_netStatus)
         {
-            db.getDBStatus(popPup,R.id.count,ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastProductID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastShopID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCategoryID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCustomPID());
+            if(checkInternet.getCustomInstance(getApplicationContext()).isConnected()) {
+
+                db.getDBStatus(popPup,R.id.count,ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastProductID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastShopID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCategoryID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCustomPID());
+
+            }
+            else
+            {
+                Blurry.with(getApplicationContext()).sampling(2).onto((ViewGroup) mainPage.getRootView());
+                if(dialog==null) {
+                    final AlertDialog.Builder alert = new AlertDialog.Builder(MainPage.this);
+
+                    alert.setTitle("Oops !!");
+                    alert.setMessage("Network Connection Required To Update");
+                    alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            Blurry.delete((ViewGroup) mainPage.getRootView());
+                        }
+                    });
+                    dialog = alert.create();
+                }
+                dialog.show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Blurry.delete((ViewGroup) mainPage.getRootView());
+                        dialog.dismiss();
+                    }
+                }, 4000);
+            }
+
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
 
         return true;
     }

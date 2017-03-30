@@ -3,22 +3,14 @@
     android:id="@+id/shop_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF8A80"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp">
+   >
 
-    <RelativeLayout
-        android:id="@+id/holder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFF">
         <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
             <RelativeLayout
+                android:id="@+id/holder"
                 android:layout_width="fill_parent"
                 android:layout_height="570dp">
 
@@ -50,13 +42,15 @@
                     android:id="@+id/owner_detail"
                     android:layout_width="215dp"
                     android:layout_height="30dp"
+                    android:elevation="15dp"
                     android:layout_alignStart="@+id/shop_name"
                     android:layout_below="@+id/shop_name"
                     android:layout_marginStart="1dp"
                     android:layout_marginTop="10dp"
-                    android:background="#FF8A80"
+                    android:background="@drawable/backgraoundwithborder"
                     android:drawableEnd="@drawable/forward"
                     android:gravity="center"
+
                     android:text="Owner Details"
                     android:textSize="20dp" />
 
@@ -81,7 +75,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_below="@+id/shop_image"
                     android:layout_marginLeft="15dp"
-                    android:background="#FF8A80"
+                    android:background="@drawable/backgraoundwithborder"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="15dp"
                     android:text="Products"
@@ -117,43 +111,24 @@
                     android:id="@+id/contact"
                     android:padding="10dp"
                     android:text="Contact Number"
-                    android:background="#FF8A80"
+                    android:background="@drawable/backgraoundwithborder"
                     android:gravity="center"
                     android:textSize="20dp"
                     android:textStyle="bold"
                     android:layout_below="@id/address"
                     android:drawableLeft="@drawable/contactno"/>
 
-                <TextView
-                    android:id="@+id/rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:text="Ratings"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
-                    android:layout_alignBottom="@+id/ratingBar"
-                    android:layout_alignStart="@+id/address" />
-
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/contact"
-                    android:layout_alignEnd="@+id/contact" />
                 <Button
                     android:id="@+id/submit_request"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="I AM COMING"
                     android:textSize="20dp"
-                    android:background="#13b586"
-                    android:layout_below="@+id/ratingBar"
+                    android:background="@drawable/green_background"
+                    android:layout_below="@+id/contact"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="18dp" />
 
             </RelativeLayout>
         </ScrollView>
     </RelativeLayout>
-
-</RelativeLayout>
