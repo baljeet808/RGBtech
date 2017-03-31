@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/com_facebook_button_login_silver_background_color"
+
+    >
+
+    <ImageView
+        android:layout_width="50pt"
+        android:layout_height="50pt"
+        android:id="@+id/shopOwner_image"
+        android:background="@drawable/contact"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="ShopName"
+        android:textColor="#000"
+        android:textSize="18dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:id="@+id/shop_N"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/s_id"
+        android:visibility="gone"
+        />
+
+
+</LinearLayout>

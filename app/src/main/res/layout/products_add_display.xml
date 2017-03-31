@@ -4,7 +4,7 @@
     android:id="@+id/tableLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF8A80">
+    android:background="#000">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,26 +12,35 @@
         <CheckBox
             android:id="@+id/chk_product"
             android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:background="#cff"
+            />
         <TextView
             android:id="@+id/textView_productName"
             android:layout_width="150dp"
             android:layout_height="50dp"
+            android:textColor="#000"
+            android:background="#cff"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/chk_product" />
         <TextView
             android:id="@+id/textView_productAval"
             android:layout_width="60dp"
             android:layout_height="50dp"
+            android:textColor="#000"
+            android:background="#cff"
             android:layout_toEndOf="@id/textView_productName"
-            android:layout_marginEnd="5dp"
+
             />
         <TextView
             android:id="@+id/textView_productPrice"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:textColor="#000"
+            android:background="#cff"
+            android:gravity="center"
             android:layout_toEndOf="@id/textView_productAval"
-            android:layout_marginEnd="5dp"
+
             />
     </RelativeLayout>
 

@@ -20,16 +20,15 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" >
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="15pt"
+                android:layout_height="12pt"
                 android:text="Shops"
                 android:layout_marginRight="10dp"
                 android:textStyle="normal"
                 android:textColor="@color/color_11"
                 android:background="#ff5252"
                 android:gravity="center|center_horizontal"
-                android:textSize="14dp"
+                android:textSize="10dp"
                 android:drawableEnd="@drawable/search_app_bar"
-                android:padding="10dp"
                 android:onClick="changeSearchType"
                 android:id="@+id/tv_search_type"
                 />

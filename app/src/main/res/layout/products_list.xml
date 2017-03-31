@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FF8A80">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#00000000">
+
+    <Button
+        android:layout_width="15pt"
+        android:layout_height="15pt"
+        android:id="@+id/close_btn"
+        android:layout_alignParentRight="true"
+        android:drawableTop="@mipmap/ic_cancel_white_24dp"
+        android:background="@drawable/red_close"
+        />
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,7 +26,7 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="12dp"
-        android:background="#BDBDBD"
+        android:background="#00000000"
         android:padding="10dp">
 
         <TextView
@@ -25,35 +37,73 @@
             android:layout_centerHorizontal="true"
             android:text="PRODUCTS"
             android:textSize="30dp"
+            android:textColor="#FF8A80"
             android:textStyle="bold"
             android:layout_marginBottom="5dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/products"
+            android:id="@+id/dialog_title"
+            android:background="#000"
+            android:orientation="horizontal"
+
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textColor="#13b586"
+                android:text="Name"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textColor="#13b586"
+                android:text="Available"
+                android:gravity="right"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textColor="#13b586"
+                android:gravity="right"
+                android:text="Price (INR.)"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
 
         <ListView
             android:id="@+id/listView_Products"
             android:layout_width="match_parent"
-            android:layout_height="360dp"
-            android:layout_below="@+id/products"
-            android:layout_alignParentStart="true">
+            android:layout_height="250dp"
+            android:background="#000"
+            android:layout_below="@+id/dialog_title"
+            android:layout_alignParentStart="true"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="5.0sp"
+            >
             </ListView>
+
         <Button
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:background="#FF8A80"
-            android:text="Add own products"
-            android:textStyle="bold"
-            android:layout_below="@id/listView_Products"
-            android:layout_alignParentLeft="true"
-            android:layout_alignBottom="@+id/button5"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="40dp"/>
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:background="#13b586"
+            android:background="@drawable/green_button"
             android:text="I Am Coming"
             android:textStyle="bold"
+            android:layout_centerHorizontal="true"
             android:layout_below="@id/listView_Products"
-            android:layout_alignParentRight="true"
             android:id="@+id/button5"
             android:layout_marginTop="15dp"
             android:layout_marginRight="40dp"/>

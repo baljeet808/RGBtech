@@ -6,14 +6,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,10 +31,14 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -37,6 +46,7 @@ import android.widget.Toast;
 
 
 import com.nerdspoint.android.chandigarh.R;
+import com.nerdspoint.android.chandigarh.adapters.TempShopAdapter;
 import com.nerdspoint.android.chandigarh.adapters.populateSearchArray;
 import com.nerdspoint.android.chandigarh.fragments.Advrts;
 import com.nerdspoint.android.chandigarh.fragments.EditProfile;
@@ -82,13 +92,18 @@ public class MainPage extends AppCompatActivity
     DBHandler db;
     DrawerLayout mainPage;
     AutoCompleteTextView searchBar;
-    ArrayList<String> items,itemsCopy;
-    String temp="Shops",shopID;
+    ArrayList<String> items,itemsCopy,shopHistory;
+    String temp="Shops",shopID="1",ShopName="nerdspoint";
+    FloatingActionButton floatingButton;
     boolean fragmentFlag=true;
     boolean fragmentFlag1=true;
-    AlertDialog dialog;
-
-
+    AlertDialog dialog,dialog1;
+    boolean actionButtonFlag= true;
+    ListView result_list;
+    LayoutInflater inflater;
+    TempShopAdapter tempAdapter;
+    View historylist;
+    Button clear;
 
 
 
@@ -98,6 +113,70 @@ public class MainPage extends AppCompatActivity
         setContentView(R.layout.activity_main_page);
 
         mainPage= (DrawerLayout) findViewById(R.id.drawer_layout);
+        inflater = getLayoutInflater();
+
+        historylist = inflater.inflate(R.layout.history_list,null);
+        clear= (Button) historylist.findViewById(R.id.clearAll_button);
+
+
+        floatingButton= (FloatingActionButton) findViewById(R.id.float_button);
+        result_list = (ListView) historylist.findViewById(R.id.result_list);
+
+
+        shopHistory = new ArrayList<String>();
+        tempAdapter = new TempShopAdapter(getApplicationContext(),shopHistory);
+
+        result_list.setAdapter(tempAdapter);
+
+        result_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    TextView textView= (TextView) view.findViewById(R.id.s_id);
+
+                showShop(textView.getText().toString(),null);
+                dialog1.dismiss();
+                Blurry.delete((ViewGroup) compareLayout.getRootView());
+            }
+        });
+
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shopHistory.clear();
+                tempAdapter.notifyDataSetChanged();
+                clear.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        floatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                       Blurry.with(getApplicationContext()).radius(25).sampling(2).onto((ViewGroup) compareLayout.getRootView());
+                      // compareLayout.setVisibility(View.INVISIBLE);
+                        if(dialog1==null) {
+                            final AlertDialog.Builder alert = new AlertDialog.Builder(MainPage.this);
+
+
+                            alert.setView(historylist);
+                            alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    Blurry.delete((ViewGroup) mainPage.getRootView());
+                                }
+                            });
+                            dialog1 = alert.create();
+                        }
+                        dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dialog1.show();
+
+
+
+
+            }
+        });
+
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -313,9 +392,16 @@ public class MainPage extends AppCompatActivity
     }
 
 
-    public void  showShop(String shopID)
+    public void  showShop(String shopID,String ShopName)
     {
-        this.shopID=shopID;
+
+        clear.setVisibility(View.VISIBLE);
+        if(ShopName!=null) {
+            setHistoryList(ShopName, shopID);
+            this.ShopName= ShopName;
+            this.shopID=shopID;
+        }
+
 
         host.setVisibility(View.INVISIBLE);
         ShopManager_layout.setVisibility(View.INVISIBLE);
@@ -323,7 +409,7 @@ public class MainPage extends AppCompatActivity
         main_fragment_holder.setVisibility(View.INVISIBLE);
         Notification_layout.setVisibility(View.INVISIBLE);
         compareLayout.setVisibility(View.VISIBLE);
-
+        floatingButton.setVisibility(View.VISIBLE);
 
 
 
@@ -340,9 +426,12 @@ public class MainPage extends AppCompatActivity
 
         fragmentTransaction.replace(R.id.compare_main_frag,shopPage);
         fragmentTransaction.commit();
+    }
 
-
-
+    public void setHistoryList(String SHOPNAME,String SHOPID)
+    {
+        shopHistory.add(SHOPID);
+        tempAdapter.notifyDataSetChanged();
     }
 
 
@@ -611,8 +700,7 @@ fragmentFlag=false;
                 main_fragment_holder.setVisibility(View.INVISIBLE);
                 Notification_layout.setVisibility(View.INVISIBLE);
                 compareLayout.setVisibility(View.INVISIBLE);
-
-
+                floatingButton.setVisibility(View.INVISIBLE);
 
             }break;
             case R.id.tv_shopManager :
@@ -624,7 +712,7 @@ fragmentFlag=false;
                 main_fragment_holder.setVisibility(View.INVISIBLE);
                 Notification_layout.setVisibility(View.INVISIBLE);
                 compareLayout.setVisibility(View.INVISIBLE);
-
+                floatingButton.setVisibility(View.INVISIBLE);
 
 
             }break;
@@ -637,6 +725,8 @@ fragmentFlag=false;
                 main_fragment_holder.setVisibility(View.INVISIBLE);
                 Notification_layout.setVisibility(View.INVISIBLE);
                 compareLayout.setVisibility(View.INVISIBLE);
+                floatingButton.setVisibility(View.INVISIBLE);
+
 
             }break;
             case R.id.tv_notifications :
@@ -648,10 +738,13 @@ fragmentFlag=false;
                 main_fragment_holder.setVisibility(View.INVISIBLE);
                 Notification_layout.setVisibility(View.VISIBLE);
                 compareLayout.setVisibility(View.INVISIBLE);
+                floatingButton.setVisibility(View.INVISIBLE);
 
             }break;
             case R.id.tv_compare :
             {
+                actionButtonFlag=true;
+                floatingButton.setVisibility(View.VISIBLE);
                 searchBar.setText("");
                 host.setVisibility(View.INVISIBLE);
                 ShopManager_layout.setVisibility(View.INVISIBLE);
@@ -659,7 +752,6 @@ fragmentFlag=false;
                 main_fragment_holder.setVisibility(View.INVISIBLE);
                 Notification_layout.setVisibility(View.INVISIBLE);
                 compareLayout.setVisibility(View.VISIBLE);
-
 
                // Toast.makeText(this, "working", Toast.LENGTH_SHORT).show();
             }break;
@@ -731,6 +823,7 @@ fragmentFlag=false;
             else
             {
                 Blurry.with(getApplicationContext()).sampling(2).onto((ViewGroup) mainPage.getRootView());
+
                 if(dialog==null) {
                     final AlertDialog.Builder alert = new AlertDialog.Builder(MainPage.this);
 
@@ -744,6 +837,7 @@ fragmentFlag=false;
                     });
                     dialog = alert.create();
                 }
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
 
                 new Handler().postDelayed(new Runnable() {

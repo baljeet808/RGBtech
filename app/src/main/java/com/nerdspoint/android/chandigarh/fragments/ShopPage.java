@@ -4,6 +4,8 @@ package com.nerdspoint.android.chandigarh.fragments;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -40,11 +42,11 @@ public class ShopPage extends Fragment implements View.OnClickListener {
     TextView shopName,Category,Address,contact;
     ImageButton map;
     ImageView profilePic;
-    Button ownerDetail,Products;
+    Button ownerDetail,Products,close_btn;
     String Shopid;
-    View userProfile;
+    View userProfile,ProductsList;
     AlertDialog.Builder alert;
-    AlertDialog dialog;
+    AlertDialog dialog,dialog2;
 
 
 
@@ -71,6 +73,20 @@ public class ShopPage extends Fragment implements View.OnClickListener {
 
         userProfile=prepareUserProfile();
 
+        ProductsList= prepareProductsList();
+
+        if(ProductsList!=null) {
+            close_btn = (Button) ProductsList.findViewById(R.id.close_btn);
+
+            close_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog2.dismiss();
+                    Blurry.delete((ViewGroup) getView());
+                }
+            });
+        }
+
         map= (ImageButton) view.findViewById(R.id.mapbutton);
         map.setOnClickListener(this);
 
@@ -84,6 +100,21 @@ public class ShopPage extends Fragment implements View.OnClickListener {
 
 
         return view;
+    }
+
+    public View prepareProductsList() {
+
+            if(checkInternet.getCustomInstance(getActivity()).isConnected()) {
+                LayoutInflater layoutInflater = getLayoutInflater(null);
+                View view = layoutInflater.inflate(R.layout.products_list, null);
+
+                return new DBHandler(getActivity()).getShopProductList(Shopid, view);
+            }
+            else {
+                Toast.makeText(getActivity(), "net again not connected", Toast.LENGTH_SHORT).show();
+                return null;
+            }
+
     }
 
     public View prepareUserProfile()
@@ -172,9 +203,48 @@ public class ShopPage extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(), "catch showing - "+e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }break;
-            case R.id.products :
-            {
+            case R.id.products : {
+                        try{
 
+
+
+                            if (dialog2 != null) {
+                                              dialog2.show();
+                                                } else {
+                                 alert = new AlertDialog.Builder(getActivity());
+                            if (ProductsList != null) {
+                                         alert.setView(ProductsList);
+                            } else {
+                                        alert.setTitle("We hit a Wall !! ");
+                                        alert.setMessage("Profile Available in online mode");
+                            }
+                                     alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                                    Toast.makeText(getActivity(), "cancel called", Toast.LENGTH_LONG).show();
+                            try {
+                                Blurry.delete((ViewGroup) getView());
+
+                            } catch (Exception e) {
+                                Toast.makeText(getActivity(), "catch blurry not working " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+
+                                 dialog2 = alert.create();
+                                dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                dialog2.show();
+                }
+                try {
+                    Blurry.with(getActivity()).radius(25).sampling(2).onto((ViewGroup) getView());
+                } catch (Exception e) {
+                    Toast.makeText(getActivity(), "Blurry not working - " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+                catch(Exception e)
+            {
+                Toast.makeText(getActivity(), "catch showing - "+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
             }break;
             case R.id.mapbutton :
             {

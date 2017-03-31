@@ -15,5 +15,6 @@ public class ProductDetails {
     public String ShopName;
     public String ShopContactNo;
     public String Address;
+    public String IsActive;
 
 }

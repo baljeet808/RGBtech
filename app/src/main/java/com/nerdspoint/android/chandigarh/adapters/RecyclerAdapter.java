@@ -85,7 +85,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 @Override
                 public void onClick(View v) {
 
-                    ((MainPage)context).showShop(ShopId);
+                    ((MainPage)context).showShop(ShopId,shopName);
                 }
             });
         }
@@ -123,7 +123,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainPage)context).showShop(productDetails.ShopID);
+
+
+
+                    ((MainPage)context).showShop(productDetails.ShopID,productDetails.ShopName);
+
+
+
                 }
             });
         }
