@@ -103,6 +103,7 @@ public int backcount;
     boolean fragmentFlag1=true;
     AlertDialog dialog,dialog1;
     boolean actionButtonFlag= true;
+    boolean flag2= true;
     ListView result_list;
     LayoutInflater inflater;
     TempShopAdapter tempAdapter;
@@ -383,17 +384,6 @@ public int backcount;
 
 
 
-
-        ShopManager manager = new ShopManager();
-
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-
-        fragmentTransaction.add(R.id.Shop_manager_holder,manager);
-        fragmentTransaction.commit();
-
-
         checkInternetConnection();
     }
 
@@ -403,9 +393,13 @@ public int backcount;
 
     }
 
-    public void ShopInfo()
+    public void ShopInfo( String shopid)
     {
+         Bundle bundle=new Bundle();
+        bundle.putString("shopid",shopid);
         ShopInfo shopInfo=new ShopInfo();
+        shopInfo.setArguments(bundle);
+
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
@@ -413,6 +407,7 @@ public int backcount;
         fragmentTransaction.replace(R.id.Shop_manager_holder, shopInfo);
         fragmentTransaction.commit();
     }
+
 
 
   public void AddShop()
@@ -782,6 +777,33 @@ fragmentFlag=false;
             }break;
             case R.id.tv_shopManager :
             {
+                if (flag2)
+                {
+                    ShopManager manager = new ShopManager();
+
+
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+                    fragmentTransaction.add(R.id.Shop_manager_holder, manager);
+                    fragmentTransaction.commit();
+                    flag2=false;
+                }
+                else
+                {
+
+                    ShopManager manager = new ShopManager();
+
+
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+                    fragmentTransaction.replace(R.id.Shop_manager_holder, manager);
+                    fragmentTransaction.commit();
+                }
+
                 searchBar.setText("");
                 host.setVisibility(View.INVISIBLE);
                 ShopManager_layout.setVisibility(View.VISIBLE);

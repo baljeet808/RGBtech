@@ -20,6 +20,7 @@ public class ShopInfo extends Fragment {
 
   Button Back;
     ViewPager mViewPager ;
+    String shopid;
 
     public ShopInfo() {
         // Required empty public constructor
@@ -32,6 +33,12 @@ public class ShopInfo extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_shop_info, container, false);
         Back=(Button)view.findViewById(R.id.back_button);
+
+
+          Bundle bundle=getArguments();
+          shopid=bundle.get("shopid").toString();
+
+        Back.setText(shopid);
 
           mViewPager = (ViewPager) view.findViewById(R.id.viewPageAndroid);
         AndroidImageAdapter adapterView = new AndroidImageAdapter(getActivity());
