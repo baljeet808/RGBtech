@@ -162,6 +162,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
+                                    Snackbar.make(getCurrentFocus(),"LOGIN FAILED "+e.getMessage(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
 
                                 }
                                 Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
@@ -177,6 +178,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Log.d("ERROR","error => "+error.toString());
+
                             alert.cancel();
                             Blurry.delete((ViewGroup) login_activity.getRootView());
                             Snackbar.make(getCurrentFocus(),error.getMessage(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();

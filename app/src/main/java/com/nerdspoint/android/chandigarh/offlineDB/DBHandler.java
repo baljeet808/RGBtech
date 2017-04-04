@@ -77,7 +77,7 @@ public class DBHandler extends SQLiteOpenHelper
 
 
 
-    String[] colNames = {"ShopID", "UID", "ShopContactNo", "ShopName", "ShopAddress", "PinCode", "Sector", "SCO", "Latitude", "Longitude", "CategoryID"};
+    String[] colNames = {"ShopID", "UID", "ShopContactNo", "ShopName", "ShopAddress", "PinCode", "Sector", "SCO", "Latitude", "Longitude", "CategoryID","FirebaseID"};
     String[] colNames1 = {"ProductID", "ProductName", "CategoryID"};
     String[] colNames2 = {"CategoryID", "CategoryName"};
     String[] colNames3 = {"CustomPID","ProductID", "CategoryID", "ShopID", "ProductName", "Price", "IsActive"};
@@ -85,6 +85,7 @@ public class DBHandler extends SQLiteOpenHelper
 
     private String update_url = "/offlineUpdate.php";
     private String vendorProfile_url = "/ShopOwnerProfile.php";
+    private String updateFirebase_url = "/Update_FireBaseID.php";
 
 
     private String count_url ="/CountNewData.php";
@@ -97,8 +98,55 @@ public class DBHandler extends SQLiteOpenHelper
         update_url=ipAddress.getCustomInstance(context).getIp()+update_url;
         count_url=ipAddress.getCustomInstance(context).getIp()+count_url;
         vendorProfile_url=ipAddress.getCustomInstance(context).getIp()+vendorProfile_url;
+        updateFirebase_url = ipAddress.getCustomInstance(context).getIp()+updateFirebase_url;
     }
 
+    public void createFirebaseHistory()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (db == null) {
+            return;
+        }
+        String sql = "CREATE TABLE IF NOT EXISTS Sender (messageId Integer PRIMARY KEY AUTOINCREMENT, title text, message text, fid text, ShopID text, myDate DATETIME);";
+        db.execSQL(sql);
+        String sql1 = "CREATE TABLE IF NOT EXISTS Receiver (messageId Integer PRIMARY KEY AUTOINCREMENT, title text, message text, fid text, ShopID text, myDate DATETIME);";
+        db.execSQL(sql1);
+        db.close();
+        Toast.makeText(context, "firebase tables created", Toast.LENGTH_SHORT).show();
+    }
+
+    public Cursor getSenderNotifications()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if(db== null)
+        {
+            return null;
+        }
+        return db.rawQuery("select message , messageId, fid, ShopId , messageId from Sender",null);
+    }
+
+    public void addNotificationRecieved(String message,String title)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (db == null) {
+            return;
+        }
+        ContentValues values = new ContentValues();
+        values.put("message",message);
+        values.put("title",title);
+        add("Receiver",values);
+    }
+
+
+    public Cursor getReceiverNotifications()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if(db== null)
+        {
+            return null;
+        }
+        return db.rawQuery("select message , messageId, fid, ShopId , messageId from Receiver",null);
+    }
 
 
 
@@ -197,13 +245,45 @@ public class DBHandler extends SQLiteOpenHelper
 
 
         if(ActiveUserDetail.getCustomInstance(context).getIsFirstSync()) {
-            CreateTable("ShopMasterTable", colNames, 11);
+            CreateTable("ShopMasterTable", colNames, 12);
             CreateTable("Product", colNames1, 3);
             CreateTable("Category", colNames2, 2);
             CreateTable("CustomProductDetail", colNames3, 7);
             ActiveUserDetail.getCustomInstance(context).setIsFirstSync(false);
         }
         updateOfflineTable("ShopMasterTable",colNames,"ShopID",ActiveUserDetail.getCustomInstance(context).getLastShopID());
+
+    }
+
+    public void updateFirebaseId(String firebaseId)
+    {
+        StringRequest request= new StringRequest(Request.Method.POST, updateFirebase_url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("Success")) {
+                    Toast.makeText(context, "Firebase is Ready to use", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "" + response.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Firebase id not saved "+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("UID",ActiveUserDetail.getCustomInstance(context).getUID());
+                map.put("FID",ActiveUserDetail.getCustomInstance(context).getFirebaseRegId());
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue= Volley.newRequestQueue(context);
+        requestQueue.add(request);
 
     }
 
@@ -339,7 +419,7 @@ public class DBHandler extends SQLiteOpenHelper
 
 
                // Log.d("Response", response);
-             //  Toast.makeText(context, ""+response, Toast.LENGTH_SHORT).show();
+               Toast.makeText(context, ""+response, Toast.LENGTH_SHORT).show();
 
 
                 try {
@@ -359,7 +439,7 @@ public class DBHandler extends SQLiteOpenHelper
                     }
 
                     progress=progress+25;
-                // Toast.makeText(context, ""+progress, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, ""+progress, Toast.LENGTH_SHORT).show();
                     // updateLastIds();
                     if(TableName.equals("ShopMasterTable"))
                     {
@@ -447,7 +527,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select ShopName, ShopAddress, UID, Sector, SCO , ShopContactNo , CategoryID from ShopMasterTable where ShopID = "+shopId+"",null);
+        return db.rawQuery("select ShopName, ShopAddress, UID, Sector, SCO , ShopContactNo , CategoryID , FirebaseID from ShopMasterTable where ShopID = "+shopId+"",null);
     }
 
     public Cursor getCategory(String CategoryName)
@@ -546,7 +626,7 @@ public class DBHandler extends SQLiteOpenHelper
       //  Toast.makeText(context, ""+id5, Toast.LENGTH_SHORT).show();
         ActiveUserDetail.getCustomInstance(context).setLastCustomPID(Integer.parseInt(id5));
 
-    //   Toast.makeText(context,"last shopid "+ActiveUserDetail.getCustomInstance(context).getLastShopID()+" Last ProductID "+ActiveUserDetail.getCustomInstance(context).getLastProductID()+" Category id "+ActiveUserDetail.getCustomInstance(context).getLastCategoryID()+" customPID "+ActiveUserDetail.getCustomInstance(context).getLastCustomPID()+" ",Toast.LENGTH_LONG).show();
+       Toast.makeText(context,"last shopid "+ActiveUserDetail.getCustomInstance(context).getLastShopID()+" Last ProductID "+ActiveUserDetail.getCustomInstance(context).getLastProductID()+" Category id "+ActiveUserDetail.getCustomInstance(context).getLastCategoryID()+" customPID "+ActiveUserDetail.getCustomInstance(context).getLastCustomPID()+" ",Toast.LENGTH_LONG).show();
         populateSearchArray.getCustomInstance(context,searchBar).populate("Shops");
     }
 

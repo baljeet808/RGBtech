@@ -27,6 +27,8 @@ import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.activities.MainPage;
 import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.permissionCheck.checkInternet;
+import com.nerdspoint.android.chandigarh.service.notify;
+import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +109,21 @@ public class ShopPage extends Fragment implements View.OnClickListener {
             if(checkInternet.getCustomInstance(getActivity()).isConnected()) {
                 LayoutInflater layoutInflater = getLayoutInflater(null);
                 View view = layoutInflater.inflate(R.layout.products_list, null);
+                Button coming = (Button) view.findViewById(R.id.button5);
+                String fid="";
+                final Cursor cursor = new DBHandler(getActivity()).getShopByID(Shopid);
+                if(cursor.moveToFirst())
+                {
+                    fid= cursor.getString(cursor.getColumnIndex("FirebaseID"));
+                }
+                final String finalFid = fid;
+                coming.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                            new notify(getActivity()).sendNotification(""+shopName.getText().toString()+" sent u a notification",""+Shopid+" <shopid", finalFid);
+
+                    }
+                });
 
                 return new DBHandler(getActivity()).getShopProductList(Shopid, view);
             }

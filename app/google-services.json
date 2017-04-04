@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "635969952258",
+    "firebase_url": "https://chandigarh-fd7eb.firebaseio.com",
+    "project_id": "chandigarh-fd7eb",
+    "storage_bucket": "chandigarh-fd7eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635969952258:android:8ec01b660a4ef658",
+        "android_client_info": {
+          "package_name": "com.nerdspoint.android.chandigarh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "635969952258-quc0mt9fqficn5ns60hok2mjbcsk5c56.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB27iuhBxWATE3nVF61b8I7nX_llXPE4rg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

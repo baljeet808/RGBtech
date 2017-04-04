@@ -97,10 +97,15 @@ public class shopRegistration extends Fragment {
 
         list = new ArrayList();
 
-        int count = CategoriesDetail.getCustomInstance(getActivity()).getCategoryCount();
-        for(int i=0;i<count;i++)
+       Cursor cursor=new DBHandler(getActivity()).getAll("Category");
+
+        if(cursor.moveToFirst())
         {
-            list.add(CategoriesDetail.getCustomInstance(getActivity()).getCategory(i));
+            while(!cursor.isAfterLast())
+            {
+                list.add(cursor.getString(cursor.getColumnIndex("CategoryName")));
+                cursor.moveToNext();
+            }
         }
         adapter= new ArrayAdapter(getActivity().getApplicationContext(),R.layout.support_simple_spinner_dropdown_item,list);
 
@@ -243,6 +248,7 @@ public class shopRegistration extends Fragment {
                   params.put("Latitude",  latitude1.getText().toString() );
                   params.put("Longitude",longitude1.getText().toString());
                   params.put("UID",ActiveUserDetail.getCustomInstance(getActivity()).getUID());
+                  params.put("FirebaseID",ActiveUserDetail.getCustomInstance(getActivity()).getFirebaseRegId());
 
 
 

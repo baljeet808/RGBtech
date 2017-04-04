@@ -70,8 +70,6 @@ public class Splash extends AppCompatActivity {
         fade_in=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fade_in);
         fade=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fade);
 
-
-
         textView = (TextView) findViewById(R.id.textView6);
         companyName=(TextView) findViewById(R.id.companyName);
         logo = (ImageView) findViewById(R.id.imageView2);
@@ -114,6 +112,8 @@ public class Splash extends AppCompatActivity {
                                         }
                                         else
                                         {
+
+                                            new DBHandler(getApplicationContext()).createFirebaseHistory();
                                             Intent j = new Intent(Splash.this, LoginActivity.class);
                                             startActivity(j);
                                             finish();

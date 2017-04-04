@@ -1,0 +1,19 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="#000"
+    tools:context="com.nerdspoint.android.chandigarh.fragments.Notification">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/notificationlist"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="20.0sp"
+        >
+
+    </ListView>
+</RelativeLayout>

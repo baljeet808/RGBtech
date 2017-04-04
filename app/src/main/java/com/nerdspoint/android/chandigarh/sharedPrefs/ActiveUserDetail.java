@@ -76,6 +76,26 @@ public class ActiveUserDetail {
     public int getLastProductID(){ return  sharedPreferences.getInt("ProductID",0);}
     public int getTotalRecords(){return sharedPreferences.getInt("Records",0);}
 
+    public void setIsFirebaseSet(boolean set)
+    {
+        editor.putBoolean("fStatus",set);
+        editor.apply();
+    }
+    public boolean isFirebaseSet()
+    {
+        return  sharedPreferences.getBoolean("fStatus",false);
+    }
+
+    public void setFirbaseRegId(String Id)
+    {
+        editor.putString("RegId",Id);
+        editor.apply();
+    }
+    public String getFirebaseRegId()
+    {
+        return  sharedPreferences.getString("RegId","0");
+    }
+
 
     public void setTotalRecords(int records)
     {
