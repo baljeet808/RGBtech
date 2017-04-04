@@ -587,7 +587,7 @@ public class DBHandler extends SQLiteOpenHelper
         if (db == null) {
             return null;
         }
-        return db.rawQuery("Select ShopName from ShopMasterTable where UID = "+UID+"", null);
+        return db.rawQuery("Select ShopName , ShopID , ShopAddress , ShopContactNO , Sector , SCO  , CategoryID  from ShopMasterTable where UID = "+UID+"", null);
     }
 
 

@@ -15,6 +15,8 @@ public class ShopDetails {
     public String productName;
     public String price;
     public String ShopID;
+    public String category;
+
 
 
 
