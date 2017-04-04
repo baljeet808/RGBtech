@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.test.mock.MockPackageManager;
 import android.util.Log;
@@ -60,7 +62,7 @@ public class shopRegistration extends Fragment {
     ArrayAdapter adapter;
     Spinner spinner;
     EditText tv_shopname,tv_shopAddress,tv_pincode,tv_SCO,tv_Sctor,tv_Shopnumber;
-    Button PinOnmap,Submit;
+    Button PinOnmap,Submit,cancel;
     TextView longitude1, latitude1;
     String cid;
 
@@ -117,8 +119,16 @@ public class shopRegistration extends Fragment {
         tv_Shopnumber=(EditText)view.findViewById(R.id.ShopNumber);
         PinOnmap=(Button)view.findViewById(R.id.mapPin);
         Submit=(Button)view.findViewById(R.id.submit);
+        cancel=(Button)view.findViewById(R.id.cancel);
         longitude1=(TextView)view.findViewById(R.id.longitude);
         latitude1=(TextView)view.findViewById(R.id.latitude);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainPage)getActivity()).AddShop();
+            }
+        });
 
 
         Submit.setOnClickListener(new View.OnClickListener() {
@@ -209,11 +219,9 @@ public class shopRegistration extends Fragment {
                   if (response.equals("Success")) {
                       alert.cancel();
                       Snackbar.make(getActivity().getCurrentFocus(), "record saved", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                     // check();
-                      Intent h = new Intent(getActivity(), MainPage.class);
-                      startActivity(h);
-                      getActivity().finish();
+
                       Toast.makeText(getActivity(), "shop registration Success", Toast.LENGTH_SHORT).show();
+                      ((MainPage)getActivity()).AddShop();
                   } else {
                       alert.cancel();
                       Snackbar.make(getActivity().getCurrentFocus(), response.toString(), Snackbar.LENGTH_SHORT).setAction("Action", null).show();

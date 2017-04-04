@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -51,6 +53,8 @@ import com.nerdspoint.android.chandigarh.adapters.populateSearchArray;
 import com.nerdspoint.android.chandigarh.fragments.Advrts;
 import com.nerdspoint.android.chandigarh.fragments.EditProfile;
 import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
+import com.nerdspoint.android.chandigarh.fragments.ShopInfo;
+import com.nerdspoint.android.chandigarh.fragments.ShopManager;
 import com.nerdspoint.android.chandigarh.fragments.ShopPage;
 import com.nerdspoint.android.chandigarh.fragments.categoriesMenu;
 import com.nerdspoint.android.chandigarh.fragments.customProductList;
@@ -67,7 +71,7 @@ import jp.wasabeef.blurry.Blurry;
 
 public class MainPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+public int backcount;
     NavigationView navigationView;
     View view;
     FragmentTransaction fragmentTransaction;
@@ -104,6 +108,7 @@ public class MainPage extends AppCompatActivity
     TempShopAdapter tempAdapter;
     View historylist;
     Button clear;
+    Boolean flag=true;
 
 
 
@@ -358,13 +363,6 @@ public class MainPage extends AppCompatActivity
 
         }
 
-        shopRegistration registration = new shopRegistration();
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-
-        fragmentTransaction.add(R.id.Shop_manager_holder,registration);
-        fragmentTransaction.commit();
 
 
 
@@ -382,6 +380,20 @@ public class MainPage extends AppCompatActivity
         fragmentTransaction.add(R.id.compare_main_frag,shopPage);
         fragmentTransaction.commit();
 
+
+
+
+
+        ShopManager manager = new ShopManager();
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        fragmentTransaction.add(R.id.Shop_manager_holder,manager);
+        fragmentTransaction.commit();
+
+
         checkInternetConnection();
     }
 
@@ -391,6 +403,45 @@ public class MainPage extends AppCompatActivity
 
     }
 
+    public void ShopInfo()
+    {
+        ShopInfo shopInfo=new ShopInfo();
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        fragmentTransaction.replace(R.id.Shop_manager_holder, shopInfo);
+        fragmentTransaction.commit();
+    }
+
+
+  public void AddShop()
+  {
+       if(flag) {
+           shopRegistration registration = new shopRegistration();
+           fragmentManager = getSupportFragmentManager();
+           fragmentTransaction = fragmentManager.beginTransaction();
+           fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+           fragmentTransaction.replace(R.id.Shop_manager_holder, registration);
+           fragmentTransaction.commit();
+           flag=false;
+       }
+       else
+       {
+          ShopManager shopManager = new ShopManager();
+           fragmentManager = getSupportFragmentManager();
+           fragmentTransaction = fragmentManager.beginTransaction();
+           fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+           fragmentTransaction.replace(R.id.Shop_manager_holder , shopManager);
+           fragmentTransaction.commit();
+           flag=true;
+       }
+
+
+
+  }
 
     public void  showShop(String shopID,String ShopName)
     {
@@ -599,16 +650,42 @@ fragmentFlag=false;
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+
+        if(backcount>0)
+        {
+            finish();
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Press again to exits", Toast.LENGTH_LONG).show();
+           backcount++;
+            new CountDownTimer(2000,1000)
+            {
+
+                @Override
+                public void onTick(long l)
+                {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    backcount=0;
+                }
+
+            }.start();
+
+        }
+
+
+       /* DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
             android.os.Process.killProcess(android.os.Process.myPid());
         }
-
-
-
+*/
     }
 
 

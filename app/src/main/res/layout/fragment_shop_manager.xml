@@ -1,0 +1,124 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nerdspoint.android.chandigarh.fragments.ShopManager">
+
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView2">
+        <android.support.v7.widget.CardView
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:id="@+id/ShopInfo_card"
+
+            >
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                     android:id="@+id/Shopname"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center"
+
+                    android:text="Yadav Beer Shop"
+                    android:textColor="#000"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Liquor"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:id="@+id/category"
+
+
+                    android:layout_below="@+id/Shopname"
+                    android:layout_toStartOf="@+id/imageView6" />
+
+
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Guru teg bahdur nagar"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:id="@+id/Shopaddress"
+
+                    android:layout_below="@+id/category"
+                    android:layout_toStartOf="@+id/imageView6" />
+
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="7696443513"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:id="@+id/PhoneNumber"
+
+                    android:layout_below="@+id/Shopaddress"
+                    android:layout_toStartOf="@+id/imageView6" />
+
+
+
+
+
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_below="@id/Shopname"
+                    android:background="@drawable/shopicon"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/imageView6" />
+
+
+
+
+            </RelativeLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+
+    </ScrollView>
+
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/add" />
+
+
+
+</RelativeLayout>
