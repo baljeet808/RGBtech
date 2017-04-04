@@ -16,6 +16,7 @@
             android:background="#cff"
             />
         <TextView
+
             android:id="@+id/textView_productName"
             android:layout_width="150dp"
             android:layout_height="50dp"

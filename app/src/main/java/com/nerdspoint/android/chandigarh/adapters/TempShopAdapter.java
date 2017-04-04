@@ -94,6 +94,7 @@ public class TempShopAdapter extends BaseAdapter {
         {
             holder.text1.setText("No Data");
 
+
         }
         else {
             /***** Get each Model object from Arraylist ********/

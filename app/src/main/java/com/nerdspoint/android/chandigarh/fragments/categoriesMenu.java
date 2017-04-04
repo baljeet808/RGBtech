@@ -31,6 +31,7 @@ public class categoriesMenu extends Fragment implements AdapterView.OnItemClickL
     Cursor cursor;
     ListView listView;
 
+
     public categoriesMenu() {
         // Required empty public constructor
     }

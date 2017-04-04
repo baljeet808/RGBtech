@@ -60,6 +60,7 @@ public class NotificationAdapter extends BaseAdapter {
             public TextView text2;
         }
 
+
         @Override
         public View getView ( int position, View convertView, ViewGroup parent){
             View vi = convertView;

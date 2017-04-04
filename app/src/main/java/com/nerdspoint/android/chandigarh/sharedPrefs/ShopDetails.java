@@ -17,5 +17,6 @@ public class ShopDetails {
     public String ShopID;
 
 
+
 }
 

@@ -82,6 +82,7 @@ public class listCustomAdapter extends BaseAdapter {
             /************  Set holder with LayoutInflater ************/
             vi.setTag( holder );
         }
+
         else {
             holder = (ViewHolder) vi.getTag();
         }

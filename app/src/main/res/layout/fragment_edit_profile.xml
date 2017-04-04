@@ -20,6 +20,7 @@ android:background="@drawable/logo"
     android:layout_alignParentStart="true" />
 
     <TextView
+
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:hint="First Name"

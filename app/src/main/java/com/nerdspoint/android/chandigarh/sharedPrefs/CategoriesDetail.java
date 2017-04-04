@@ -76,6 +76,7 @@ public class CategoriesDetail {
     }
     public void setCategory(int i,String category)
     {
+
         editor.putString("Category"+i,category);
         editor.apply();
     }

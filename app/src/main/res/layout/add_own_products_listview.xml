@@ -15,6 +15,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="5dp"/>
         <TextView
+
             android:id="@+id/textView_productName"
             android:layout_width="220dp"
             android:layout_height="50dp"

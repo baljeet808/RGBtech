@@ -18,6 +18,7 @@ public class AndroidImageAdapter extends PagerAdapter {
     }
 
     @Override
+
     public int getCount() {
         return sliderImagesId.length;
     }

@@ -28,6 +28,7 @@ public class checkInternet {
     {
         this.context=context;
 
+
         sharedPreferences= context.getSharedPreferences("connectionDetail",Context.MODE_PRIVATE);
         editor=sharedPreferences.edit();
         editor.apply();

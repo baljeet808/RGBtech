@@ -94,6 +94,7 @@ public class productListAdapter extends BaseAdapter {
             holder.text1.setText("NO");
             holder.text2.setText("_");
         }
+
         else {
             /***** Get each Model object from Arraylist ********/
             productDetails = null;

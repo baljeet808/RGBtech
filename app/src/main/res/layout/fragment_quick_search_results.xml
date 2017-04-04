@@ -15,6 +15,7 @@
         android:layout_alignParentLeft="true"
         />
     <TextView
+
         android:id="@+id/resultCount"
         android:layout_width="150dp"
         android:layout_height="wrap_content"

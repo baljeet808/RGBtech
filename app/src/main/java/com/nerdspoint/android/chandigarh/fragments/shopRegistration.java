@@ -101,6 +101,7 @@ public class shopRegistration extends Fragment {
 
        Cursor cursor=new DBHandler(getActivity()).getAll("Category");
 
+
         if(cursor.moveToFirst())
         {
             while(!cursor.isAfterLast())

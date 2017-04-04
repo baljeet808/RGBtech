@@ -18,7 +18,8 @@
         android:padding="10dp"
 
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        >
 
         <EditText
             android:id="@+id/ShopAddress"

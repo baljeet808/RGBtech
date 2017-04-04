@@ -11,6 +11,7 @@ public class CategoryDetails {
     public String CategoryName;
     public String ProductID;
     public String ProductCount;
+
 }
 
 

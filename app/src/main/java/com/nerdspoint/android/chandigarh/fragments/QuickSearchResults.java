@@ -52,6 +52,7 @@ public class QuickSearchResults extends Fragment implements View.OnClickListener
     FragmentTransaction fragmentTransaction;
 
 
+
     Context context;
     listCustomAdapter customAdapter;
     TextView query,resultCounts,searchType;

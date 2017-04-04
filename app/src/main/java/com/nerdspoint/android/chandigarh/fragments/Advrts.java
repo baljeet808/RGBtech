@@ -22,6 +22,7 @@ public class Advrts extends Fragment implements CardStackView.ItemExpendListener
 
 
 
+
     public static Integer[] TEST_DATAS = new Integer[]{
             R.color.color_1,
             R.color.color_2,

@@ -400,7 +400,6 @@ public int backcount;
 
 
 
-        ShopManager manager = new ShopManager();
 
 
         fragmentManager = getSupportFragmentManager();
@@ -418,6 +417,15 @@ public int backcount;
             firebaseBroadcast();
             ActiveUserDetail.getCustomInstance(getApplicationContext()).setIsFirebaseSet(true);
         }
+
+
+        ShopManager manager = new ShopManager();
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+
         fragmentTransaction.add(R.id.Shop_manager_holder,manager);
         fragmentTransaction.commit();
 

@@ -28,6 +28,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     List<ProductDetails> list1;
     String type;
 
+
     public RecyclerAdapter(Activity activity,Context context, List<ShopDetails> list, List<ProductDetails>  list1, String type) {
         this.context = context;
             this.list1=list1;

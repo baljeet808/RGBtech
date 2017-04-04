@@ -45,6 +45,7 @@ public class FogotPassword extends AppCompatActivity {
     FragmentManager fragmentManager;
      RelativeLayout main,passfrag;
     boolean isVerified;
+
     private  final  static String URL_PHONE="https://baljeet808singh.000webhostapp.com/chandigarh/VerifyNumber.php";
     private EditText number;
     ProgressDialog progress;

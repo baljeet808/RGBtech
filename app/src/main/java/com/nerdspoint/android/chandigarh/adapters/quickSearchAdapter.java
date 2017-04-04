@@ -52,6 +52,7 @@ public class quickSearchAdapter {
 
         arrayAdapter = new ArrayAdapter(context,android.R.layout.simple_list_item_1,items);
 
+
         return  arrayAdapter;
     }
 

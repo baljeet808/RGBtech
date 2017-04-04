@@ -13,6 +13,7 @@
         android:background="@drawable/red_close"
         />
     <ScrollView
+
         android:layout_width="wrap_content"
 
         android:layout_height="wrap_content"

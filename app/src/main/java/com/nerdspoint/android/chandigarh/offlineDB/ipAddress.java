@@ -22,6 +22,7 @@ public class ipAddress {
 
     static ipAddress classObject;
 
+
     public ipAddress(Context context)
     {
         this.context=context;

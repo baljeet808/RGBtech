@@ -117,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                     alert.setTitle("Loging In");
                     final ProgressBar progressBar = new ProgressBar(getApplicationContext());
                     alert.setView(progressBar);
+                    alert.setCancelable(false);
                     alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {

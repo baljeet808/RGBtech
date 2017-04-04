@@ -168,6 +168,7 @@ public class ActiveUserDetail {
     {
         editor.putString("LastName",lastName);editor.apply();
     }
+
     public void setPassword(String password)
     {
         editor.putString("Password",password);editor.apply();

@@ -196,6 +196,7 @@ public class SignupForm extends AppCompatActivity {
                 {
                     Snackbar.make(getCurrentFocus(),"User already exists with this detail",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                 }
+
                 if(response.equals("User Successfully Registered"))
                 {
                     alert.cancel();

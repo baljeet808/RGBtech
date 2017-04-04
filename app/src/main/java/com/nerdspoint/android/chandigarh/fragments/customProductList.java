@@ -31,6 +31,7 @@ public class customProductList extends Fragment {
     ListView listView;
     String queryValue;
 
+
     public customProductList() {
         // Required empty public constructor
     }

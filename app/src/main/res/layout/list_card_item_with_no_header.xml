@@ -14,6 +14,7 @@
         android:background="@drawable/shape_rectangle_with_radius">
 
         <TextView
+
             android:id="@+id/text_list_card_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

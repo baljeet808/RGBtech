@@ -25,6 +25,7 @@ public class populateSearchArray
     AutoCompleteTextView searchBar;
 
 
+
     Context context;
     ArrayList<String> items;
 

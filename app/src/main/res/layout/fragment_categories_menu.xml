@@ -16,6 +16,7 @@
         android:elevation="20dp"
         android:background="@drawable/backgraoundwithborder"
         android:id="@+id/head"/>
+
   <ListView
       android:layout_width="match_parent"
       android:layout_height="match_parent"

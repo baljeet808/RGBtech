@@ -10,4 +10,5 @@ public class NotificatioDetail {
     public String ShopName;
     public String type;
     public String notificationID;
+
 }

@@ -13,6 +13,7 @@
         android:id="@+id/notificationlist"
         android:divider="@android:color/transparent"
         android:dividerHeight="20.0sp"
+
         >
 
     </ListView>

@@ -132,6 +132,7 @@ public class ShopPage extends Fragment implements View.OnClickListener {
                 return null;
             }
 
+
     }
 
     public View prepareUserProfile()

@@ -25,6 +25,7 @@ public class TestStackAdapter extends StackAdapter<Integer> {
             ColorItemLargeHeaderViewHolder h = (ColorItemLargeHeaderViewHolder) holder;
             h.onBind(data, position);
         }
+
         if (holder instanceof ColorItemWithNoHeaderViewHolder) {
             ColorItemWithNoHeaderViewHolder h = (ColorItemWithNoHeaderViewHolder) holder;
             h.onBind(data, position);

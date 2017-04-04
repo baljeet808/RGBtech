@@ -45,6 +45,7 @@ public class Notification extends Fragment {
         list = new ArrayList<>();
 
 
+
         notificationList = (ListView) view.findViewById(R.id.notificationlist);
         Cursor cursor = new DBHandler(getActivity()).getSenderNotifications();
 
