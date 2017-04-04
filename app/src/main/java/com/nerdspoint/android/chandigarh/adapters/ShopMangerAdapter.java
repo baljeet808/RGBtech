@@ -87,6 +87,8 @@ public class ShopMangerAdapter extends RecyclerView.Adapter<ShopMangerAdapter.My
             });
 
 
+
+
     }
 
     @Override
