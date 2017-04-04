@@ -3,41 +3,22 @@ package com.nerdspoint.android.chandigarh.activities;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.digits.sdk.android.Digits;
 import com.nerdspoint.android.chandigarh.R;
-import com.nerdspoint.android.chandigarh.fragments.profileUpdation;
 import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
-import com.nerdspoint.android.chandigarh.sharedPrefs.CategoriesDetail;
 
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import io.fabric.sdk.android.Fabric;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Splash extends AppCompatActivity {
 

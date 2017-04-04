@@ -2,25 +2,19 @@ package com.nerdspoint.android.chandigarh.fragments;
 
 
 import android.Manifest;
-import android.content.Intent;
 import android.database.Cursor;
-import android.icu.util.ULocale;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.test.mock.MockPackageManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -35,19 +29,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.nerdspoint.android.chandigarh.R;
-import com.nerdspoint.android.chandigarh.activities.LoginActivity;
 import com.nerdspoint.android.chandigarh.activities.MainPage;
 import com.nerdspoint.android.chandigarh.adapters.GPSTracker;
 import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
-import com.nerdspoint.android.chandigarh.sharedPrefs.CategoriesDetail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.
