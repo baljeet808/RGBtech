@@ -107,9 +107,9 @@ public class DBHandler extends SQLiteOpenHelper
         if (db == null) {
             return;
         }
-        String sql = "CREATE TABLE IF NOT EXISTS Sender (messageId Integer PRIMARY KEY AUTOINCREMENT, title text, message text, fid text, ShopID text, myDate DATETIME);";
+        String sql = "CREATE TABLE IF NOT EXISTS Sender (messageId Integer PRIMARY KEY AUTOINCREMENT,Name text, title text, message text, fid text, UID text, myDate text);";
         db.execSQL(sql);
-        String sql1 = "CREATE TABLE IF NOT EXISTS Receiver (messageId Integer PRIMARY KEY AUTOINCREMENT, title text, message text, fid text, ShopID text, myDate DATETIME);";
+        String sql1 = "CREATE TABLE IF NOT EXISTS Receiver (messageId Integer PRIMARY KEY AUTOINCREMENT,Name text, title text, message text, fid text, UID text, myDate text);";
         db.execSQL(sql1);
         db.close();
         Toast.makeText(context, "firebase tables created", Toast.LENGTH_SHORT).show();
@@ -122,7 +122,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select message , messageId, fid, ShopId , messageId from Sender",null);
+        return db.rawQuery("select message , Name , messageId, UID , myDate, title  from Sender",null);
     }
 
     public void addNotificationRecieved(String message,String title)
@@ -145,7 +145,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select message , messageId, fid, ShopId , messageId from Receiver",null);
+        return db.rawQuery("select message , Name , messageId, UID , myDate, title from Receiver",null);
     }
 
 

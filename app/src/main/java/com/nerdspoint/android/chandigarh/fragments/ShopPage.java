@@ -112,20 +112,24 @@ public class ShopPage extends Fragment implements View.OnClickListener {
                 Button coming = (Button) view.findViewById(R.id.button5);
                 String fid="";
                 final Cursor cursor = new DBHandler(getActivity()).getShopByID(Shopid);
-                if(cursor.moveToFirst())
-                {
-                    fid= cursor.getString(cursor.getColumnIndex("FirebaseID"));
-                }
-                final String finalFid = fid;
-                coming.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                            new notify(getActivity()).sendNotification(""+shopName.getText().toString()+" sent u a notification",""+Shopid+" <shopid", finalFid);
+                if(cursor.moveToFirst()) {
+                    fid = cursor.getString(cursor.getColumnIndex("FirebaseID"));
 
-                    }
-                });
 
+                    final String finalFid = fid;
+                    Toast.makeText(getActivity(), "firebase id of shop recieved " + fid, Toast.LENGTH_SHORT).show();
+                    coming.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(getActivity(), "coming button clicked", Toast.LENGTH_SHORT).show();
+                            new notify(getActivity()).sendNotification("" + ActiveUserDetail.getCustomInstance(getActivity()).getFirstName() + " sent u a notification", "looking for purchase", finalFid);
+
+                        }
+                    });
+
+                   }
                 return new DBHandler(getActivity()).getShopProductList(Shopid, view);
+
             }
             else {
                 Toast.makeText(getActivity(), "net again not connected", Toast.LENGTH_SHORT).show();

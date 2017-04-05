@@ -5,10 +5,13 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
+import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,10 +34,12 @@ public class notify {
 
     public void sendNotification(final String message, final String title, final String fid)
     {
+
+
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(context, "message Sent", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "message Sent "+response, Toast.LENGTH_SHORT).show();
 
             }
         }, new Response.ErrorListener() {
@@ -49,10 +54,16 @@ public class notify {
                 map.put("title",title);
                 map.put("message",message);
                 map.put("regId",fid);
+                map.put("Name",ActiveUserDetail.getCustomInstance(context).getFirstName()+" "+ActiveUserDetail.getCustomInstance(context).getLastName());
+                map.put("UID", ActiveUserDetail.getCustomInstance(context).getUID());
 
                 return map;
             }
         };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+
     }
 
 }

@@ -37,8 +37,7 @@ public class NotificationAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if (list.size() <= 0)
-            return 1;
+
         return list.size();
     }
 
@@ -58,6 +57,8 @@ public class NotificationAdapter extends BaseAdapter {
             public TextView text;
             public TextView text1;
             public TextView text2;
+            public TextView text3;
+            public TextView text4;
         }
 
 
@@ -78,7 +79,8 @@ public class NotificationAdapter extends BaseAdapter {
                 holder.text = (TextView) vi.findViewById(R.id.header);
                 holder.text1=(TextView)vi.findViewById(R.id.footer);
                 holder.text2 = (TextView) vi.findViewById(R.id.typeTag);
-
+                holder.text3 =(TextView) vi.findViewById(R.id.message_title);
+                holder.text4 = (TextView) vi.findViewById(R.id.time);
                 /************  Set holder with LayoutInflater ************/
                 vi.setTag( holder );
             }
@@ -87,29 +89,28 @@ public class NotificationAdapter extends BaseAdapter {
             }
 
 
-            if(list.size()<=0)
-            {
 
-                holder.text.setText("nerdspoint");
-                holder.text1.setText("Welcoming you by RGBTech");
-                holder.text2.setText("Recieved");
-            }
-            else {
                 /***** Get each Model object from Arraylist ********/
                 detail = null;
                 detail =list.get(position);
 
                 /************  Set Model values in Holder elements ***********/
 
-                holder.text1.setText(detail.Message);
-                holder.text.setText(detail.ShopName);
-                holder.text2.setText(detail.type);
 
+                if(detail.ShopName!=null) {
+                    holder.text.setText(detail.ShopName);
+                }else if ( detail.visitorName!=null){
+                    holder.text.setText(detail.visitorName);
+                }
+                    holder.text2.setText(detail.type);
+                holder.text3.setText(detail.title);
+                holder.text1.setText(detail.Message);
+                holder.text4.setText(detail.timestamp);
 
                 /******** Set Item Click Listner for LayoutInflater for each row *******/
 
 
-            }
+
             return vi;
 
 

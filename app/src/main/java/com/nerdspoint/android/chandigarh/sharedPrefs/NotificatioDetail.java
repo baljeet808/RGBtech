@@ -8,7 +8,11 @@ public class NotificatioDetail {
 
     public String Message;
     public String ShopName;
+    public String visitorName;
+    public String timestamp;
     public String type;
     public String notificationID;
+    public String title;
+    public String UID;
 
 }

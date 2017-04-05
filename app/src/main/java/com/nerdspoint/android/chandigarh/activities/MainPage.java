@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -17,8 +18,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,11 +50,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.adapters.TempShopAdapter;
 import com.nerdspoint.android.chandigarh.adapters.populateSearchArray;
+
 import com.nerdspoint.android.chandigarh.fragments.Advrts;
 import com.nerdspoint.android.chandigarh.fragments.EditProfile;
+import com.nerdspoint.android.chandigarh.fragments.Notification;
 import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
 import com.nerdspoint.android.chandigarh.fragments.ShopInfo;
 import com.nerdspoint.android.chandigarh.fragments.ShopManager;
@@ -64,6 +70,7 @@ import com.nerdspoint.android.chandigarh.fragments.shopRegistration;
 import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.permissionCheck.checkInternet;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
+
 
 import java.util.ArrayList;
 
@@ -110,6 +117,9 @@ public int backcount;
     View historylist;
     Button clear;
     Boolean flag=true;
+
+
+
 
 
 
@@ -363,7 +373,14 @@ public int backcount;
             fragmentTransaction.commit();
 
         }
+        Notification notification = new Notification();
 
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        fragmentTransaction.add(R.id.Notification_holder,notification);
+        fragmentTransaction.commit();
 
 
 
@@ -387,11 +404,9 @@ public int backcount;
         checkInternetConnection();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
 
-    }
+
+
 
     public void ShopInfo( String shopid)
     {
