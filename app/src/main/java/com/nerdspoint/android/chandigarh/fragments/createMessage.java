@@ -117,7 +117,6 @@ public class createMessage extends Fragment {
             }
         });
 
-        final Cursor cursor1 = new DBHandler(getActivity()).getShopByID(Shopid);
 
             Toast.makeText(getActivity(), "firebase id of shop recieved " + fid, Toast.LENGTH_SHORT).show();
 
@@ -125,7 +124,7 @@ public class createMessage extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if (addedProducts.size() > 0) {
-                        new notify(getActivity()).sendNotification("" + ActiveUserDetail.getCustomInstance(getActivity()).getFirstName() + " sent u a notification", "looking for purchase", fid,cpIds);
+                        new notify(getActivity()).sendNotification(et_customMessage.getText().toString(), "looking for purchase", fid,cpIds);
 
                     } else {
                         Toast.makeText(getActivity(), "please add any product", Toast.LENGTH_SHORT).show();

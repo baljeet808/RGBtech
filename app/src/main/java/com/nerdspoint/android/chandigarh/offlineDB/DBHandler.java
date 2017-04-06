@@ -123,7 +123,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select message , Name , messageId, UID , myDate, title  from Sender",null);
+        return db.rawQuery("select message , Name , messageId, UID , myDate, title ,CPIDS from Sender",null);
     }
 
     public void addNotificationRecieved(String message,String title)
@@ -146,7 +146,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select message , Name , messageId, UID , myDate, title from Receiver",null);
+        return db.rawQuery("select message , Name , messageId, UID , myDate, title , CPIDS from Receiver",null);
     }
 
     public Cursor getShopProducts(String ShopId)

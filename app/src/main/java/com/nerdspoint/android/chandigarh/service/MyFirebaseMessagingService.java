@@ -99,6 +99,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.e(TAG, "payload: " + payload.toString());
             Log.e(TAG, "imageUrl: " + imageUrl);
             Log.e(TAG, "timestamp: " + timestamp);
+            Log.e(TAG,"length fetched "+length);
 
 
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
@@ -110,7 +111,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 pushNotification.putExtra("timeStamp",timestamp);
                 pushNotification.putExtra("UID",UID);
                 pushNotification.putExtra("Name",name);
-                pushNotification.putExtra("length",length);
+                pushNotification.putExtra("length",""+length);
                 for(int j =0 ; j<length;j++) {
                     pushNotification.putExtra("cpid"+j,listOfIds.get(j) );
                 }
