@@ -86,6 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="39dp"
         android:id="@+id/button3"
+        android:visibility="invisible"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="skip"

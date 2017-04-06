@@ -419,7 +419,7 @@ public class DBHandler extends SQLiteOpenHelper
 
 
                // Log.d("Response", response);
-               Toast.makeText(context, ""+response, Toast.LENGTH_SHORT).show();
+            //   Toast.makeText(context, ""+response, Toast.LENGTH_SHORT).show();
 
 
                 try {
@@ -439,7 +439,7 @@ public class DBHandler extends SQLiteOpenHelper
                     }
 
                     progress=progress+25;
-                    Toast.makeText(context, ""+progress, Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(context, ""+progress, Toast.LENGTH_SHORT).show();
                     // updateLastIds();
                     if(TableName.equals("ShopMasterTable"))
                     {
@@ -528,7 +528,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select ShopName, ShopAddress, UID, Sector, SCO , ShopContactNo , CategoryID , FirebaseID from ShopMasterTable where ShopID = "+shopId+"",null);
+        return db.rawQuery("select ShopName, ShopAddress, UID, Sector, SCO , ShopContactNo , CategoryID ,PinCode,Latitude,Longitude   from ShopMasterTable where ShopID = "+shopId+"",null);
     }
 
     public Cursor getCategory(String CategoryName)
@@ -627,7 +627,7 @@ public class DBHandler extends SQLiteOpenHelper
       //  Toast.makeText(context, ""+id5, Toast.LENGTH_SHORT).show();
         ActiveUserDetail.getCustomInstance(context).setLastCustomPID(Integer.parseInt(id5));
 
-       Toast.makeText(context,"last shopid "+ActiveUserDetail.getCustomInstance(context).getLastShopID()+" Last ProductID "+ActiveUserDetail.getCustomInstance(context).getLastProductID()+" Category id "+ActiveUserDetail.getCustomInstance(context).getLastCategoryID()+" customPID "+ActiveUserDetail.getCustomInstance(context).getLastCustomPID()+" ",Toast.LENGTH_LONG).show();
+      // Toast.makeText(context,"last shopid "+ActiveUserDetail.getCustomInstance(context).getLastShopID()+" Last ProductID "+ActiveUserDetail.getCustomInstance(context).getLastProductID()+" Category id "+ActiveUserDetail.getCustomInstance(context).getLastCategoryID()+" customPID "+ActiveUserDetail.getCustomInstance(context).getLastCustomPID()+" ",Toast.LENGTH_LONG).show();
         populateSearchArray.getCustomInstance(context,searchBar).populate("Shops");
     }
 

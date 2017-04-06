@@ -13,9 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,7 +45,7 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class shopRegistration extends Fragment {
+public class shopRegistration extends Fragment   {
     private static final int REQUEST_CODE_PERMISSION = 2;
     String mPermission = Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -52,10 +55,11 @@ public class shopRegistration extends Fragment {
     ArrayAdapter adapter;
     Spinner spinner;
     EditText tv_shopname,tv_shopAddress,tv_pincode,tv_SCO,tv_Sctor,tv_Shopnumber;
-    Button PinOnmap,Submit,cancel;
-    TextView longitude1, latitude1;
-    String cid;
+    Button Submit,cancel;
+    ImageButton PinOnmap;
 
+    String cid;
+    Double  latitude,longitude;
 
     public shopRegistration() {
         // Required empty public constructor
@@ -100,24 +104,22 @@ public class shopRegistration extends Fragment {
                 cursor.moveToNext();
             }
         }
-        adapter= new ArrayAdapter(getActivity().getApplicationContext(),R.layout.support_simple_spinner_dropdown_item,list);
-
-        spinner = (Spinner) view.findViewById(R.id.category);
+        adapter= new ArrayAdapter(getActivity().getApplicationContext(),R.layout.spinner,list);
+        spinner = (Spinner) view.findViewById(R.id.categoryEdit);
         spinner.setAdapter(adapter);
 
 
 
-        tv_shopname=(EditText)view.findViewById(R.id.Shopname);
-        tv_shopAddress=(EditText)view.findViewById(R.id.ShopAddress);
-        tv_pincode=(EditText)view.findViewById(R.id.pincode);
-        tv_SCO=(EditText)view.findViewById(R.id.SCO);
-        tv_Sctor=(EditText)view.findViewById(R.id.Sector);
-        tv_Shopnumber=(EditText)view.findViewById(R.id.ShopNumber);
-        PinOnmap=(Button)view.findViewById(R.id.mapPin);
-        Submit=(Button)view.findViewById(R.id.submit);
-        cancel=(Button)view.findViewById(R.id.cancel);
-        longitude1=(TextView)view.findViewById(R.id.longitude);
-        latitude1=(TextView)view.findViewById(R.id.latitude);
+
+        tv_shopname=(EditText)view.findViewById(R.id.shopName);
+        tv_shopAddress=(EditText)view.findViewById(R.id.shopAddress);
+        tv_pincode=(EditText)view.findViewById(R.id.pinCode);
+        tv_SCO=(EditText)view.findViewById(R.id.scoNumber);
+        tv_Sctor=(EditText)view.findViewById(R.id.sectorNo);
+        tv_Shopnumber=(EditText)view.findViewById(R.id.contactNumber);
+        PinOnmap=(ImageButton)view.findViewById(R.id.imageButton);
+        Submit=(Button)view.findViewById(R.id.submitButton);
+        cancel=(Button)view.findViewById(R.id.cancelButton);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,17 +173,16 @@ public class shopRegistration extends Fragment {
               // check if GPS enabled
               if(gps.canGetLocation()){
 
-                  double latitude = gps.getLatitude();
-                  double longitude = gps.getLongitude();
-                  latitude1.setText(""+longitude);
-                  longitude1.setText(""+latitude);
+                   latitude = gps.getLatitude();
+                   longitude = gps.getLongitude();
+
+
+                  Toast.makeText(getActivity(), "latitude ="+latitude+" longitude="+longitude, Toast.LENGTH_LONG).show();
 
 
 
               }else{
-                  // can't get location
-                  // GPS or Network is not enabled
-                  // Ask user to enable GPS/network in settings
+
                   gps.showSettingsAlert();
               }
 
@@ -244,8 +245,8 @@ public class shopRegistration extends Fragment {
                   params.put("Sector",tv_Sctor.getText().toString());
                   params.put("SCO",tv_SCO.getText().toString());
                   params.put("CategoryID",cid);
-                  params.put("Latitude",  latitude1.getText().toString() );
-                  params.put("Longitude",longitude1.getText().toString());
+                  params.put("Latitude",  ""+latitude );
+                  params.put("Longitude",""+longitude );
                   params.put("UID",ActiveUserDetail.getCustomInstance(getActivity()).getUID());
                   params.put("FirebaseID",ActiveUserDetail.getCustomInstance(getActivity()).getFirebaseRegId());
 

@@ -48,7 +48,8 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditProfile extends Fragment implements View.OnClickListener {
+public class
+EditProfile extends Fragment implements View.OnClickListener {
 
     TextView FirstName,LastName,PhoneNumber,Password,Email,UserName;
     String UID;

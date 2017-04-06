@@ -2,22 +2,220 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.nerdspoint.android.chandigarh.fragments.ShopInfo">
 
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPageAndroid"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
-
-
-    <Button
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="back"
-        android:id="@+id/back_button"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+         <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
-        android:layout_alignParentBottom="true"
-        />
+             <android.support.v4.view.ViewPager
+                 android:id="@+id/viewPageAndroid"
+                 android:layout_width="match_parent"
+                 android:layout_height="200dp"
+                 android:layout_alignParentTop="true"
+                 android:layout_alignParentStart="true" />
+             <android.support.design.widget.TextInputLayout
+                 android:id="@+id/TextInputLayout1"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@id/viewPageAndroid">
+
+                 <EditText
+                     android:layout_marginTop="20dp"
+                     android:id="@+id/shopName"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_below="@+id/categoryEdit"
+                     android:hint="Shop Name" />
+             </android.support.design.widget.TextInputLayout>
+
+             <android.support.design.widget.TextInputLayout
+                 android:id="@+id/TextInputLayout2"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@+id/TextInputLayout1">
+
+                 <EditText
+                     android:id="@+id/contactNumber"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_below="@+id/TextInputLayout1"
+                     android:hint="Shop Contact Number"
+                     android:inputType="number"/>
+             </android.support.design.widget.TextInputLayout>
+
+             <android.support.design.widget.TextInputLayout
+                 android:id="@+id/TextInputLayout3"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@+id/TextInputLayout2">
+                 <EditText
+                     android:id="@+id/shopAddress"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_below="@+id/contactNumber"
+                     android:hint="Shop Address"
+                     />
+             </android.support.design.widget.TextInputLayout>
+
+             <android.support.design.widget.TextInputLayout
+                 android:id="@+id/TextInputLayout4"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@+id/TextInputLayout3">
+                 <EditText
+                     android:id="@+id/pinCode"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_below="@+id/shopAddress"
+                     android:hint="Pin Code"
+                     android:inputType="number"
+                     />
+             </android.support.design.widget.TextInputLayout>
+
+
+             <android.support.design.widget.TextInputLayout
+                 android:id="@+id/TextInputLayout5"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@+id/TextInputLayout4">
+                 <EditText
+                     android:id="@+id/sectorNo"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_below="@+id/pinCode"
+                     android:hint="Sector"
+                     android:inputType="number"
+                     android:layout_marginRight="220dp"
+                     />
+             </android.support.design.widget.TextInputLayout>
+
+             <android.support.design.widget.TextInputLayout
+                 android:id="@+id/TextInputLayout6"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@+id/TextInputLayout4"
+                 android:layout_alignParentStart="true">
+                 <EditText
+                     android:id="@+id/scoNumber"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_below="@+id/pinCode"
+                     android:hint="SCO"
+                     android:layout_marginLeft="220dp"
+                     android:inputType="number"
+                     />
+             </android.support.design.widget.TextInputLayout>
+
+
+
+
+             <TextView
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/orText"
+                 android:layout_below="@+id/TextInputLayout6"
+                 android:layout_marginTop="20dp"
+                 android:gravity="center"
+                 android:textSize="15dp"
+                 android:text="Set Your Shop On Map"
+                 android:textColor="#000"
+                 />
+
+             <ImageButton
+                 android:id="@+id/imageButton"
+                 android:layout_marginTop="5dp"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@+id/orText"
+                 android:layout_centerHorizontal="true"
+                 app:srcCompat="@android:drawable/ic_menu_mapmode" />
+
+
+
+
+
+         <LinearLayout
+             android:layout_below="@id/imageButton"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal"
+             android:weightSum="1"
+             android:id="@+id/linear"
+
+             >
+             <TextView
+                 android:layout_width="0dp"
+                 android:layout_weight="0.5"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/Latitude"
+                 android:layout_below="@id/imageButton"
+                 android:gravity="center"
+                 android:textSize="20dp"
+                 android:text="10.1.5.5."
+
+
+                 />
+
+             <TextView
+                 android:layout_width="0dp"
+                 android:layout_weight="0.5"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/Longitude"
+                 android:layout_below="@id/Latitude"
+                 android:gravity="center"
+                 android:textSize="20dp"
+                 android:text="10.1.5.5."
+                 />
+
+
+         </LinearLayout>
+
+
+
+
+             <Button
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/Update"
+                 android:layout_below="@id/linear"
+                 android:text="Update"
+                 android:background="#59CD90"
+                 android:layout_marginTop="10dp"
+                 android:layout_marginLeft="250dp"
+                 android:layout_marginRight="20dp"/>
+
+
+             <Button
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:text="back"
+                 android:id="@+id/back_button"
+                 android:layout_below="@id/Update"
+                 android:layout_alignParentBottom="true"
+
+
+                 />
+
+
+
+         </RelativeLayout>
+
+
+
+
+
+
+
+    </ScrollView>
+
+
 
 </RelativeLayout>

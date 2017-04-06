@@ -52,6 +52,7 @@ import com.nerdspoint.android.chandigarh.adapters.TempShopAdapter;
 import com.nerdspoint.android.chandigarh.adapters.populateSearchArray;
 import com.nerdspoint.android.chandigarh.fragments.Advrts;
 import com.nerdspoint.android.chandigarh.fragments.EditProfile;
+import com.nerdspoint.android.chandigarh.fragments.Notification;
 import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
 import com.nerdspoint.android.chandigarh.fragments.ShopInfo;
 import com.nerdspoint.android.chandigarh.fragments.ShopManager;
@@ -364,7 +365,14 @@ public int backcount;
 
         }
 
+        Notification notification= new Notification();
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
+
+        fragmentTransaction.add(R.id.Notification_holder,notification);
+        fragmentTransaction.commit();
 
 
         ShopPage shopPage= new ShopPage();
