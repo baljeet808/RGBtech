@@ -90,7 +90,8 @@ public class Notification extends Fragment {
                         String timestamp = intent.getStringExtra("timeStamp");
                         String length = intent.getStringExtra("length");
                         List ids = new ArrayList();
-                        for (int i = 0;i<Integer.parseInt(length);i++)
+                        int size = Integer.parseInt(length);
+                        for (int i = 0;i<size;i++)
                         {
                             ids.add(intent.getStringExtra("cpid"+i));
                         }
@@ -170,7 +171,7 @@ public class Notification extends Fragment {
                 detail.title=cursor2.getString(cursor2.getColumnIndex("title"));
                 detail.UID=cursor2.getString(cursor2.getColumnIndex("UID"));
                 detail.notificationID= cursor2.getString(cursor2.getColumnIndex("messageId"));
-                detail.cpids = cursor.getString(cursor.getColumnIndex("CPIDS"));
+                detail.cpids = cursor2.getString(cursor.getColumnIndex("CPIDS"));
                 list.add(detail);
                 cursor2.moveToNext();
             }
