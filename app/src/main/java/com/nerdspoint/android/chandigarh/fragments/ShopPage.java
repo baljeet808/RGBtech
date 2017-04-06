@@ -45,7 +45,7 @@ public class ShopPage extends Fragment implements View.OnClickListener {
     ImageButton map;
     ImageView profilePic;
     Button ownerDetail,Products,close_btn;
-    String Shopid;
+    String Shopid,fid;
     View userProfile,ProductsList;
     AlertDialog.Builder alert;
     AlertDialog dialog,dialog2;
@@ -89,6 +89,7 @@ public class ShopPage extends Fragment implements View.OnClickListener {
             });
         }
 
+
         map= (ImageButton) view.findViewById(R.id.mapbutton);
         map.setOnClickListener(this);
 
@@ -110,33 +111,34 @@ public class ShopPage extends Fragment implements View.OnClickListener {
                 LayoutInflater layoutInflater = getLayoutInflater(null);
                 View view = layoutInflater.inflate(R.layout.products_list, null);
                 Button coming = (Button) view.findViewById(R.id.button5);
-                String fid="";
-                final Cursor cursor = new DBHandler(getActivity()).getShopByID(Shopid);
-                if(cursor.moveToFirst()) {
-                    fid = cursor.getString(cursor.getColumnIndex("FirebaseID"));
+                coming.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog2.dismiss();
+                        TextView textView= (TextView) userProfile.findViewById(R.id.fid);
+                        fid=textView.getText().toString();
+                        //Toast.makeText(getActivity(), "coming button clicked", Toast.LENGTH_SHORT).show();
+                        createMessage();
+
+                    }
+                });
 
 
-                    final String finalFid = fid;
-                    Toast.makeText(getActivity(), "firebase id of shop recieved " + fid, Toast.LENGTH_SHORT).show();
-                    coming.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(getActivity(), "coming button clicked", Toast.LENGTH_SHORT).show();
-                            new notify(getActivity()).sendNotification("" + ActiveUserDetail.getCustomInstance(getActivity()).getFirstName() + " sent u a notification", "looking for purchase", finalFid);
-
-                        }
-                    });
-
-                   }
                 return new DBHandler(getActivity()).getShopProductList(Shopid, view);
-
             }
+
             else {
-                Toast.makeText(getActivity(), "net again not connected", Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(getActivity(), "net again not connected", Toast.LENGTH_SHORT).show();
                 return null;
             }
 
 
+    }
+
+
+    public void createMessage()
+    {
+        ((MainPage)getActivity()).setCreateMessage(Shopid,fid);
     }
 
     public View prepareUserProfile()

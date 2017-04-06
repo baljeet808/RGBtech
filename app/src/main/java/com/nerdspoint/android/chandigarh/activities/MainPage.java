@@ -63,6 +63,7 @@ import com.nerdspoint.android.chandigarh.fragments.ShopInfo;
 import com.nerdspoint.android.chandigarh.fragments.ShopManager;
 import com.nerdspoint.android.chandigarh.fragments.ShopPage;
 import com.nerdspoint.android.chandigarh.fragments.categoriesMenu;
+import com.nerdspoint.android.chandigarh.fragments.createMessage;
 import com.nerdspoint.android.chandigarh.fragments.customProductList;
 import com.nerdspoint.android.chandigarh.fragments.productMenu;
 import com.nerdspoint.android.chandigarh.fragments.profileUpdation;
@@ -404,6 +405,43 @@ public int backcount;
         checkInternetConnection();
     }
 
+
+    public void setCreateMessage(String Shopid,String fid)
+    {
+        createMessage message = new createMessage();
+
+        Bundle bundle= new Bundle();
+        bundle.putString("shopid",Shopid);
+        bundle.putString("fid",fid);
+
+        message.setArguments(bundle);
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        fragmentTransaction.replace(R.id.compare_main_frag,message);
+
+        fragmentTransaction.commit();
+    }
+
+    public void setShopAgain(String Shopid)
+    {
+        ShopPage shop = new ShopPage();
+
+        Bundle bundle= new Bundle();
+        bundle.putString("shopid",Shopid);
+
+        shop.setArguments(bundle);
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        fragmentTransaction.replace(R.id.compare_main_frag,shop);
+
+        fragmentTransaction.commit();
+    }
 
 
 

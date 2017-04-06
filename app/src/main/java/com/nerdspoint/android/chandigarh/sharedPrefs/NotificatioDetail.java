@@ -14,5 +14,6 @@ public class NotificatioDetail {
     public String notificationID;
     public String title;
     public String UID;
+    public String cpids;
 
 }

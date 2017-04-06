@@ -2,6 +2,7 @@ package com.nerdspoint.android.chandigarh.adapters;
 
 import android.app.Service;
 import android.content.Context;
+import android.database.Cursor;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +10,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.nerdspoint.android.chandigarh.R;
+import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.sharedPrefs.NotificatioDetail;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -109,6 +116,24 @@ public class NotificationAdapter extends BaseAdapter {
 
                 /******** Set Item Click Listner for LayoutInflater for each row *******/
 
+                vi.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       Gson gson = new Gson();
+                        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+
+                        ArrayList<String> finalOutputString = gson.fromJson(detail.cpids, type);
+                        for(int i =0;i<finalOutputString.size();i++)
+                        {
+                            Cursor cursor = new DBHandler(context).getCustomProductByID(finalOutputString.get(i));
+                            if(cursor.moveToFirst())
+                            {
+                                Toast.makeText(context, "product - "+cursor.getString(cursor.getColumnIndex("ProductName"))+" price - "+cursor.getString(cursor.getColumnIndex("Price")), Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                    }
+                });
 
 
             return vi;

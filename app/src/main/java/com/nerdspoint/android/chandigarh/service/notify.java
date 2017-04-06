@@ -14,6 +14,7 @@ import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,7 +33,7 @@ public class notify {
         url= ipAddress.getCustomInstance(context).getIp()+url;
     }
 
-    public void sendNotification(final String message, final String title, final String fid)
+    public void sendNotification(final String message, final String title, final String fid, final List<String> cpIds)
     {
 
 
@@ -54,6 +55,11 @@ public class notify {
                 map.put("title",title);
                 map.put("message",message);
                 map.put("regId",fid);
+                map.put("idsLength",""+cpIds.size());
+                for(int i = 0; i<cpIds.size();i++)
+                {
+                    map.put("cpid"+i,cpIds.get(i));
+                }
                 map.put("Name",ActiveUserDetail.getCustomInstance(context).getFirstName()+" "+ActiveUserDetail.getCustomInstance(context).getLastName());
                 map.put("UID", ActiveUserDetail.getCustomInstance(context).getUID());
 

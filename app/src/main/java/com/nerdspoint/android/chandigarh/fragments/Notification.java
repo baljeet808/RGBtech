@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.gson.Gson;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.adapters.NotificationAdapter;
 import com.nerdspoint.android.chandigarh.app.Config;
@@ -87,7 +88,18 @@ public class Notification extends Fragment {
                         String UID = intent.getStringExtra("UID");
                         String Name = intent.getStringExtra("Name");
                         String timestamp = intent.getStringExtra("timeStamp");
-/*
+                        String length = intent.getStringExtra("length");
+                        List ids = new ArrayList();
+                        for (int i = 0;i<Integer.parseInt(length);i++)
+                        {
+                            ids.add(intent.getStringExtra("cpid"+i));
+                        }
+                    Gson gson = new Gson();
+
+                    String inputString= gson.toJson(ids);
+
+                    System.out.println("inputString= " + inputString);
+
                     try {
                         ContentValues row =  new ContentValues();
                         row.put("title",title);
@@ -95,12 +107,12 @@ public class Notification extends Fragment {
                         row.put("message",message);
                         row.put("UID",UID);
                         row.put("myDate",timestamp);
-
+                        row.put("CPIDS",inputString);
                         new DBHandler(getContext()).add("Receiver",row);
                     }catch(Exception e)
                     {
                         Toast.makeText(context, "error in saving the message - "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }*/
+                    }
 
                     detail= new NotificatioDetail();
                     detail.Message= message;
@@ -109,6 +121,7 @@ public class Notification extends Fragment {
                     detail.visitorName=Name;
                     detail.title=title;
                     detail.UID=UID;
+                    detail.cpids = inputString;
                     list.add(detail);
                     adapter.notifyDataSetChanged();
                   //  txtRegId.setText( "Push notification: " + message +" title "+title+"  payload ");
@@ -137,6 +150,7 @@ public class Notification extends Fragment {
                 detail.title=cursor.getString(cursor.getColumnIndex("title"));
                 detail.UID=cursor.getString(cursor.getColumnIndex("UID"));
                 detail.notificationID= cursor.getString(cursor.getColumnIndex("messageId"));
+                detail.cpids = cursor.getString(cursor.getColumnIndex("CPIDS"));
                 list.add(detail);
                 cursor.moveToNext();
             }
@@ -150,13 +164,13 @@ public class Notification extends Fragment {
             {
                 detail = new NotificatioDetail();
                 detail.Message= cursor2.getString(cursor2.getColumnIndex("message"));
-
                 detail.visitorName=cursor2.getString(cursor2.getColumnIndex("Name"));
                 detail.type= "received";
                 detail.timestamp= cursor2.getString(cursor2.getColumnIndex("myDate"));
                 detail.title=cursor2.getString(cursor2.getColumnIndex("title"));
                 detail.UID=cursor2.getString(cursor2.getColumnIndex("UID"));
                 detail.notificationID= cursor2.getString(cursor2.getColumnIndex("messageId"));
+                detail.cpids = cursor.getString(cursor.getColumnIndex("CPIDS"));
                 list.add(detail);
                 cursor2.moveToNext();
             }
@@ -176,6 +190,7 @@ public class Notification extends Fragment {
         //txtRegId.setText(regId);
         ActiveUserDetail.getCustomInstance(getActivity()).setIsFirebaseSet(true);
         ActiveUserDetail.getCustomInstance(getActivity()).setFirbaseRegId(regId);
+        new DBHandler(getActivity()).updateFirebaseId(regId);
         Log.e(TAG, "Firebase reg id: " + regId);
 
     }
