@@ -528,7 +528,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select ShopName, ShopAddress, UID, Sector, SCO , ShopContactNo , CategoryID ,PinCode,Latitude,Longitude   from ShopMasterTable where ShopID = "+shopId+"",null);
+        return db.rawQuery("select ShopName, ShopAddress, UID, Sector, SCO , ShopContactNo , CategoryID ,PinCode,Latitude,Longitude, FirebaseID from ShopMasterTable where ShopID = "+shopId+"",null);
     }
 
     public Cursor getCategory(String CategoryName)
