@@ -101,7 +101,7 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:background="@drawable/green_button"
-            android:text="I Am Coming"
+            android:text="add wishlist"
             android:textStyle="bold"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/listView_Products"

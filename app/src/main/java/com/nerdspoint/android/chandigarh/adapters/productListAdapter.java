@@ -54,7 +54,7 @@ public class productListAdapter extends BaseAdapter {
     }
     public static class ViewHolder{
 
-        public CheckBox box;
+        public TextView cpId;
         public TextView text;
         public TextView text1;
         public TextView text2;
@@ -74,7 +74,7 @@ public class productListAdapter extends BaseAdapter {
             /****** View Holder Object to contain tabitem.xml file elements ******/
 
             holder = new ViewHolder();
-            holder.box= (CheckBox) vi.findViewById(R.id.chk_product);
+            holder.cpId = (TextView) vi.findViewById(R.id.customPid_tv);
             holder.text = (TextView) vi.findViewById(R.id.textView_productName);
             holder.text1=(TextView)vi.findViewById(R.id.textView_productAval);
             holder.text2= (TextView) vi.findViewById(R.id.textView_productPrice);
@@ -89,7 +89,7 @@ public class productListAdapter extends BaseAdapter {
 
         if(list.size()<=0)
         {
-            holder.box.setEnabled(false);
+
             holder.text.setText("No Data");
             holder.text1.setText("NO");
             holder.text2.setText("_");
@@ -103,6 +103,10 @@ public class productListAdapter extends BaseAdapter {
             /************  Set Model values in Holder elements ***********/
 
             holder.text.setText(productDetails.ProductName);
+            if(productDetails.CustomPID!=null)
+            {
+                holder.cpId.setText(productDetails.CustomPID);
+            }
             if(productDetails.IsActive.equals("1")) {
                 holder.text1.setText("YES");
             }

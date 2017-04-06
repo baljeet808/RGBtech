@@ -6,44 +6,45 @@
     android:layout_height="match_parent"
     android:background="#000">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <CheckBox
-            android:id="@+id/chk_product"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="#cff"
-            />
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        >
+
         <TextView
 
             android:id="@+id/textView_productName"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:textColor="#000"
             android:background="#cff"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/chk_product" />
+            android:layout_weight="1"
+             />
         <TextView
             android:id="@+id/textView_productAval"
-            android:layout_width="60dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:textColor="#000"
             android:background="#cff"
-            android:layout_toEndOf="@id/textView_productName"
-
+            android:layout_weight="1"
             />
         <TextView
             android:id="@+id/textView_productPrice"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:textColor="#000"
             android:background="#cff"
+            android:layout_weight="1"
             android:gravity="center"
-            android:layout_toEndOf="@id/textView_productAval"
-
             />
-    </RelativeLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/customPid_tv"
+            android:visibility="gone"
+            />
+    </LinearLayout>
 
 </RelativeLayout>
 

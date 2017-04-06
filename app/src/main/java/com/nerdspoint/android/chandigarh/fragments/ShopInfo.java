@@ -5,30 +5,46 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.activities.MainPage;
 import com.nerdspoint.android.chandigarh.adapters.AndroidImageAdapter;
 import com.nerdspoint.android.chandigarh.adapters.GPSTracker;
 import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
+import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ShopInfo extends Fragment {
 
-  Button Back;
+  Button Back,Update;
     GPSTracker gps;
     EditText Shopname,ShopAddres,PhoneNumber,SCO,Pincode,Sector;
     TextView latitude,longitude;
+
+    private String EditShopProfile_URL="/update_Shop.php";
     ViewPager mViewPager ;
     String shopid;
     ImageButton  PinOnmap;
@@ -44,13 +60,16 @@ public class ShopInfo extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_shop_info, container, false);
+        EditShopProfile_URL= ipAddress.getCustomInstance(getActivity()).getIp()+ EditShopProfile_URL;
         Back=(Button)view.findViewById(R.id.back_button);
+        Update=(Button)view.findViewById(R.id.Update);
+
         Shopname=(EditText)view.findViewById(R.id.shopName);
         PhoneNumber=(EditText)view.findViewById(R.id.contactNumber);
         ShopAddres=(EditText)view.findViewById(R.id.shopAddress);
         SCO=(EditText)view.findViewById(R.id.scoNumber);
         Pincode=(EditText)view.findViewById(R.id.pinCode);
-       Sector=(EditText)view.findViewById(R.id.sectorNo);
+        Sector=(EditText)view.findViewById(R.id.sectorNo);
         latitude=(TextView)view.findViewById(R.id.Latitude);
         longitude=(TextView)view.findViewById(R.id.Longitude);
         PinOnmap=(ImageButton)view.findViewById(R.id.imageButton);
@@ -130,6 +149,78 @@ public class ShopInfo extends Fragment {
 
 
         return view;
+    }
+
+
+
+    public void update(View view)
+    {
+
+
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog alert = builder.create();
+        alert.setTitle("Updating");
+        final ProgressBar progressBar = new ProgressBar(getActivity());
+        alert.setView(progressBar);
+        alert.show();
+
+        StringRequest request = new StringRequest(Request.Method.POST, EditShopProfile_URL, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d("Response", response+"Done");
+
+                if(response.equals("success"))
+                {
+
+                    alert.cancel();
+
+                    Toast.makeText(getActivity(), "update success", Toast.LENGTH_SHORT).show();
+
+
+                }
+                else
+                {
+                    Log.d("response",response);
+                    alert.cancel();
+                    Toast.makeText(getActivity(), "update Fail", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("ERROR","error => "+error.toString());
+                alert.cancel();
+                //    Snackbar.make(v.findFocus(),error.getMessage(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+            }
+        }
+        )
+        {
+            @Override
+            protected Map getParams() throws AuthFailureError {
+                Map map = new HashMap<>() ;
+                map.put("ShopName",Shopname.getText().toString());
+                map.put("ShopAddress",ShopAddres.getText().toString());
+                map.put("ShopContactNo",PhoneNumber.getText().toString());
+                map.put("PinCode", Pincode.getText().toString());
+                map.put("Sector",Sector.getText().toString());
+                map.put("SCO", SCO.getText().toString());
+
+                map.put("Latitude",  ""+latitude );
+                map.put("Longitude",""+longitude );
+
+
+                return map;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        queue.add(request);
+
+
+
+
     }
 
 }

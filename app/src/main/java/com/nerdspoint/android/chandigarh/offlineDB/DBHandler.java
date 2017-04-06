@@ -48,6 +48,7 @@ import com.nerdspoint.android.chandigarh.sharedPrefs.ProductDetails;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,7 +65,7 @@ import static android.net.sip.SipErrorCode.TIME_OUT;
 public class DBHandler extends SQLiteOpenHelper
 {
 
-    String VendorFname,VendorLname,VendorCnumber,UID;
+    String VendorFname,VendorLname,VendorCnumber,UID,fid;
 
     int progress=0;
     String count;
@@ -77,7 +78,7 @@ public class DBHandler extends SQLiteOpenHelper
 
 
 
-    String[] colNames = {"ShopID", "UID", "ShopContactNo", "ShopName", "ShopAddress", "PinCode", "Sector", "SCO", "Latitude", "Longitude", "CategoryID","FirebaseID"};
+    String[] colNames = {"ShopID", "UID", "ShopContactNo", "ShopName", "ShopAddress", "PinCode", "Sector", "SCO", "Latitude", "Longitude", "CategoryID"};
     String[] colNames1 = {"ProductID", "ProductName", "CategoryID"};
     String[] colNames2 = {"CategoryID", "CategoryName"};
     String[] colNames3 = {"CustomPID","ProductID", "CategoryID", "ShopID", "ProductName", "Price", "IsActive"};
@@ -107,9 +108,9 @@ public class DBHandler extends SQLiteOpenHelper
         if (db == null) {
             return;
         }
-        String sql = "CREATE TABLE IF NOT EXISTS Sender (messageId Integer PRIMARY KEY AUTOINCREMENT, title text, message text, fid text, ShopID text, myDate DATETIME);";
+        String sql = "CREATE TABLE IF NOT EXISTS Sender (messageId Integer PRIMARY KEY AUTOINCREMENT,Name text, title text, message text, fid text, UID text, myDate text, CPIDS text);";
         db.execSQL(sql);
-        String sql1 = "CREATE TABLE IF NOT EXISTS Receiver (messageId Integer PRIMARY KEY AUTOINCREMENT, title text, message text, fid text, ShopID text, myDate DATETIME);";
+        String sql1 = "CREATE TABLE IF NOT EXISTS Receiver (messageId Integer PRIMARY KEY AUTOINCREMENT,Name text, title text, message text, fid text, UID text, myDate text, CPIDS text);";
         db.execSQL(sql1);
         db.close();
         Toast.makeText(context, "firebase tables created", Toast.LENGTH_SHORT).show();
@@ -122,7 +123,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select message , messageId, fid, ShopId , messageId from Sender",null);
+        return db.rawQuery("select message , Name , messageId, UID , myDate, title  from Sender",null);
     }
 
     public void addNotificationRecieved(String message,String title)
@@ -145,7 +146,27 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select message , messageId, fid, ShopId , messageId from Receiver",null);
+        return db.rawQuery("select message , Name , messageId, UID , myDate, title from Receiver",null);
+    }
+
+    public Cursor getShopProducts(String ShopId)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if(db== null)
+        {
+            return null;
+        }
+        return db.rawQuery("select CustomPID, ProductName, Price, IsActive from CustomProductDetail where ShopID =" + ShopId + "",null);
+    }
+
+    public Cursor getCustomProductByID(String CPID)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if(db== null)
+        {
+            return null;
+        }
+        return  db.rawQuery("select CustomPID, ProductName, Price from CustomProductDetail where CustomPID = "+CPID+"",null);
     }
 
 
@@ -245,7 +266,7 @@ public class DBHandler extends SQLiteOpenHelper
 
 
         if(ActiveUserDetail.getCustomInstance(context).getIsFirstSync()) {
-            CreateTable("ShopMasterTable", colNames, 12);
+            CreateTable("ShopMasterTable", colNames, 11);
             CreateTable("Product", colNames1, 3);
             CreateTable("Category", colNames2, 2);
             CreateTable("CustomProductDetail", colNames3, 7);
@@ -263,7 +284,7 @@ public class DBHandler extends SQLiteOpenHelper
                 if (response.equals("Success")) {
                     Toast.makeText(context, "Firebase is Ready to use", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "" + response.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "error showed in else " + response.toString(), Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -277,7 +298,7 @@ public class DBHandler extends SQLiteOpenHelper
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<>();
                 map.put("UID",ActiveUserDetail.getCustomInstance(context).getUID());
-                map.put("FID",ActiveUserDetail.getCustomInstance(context).getFirebaseRegId());
+                map.put("FirebaseID",ActiveUserDetail.getCustomInstance(context).getFirebaseRegId());
                 return map;
             }
         };
@@ -329,6 +350,7 @@ public class DBHandler extends SQLiteOpenHelper
                     VendorLname = jsonObject.getString("LastName");
                     VendorCnumber = jsonObject.getString("PhoneNumber");
                     UID = jsonObject.getString("UID");
+                    fid= jsonObject.getString("FirebaseID");
                     setVendorProfile();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -361,6 +383,7 @@ public class DBHandler extends SQLiteOpenHelper
     {
         TextView ownerFname = (TextView) userProfile.findViewById(R.id.owner_Fname);
         TextView ownerLname = (TextView) userProfile.findViewById(R.id.owner_Sname);
+        TextView fidd = (TextView) userProfile.findViewById(R.id.fid);
         final TextView Contactt = (TextView) userProfile.findViewById(R.id.owner_contactno);
         Contactt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -383,7 +406,7 @@ public class DBHandler extends SQLiteOpenHelper
         ownerFname.setText(VendorFname);
         ownerLname.setText(VendorLname);
         Contactt.setText(VendorCnumber);
-
+        fidd.setText(fid);
         ListView shopsOwned = (ListView) userProfile.findViewById(R.id.shop_owned);
 
         List<String> shops;
@@ -437,6 +460,10 @@ public class DBHandler extends SQLiteOpenHelper
                         add(TableName,row);
 
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, " "+TableName+" catch showing "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
 
                     progress=progress+25;
                 //    Toast.makeText(context, ""+progress, Toast.LENGTH_SHORT).show();
@@ -459,17 +486,13 @@ public class DBHandler extends SQLiteOpenHelper
 
                     }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    progress=progress+25;
-                     Toast.makeText(context, "catch showing "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-               Toast.makeText(context,"on response error -"+error.toString(), Toast.LENGTH_LONG).show();
-              //  Log.d("ERROR","error => "+error.toString());
+               Toast.makeText(context,""+TableName+" showing error on response error -"+error.toString(), Toast.LENGTH_LONG).show();
+              Log.d("ERROR","error => "+error.toString());
             }
         }
         )
@@ -528,7 +551,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select ShopName, ShopAddress, UID, Sector, SCO , ShopContactNo , CategoryID ,PinCode,Latitude,Longitude, FirebaseID from ShopMasterTable where ShopID = "+shopId+"",null);
+        return db.rawQuery("select ShopName, ShopAddress, UID, Sector, SCO , ShopContactNo , CategoryID ,PinCode,Latitude,Longitude from ShopMasterTable where ShopID = "+shopId+"",null);
     }
 
     public Cursor getCategory(String CategoryName)
@@ -598,13 +621,18 @@ public class DBHandler extends SQLiteOpenHelper
     {
         SQLiteDatabase db1 = this.getReadableDatabase();
 
+        try {
+            Cursor cursor2 = db1.rawQuery("Select MAX(ShopID) from ShopMasterTable", null);
+            cursor2.moveToFirst();
 
-        Cursor cursor2= db1.rawQuery("Select MAX(ShopID) from ShopMasterTable",null);
-        cursor2.moveToFirst();
-
-        String id = cursor2.getString(0);
-     //   Toast.makeText(context, ""+id, Toast.LENGTH_SHORT).show();
-        ActiveUserDetail.getCustomInstance(context).setLastShopID(Integer.parseInt(id));
+            String id = cursor2.getString(0);
+            //   Toast.makeText(context, ""+id, Toast.LENGTH_SHORT).show();
+            ActiveUserDetail.getCustomInstance(context).setLastShopID(Integer.parseInt(id));
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(context, " saving last id of shopmaster table showing error "+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
         Cursor cursor3= db1.rawQuery("select MAX(ProductID) from Product", null);
 
@@ -685,7 +713,7 @@ public class DBHandler extends SQLiteOpenHelper
 
         //  Log.i("haiyang:createDB=","\t\t\t\t\t\t\t\t"+sql);
         db.execSQL(sql);
-    //   Toast.makeText(context,"created "+tableName,Toast.LENGTH_SHORT).show();
+      Toast.makeText(context,"created "+tableName,Toast.LENGTH_SHORT).show();
 
         db.close();
 

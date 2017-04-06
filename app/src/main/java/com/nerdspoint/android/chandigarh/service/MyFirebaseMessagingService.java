@@ -20,6 +20,9 @@ import com.nerdspoint.android.chandigarh.app.Config;
 import com.nerdspoint.android.chandigarh.fragments.Notification;
 import com.nerdspoint.android.chandigarh.util.NotificationUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -80,6 +83,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String imageUrl = data.getString("image");
             String timestamp = data.getString("timestamp");
             JSONObject payload = data.getJSONObject("payload");
+            String UID = payload.getString("UID");
+            String name= payload.getString("Name");
+            int length = Integer.parseInt(payload.getString("length"));
+            List<String> listOfIds = new ArrayList<>();
+
+            for(int i= 0;i<length;i++)
+            {
+                listOfIds.add(payload.getString("CPID"+i));
+            }
 
             Log.e(TAG, "title: " + title);
             Log.e(TAG, "message: " + message);
@@ -93,8 +105,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 // app is in foreground, broadcast the push message
                 Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
                 pushNotification.putExtra("message", message);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
+                pushNotification.putExtra("title",title);
+                pushNotification.putExtra("timeStamp",timestamp);
+                pushNotification.putExtra("UID",UID);
+                pushNotification.putExtra("Name",name);
+                pushNotification.putExtra("length",length);
+                for(int j =0 ; j<length;j++) {
+                    pushNotification.putExtra("cpid"+j,listOfIds.get(j) );
+                }
+
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
                 // play notification sound
                 NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
@@ -103,7 +124,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 // app is in background, show the notification in notification tray
                 Intent resultIntent = new Intent(getApplicationContext(), MainPage.class);
                 resultIntent.putExtra("message", message);
-
+                resultIntent.putExtra("title",title);
+                resultIntent.putExtra("timeStamp",timestamp);
+                resultIntent.putExtra("UID",UID);
+                resultIntent.putExtra("Name",name);
                 // check for image attachment
                 if (TextUtils.isEmpty(imageUrl)) {
                     showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
