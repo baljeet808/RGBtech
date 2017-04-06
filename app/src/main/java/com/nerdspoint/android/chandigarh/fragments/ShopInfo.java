@@ -49,6 +49,9 @@ public class ShopInfo extends Fragment {
     String shopid;
     ImageButton  PinOnmap;
 
+    Double latitude1 ,longitude1;
+
+
     public ShopInfo() {
         // Required empty public constructor
     }
@@ -59,7 +62,7 @@ public class ShopInfo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_shop_info, container, false);
+        final View view= inflater.inflate(R.layout.fragment_shop_info, container, false);
         EditShopProfile_URL= ipAddress.getCustomInstance(getActivity()).getIp()+ EditShopProfile_URL;
         Back=(Button)view.findViewById(R.id.back_button);
         Update=(Button)view.findViewById(R.id.Update);
@@ -110,6 +113,13 @@ public class ShopInfo extends Fragment {
           mViewPager = (ViewPager) view.findViewById(R.id.viewPageAndroid);
         AndroidImageAdapter adapterView = new AndroidImageAdapter(getActivity());
         mViewPager.setAdapter(adapterView);
+        Update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                update(view);
+
+            }
+        });
 
         Back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,11 +139,11 @@ public class ShopInfo extends Fragment {
                 // check if GPS enabled
                 if(gps.canGetLocation()){
 
-                   Double latitude1 = gps.getLatitude();
-                    Double longitude1 = gps.getLongitude();
+                    latitude1 = gps.getLatitude();
+                      longitude1 = gps.getLongitude();
 
-                    latitude.setText(""+latitude1.toString());
-                    longitude.setText(""+longitude1.toString());
+                    latitude.setText(""+latitude1);
+                    longitude.setText(""+longitude1);
                     Toast.makeText(getActivity(), "latitude ="+latitude1+" longitude="+longitude1, Toast.LENGTH_LONG).show();
 
 
@@ -200,6 +210,7 @@ public class ShopInfo extends Fragment {
             @Override
             protected Map getParams() throws AuthFailureError {
                 Map map = new HashMap<>() ;
+                map.put("ShopID",shopid.toString());
                 map.put("ShopName",Shopname.getText().toString());
                 map.put("ShopAddress",ShopAddres.getText().toString());
                 map.put("ShopContactNo",PhoneNumber.getText().toString());
@@ -207,8 +218,10 @@ public class ShopInfo extends Fragment {
                 map.put("Sector",Sector.getText().toString());
                 map.put("SCO", SCO.getText().toString());
 
-                map.put("Latitude",  ""+latitude );
-                map.put("Longitude",""+longitude );
+                map.put("Latitude",  ""+latitude1);
+                map.put("Longitude",""+longitude1);
+
+
 
 
                 return map;

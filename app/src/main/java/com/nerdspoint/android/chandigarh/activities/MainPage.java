@@ -374,21 +374,12 @@ public int backcount;
             fragmentTransaction.commit();
 
         }
-        Notification notification = new Notification();
 
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-<<<<<<< HEAD
         Notification notification= new Notification();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-=======
-        fragmentTransaction.add(R.id.Notification_holder,notification);
-        fragmentTransaction.commit();
->>>>>>> 44a7c0c21e7ecf23eb4662ae7fbd6ba910a0692c
 
 
         fragmentTransaction.add(R.id.Notification_holder,notification);
