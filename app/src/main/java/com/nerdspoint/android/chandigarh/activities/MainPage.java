@@ -58,6 +58,7 @@ import com.nerdspoint.android.chandigarh.adapters.populateSearchArray;
 import com.nerdspoint.android.chandigarh.fragments.Advrts;
 import com.nerdspoint.android.chandigarh.fragments.EditProfile;
 import com.nerdspoint.android.chandigarh.fragments.Notification;
+import com.nerdspoint.android.chandigarh.fragments.ProductAdd;
 import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
 import com.nerdspoint.android.chandigarh.fragments.ShopInfo;
 import com.nerdspoint.android.chandigarh.fragments.ShopManager;
@@ -464,9 +465,29 @@ public int backcount;
 
 
 
+    public void AddProducts(String Shopid)
+    {  ProductAdd productAdd = new ProductAdd();
+
+        Bundle bundle=new Bundle();
+        bundle.putString("shopid",Shopid);
+
+        productAdd.setArguments(bundle);
+
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        fragmentTransaction.replace(R.id.Shop_manager_holder, productAdd);
+        fragmentTransaction.commit();
+
+    }
+
+
+
   public void AddShop()
   {
-       if(flag) {
+
            shopRegistration registration = new shopRegistration();
            fragmentManager = getSupportFragmentManager();
            fragmentTransaction = fragmentManager.beginTransaction();
@@ -475,20 +496,18 @@ public int backcount;
            fragmentTransaction.replace(R.id.Shop_manager_holder, registration);
            fragmentTransaction.commit();
            flag=false;
-       }
-       else
-       {
-          ShopManager shopManager = new ShopManager();
-           fragmentManager = getSupportFragmentManager();
-           fragmentTransaction = fragmentManager.beginTransaction();
-           fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-           fragmentTransaction.replace(R.id.Shop_manager_holder , shopManager);
-           fragmentTransaction.commit();
-           flag=true;
-       }
+  }
+  public  void Shopmanger()
+  {
+      ShopManager shopManager = new ShopManager();
+      fragmentManager = getSupportFragmentManager();
+      fragmentTransaction = fragmentManager.beginTransaction();
+      fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-
+      fragmentTransaction.replace(R.id.Shop_manager_holder , shopManager);
+      fragmentTransaction.commit();
+      flag=true;
 
   }
 

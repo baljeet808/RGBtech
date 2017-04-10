@@ -2,10 +2,12 @@ package com.nerdspoint.android.chandigarh.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +24,7 @@ import java.util.List;
 
 public class ShopMangerAdapter extends RecyclerView.Adapter<ShopMangerAdapter.MyViewHolder>{
 
-
+    String shopid;
     Context context;
     List<ShopDetails> list;
 
@@ -85,6 +87,18 @@ public class ShopMangerAdapter extends RecyclerView.Adapter<ShopMangerAdapter.My
                     ((MainPage)context).ShopInfo(details.ShopID);
                 }
             });
+        holder.AddProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+
+                ((MainPage)context).AddProducts(ShopId);
+
+
+            }
+        });
 
 
 
@@ -101,7 +115,7 @@ public class ShopMangerAdapter extends RecyclerView.Adapter<ShopMangerAdapter.My
 
 
         TextView shopName,category,address,contactNumber;
-
+        Button AddProduct;
         public MyViewHolder(View itemView) {
             super(itemView);
 
@@ -110,6 +124,8 @@ public class ShopMangerAdapter extends RecyclerView.Adapter<ShopMangerAdapter.My
 
             address=(TextView) itemView.findViewById(R.id.Shopaddress);
             contactNumber=(TextView) itemView.findViewById(R.id.PhoneNumber);
+            AddProduct=(Button) itemView.findViewById(R.id.AddProduct);
+
         }
     }
 }

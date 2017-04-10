@@ -73,8 +73,8 @@ public class ShopInfo extends Fragment {
         SCO=(EditText)view.findViewById(R.id.scoNumber);
         Pincode=(EditText)view.findViewById(R.id.pinCode);
         Sector=(EditText)view.findViewById(R.id.sectorNo);
-        latitude=(TextView)view.findViewById(R.id.Latitude);
-        longitude=(TextView)view.findViewById(R.id.Longitude);
+        //latitude=(TextView)view.findViewById(R.id.Latitude);
+      //  longitude=(TextView)view.findViewById(R.id.Longitude);
         PinOnmap=(ImageButton)view.findViewById(R.id.imageButton);
 
 
@@ -99,8 +99,8 @@ public class ShopInfo extends Fragment {
 
               Pincode.setText(cursor.getString(cursor.getColumnIndex("PinCode")));
                 Sector.setText(cursor.getString(cursor.getColumnIndex("Sector")));
-                latitude.setText(cursor.getString(cursor.getColumnIndex("Latitude")));
-               longitude.setText(cursor.getString(cursor.getColumnIndex("Longitude")));
+               //                latitude.setText(cursor.getString(cursor.getColumnIndex("Latitude")));
+              // longitude.setText(cursor.getString(cursor.getColumnIndex("Longitude")));
 
                 cursor.moveToNext();
             }
@@ -108,7 +108,7 @@ public class ShopInfo extends Fragment {
 
 
 
-        Back.setText(shopid);
+        Back.setText("Back");
 
           mViewPager = (ViewPager) view.findViewById(R.id.viewPageAndroid);
         AndroidImageAdapter adapterView = new AndroidImageAdapter(getActivity());
@@ -124,7 +124,7 @@ public class ShopInfo extends Fragment {
         Back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainPage)getActivity()).AddShop();
+                ((MainPage)getActivity()).Shopmanger();
             }
         });
 
@@ -142,8 +142,8 @@ public class ShopInfo extends Fragment {
                     latitude1 = gps.getLatitude();
                       longitude1 = gps.getLongitude();
 
-                    latitude.setText(""+latitude1);
-                    longitude.setText(""+longitude1);
+                  //  latitude.setText(""+latitude1);
+                   // longitude.setText(""+longitude1);
                     Toast.makeText(getActivity(), "latitude ="+latitude1+" longitude="+longitude1, Toast.LENGTH_LONG).show();
 
 
@@ -185,6 +185,8 @@ public class ShopInfo extends Fragment {
                 {
 
                     alert.cancel();
+
+                  //  new DBHandler(getActivity()).updateShopbyID(shopid.toString());
 
                     Toast.makeText(getActivity(), "update success", Toast.LENGTH_SHORT).show();
 

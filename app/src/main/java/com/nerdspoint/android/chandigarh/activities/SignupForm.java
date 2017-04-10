@@ -82,12 +82,15 @@ public class SignupForm extends AppCompatActivity {
             public void onClick(View v) {
                 AuthConfig.Builder builder = new AuthConfig.Builder();
 
-                builder.withPhoneNumber("+91 7696443513");
+                builder.withPhoneNumber("+91 "+mobile.getText());
 
 
                 builder.withAuthCallBack(new AuthCallback() {
                     @Override
                     public void success(DigitsSession session, String Number) {
+                        Digits.getActiveSession();
+                        Digits.getInstance().logout();
+
                         Toast.makeText(getApplicationContext(), "Authentication successful for "
                                 + Number, Toast.LENGTH_LONG).show();
 
