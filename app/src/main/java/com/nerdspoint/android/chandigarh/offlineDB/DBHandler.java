@@ -595,6 +595,15 @@ public class DBHandler extends SQLiteOpenHelper
 
     }
 
+    public void updateShopbyID(String  ShopID ,   String ShopName,  String  ShopContactNo,String ShopAddres,String  PinCode,String  Sector,String  SCO, String Latitude, String Longitude )
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (db == null) {
+            return;
+        }
+
+    }
+
 
     public Cursor getAll(String tableName) {
         SQLiteDatabase db = this.getReadableDatabase();

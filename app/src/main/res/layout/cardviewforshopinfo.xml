@@ -10,7 +10,7 @@
     <android.support.v7.widget.CardView
         android:layout_marginTop="16dp"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="180dp"
         android:id="@+id/ShopInfo_card"
 
         >
@@ -18,7 +18,8 @@
         <RelativeLayout
 
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="180dp"
+            android:id="@+id/relativeLayout"
 
             >
             <TextView
@@ -76,24 +77,35 @@
                 android:layout_toStartOf="@+id/imageView6" />
 
 
-
-
-
-
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_below="@id/Shopname"
-                android:background="@drawable/shopicon"
+                android:background="@drawable/generalstore_logo"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:id="@+id/imageView6" />
 
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Product"
+                android:id="@+id/AddProduct"
+                android:layout_below="@+id/imageView6"
+
+
+                />
+
+
+
+
 
 
         </RelativeLayout>
+
+
 
 
     </android.support.v7.widget.CardView>

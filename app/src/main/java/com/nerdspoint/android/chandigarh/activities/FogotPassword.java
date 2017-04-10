@@ -84,6 +84,7 @@ public class FogotPassword extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 MOB(Number);
+
             }
         });
 
@@ -110,17 +111,19 @@ public class FogotPassword extends AppCompatActivity {
         builder.withPhoneNumber("+91 "+Number);
 
 
-        builder.withAuthCallBack(new AuthCallback() {
+       AuthConfig.Builder digits = builder.withAuthCallBack(new AuthCallback() {
             @Override
             public void success(DigitsSession session, String Number) {
+
+                Digits.getActiveSession();
+                Digits.getInstance().logout();
+
 
                 Toast.makeText(getApplicationContext(), "Authentication successful for "
                         + Number, Toast.LENGTH_LONG).show();
 
 
-                PassFrag();
-
-
+                        PassFrag();
 
 
             }

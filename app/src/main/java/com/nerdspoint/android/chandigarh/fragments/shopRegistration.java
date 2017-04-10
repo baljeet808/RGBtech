@@ -124,7 +124,7 @@ public class shopRegistration extends Fragment   {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainPage)getActivity()).AddShop();
+                ((MainPage)getActivity()).Shopmanger();
             }
         });
 
@@ -248,7 +248,7 @@ public class shopRegistration extends Fragment   {
                   params.put("Latitude",  ""+latitude );
                   params.put("Longitude",""+longitude );
                   params.put("UID",ActiveUserDetail.getCustomInstance(getActivity()).getUID());
-                  params.put("FirebaseID",ActiveUserDetail.getCustomInstance(getActivity()).getFirebaseRegId());
+
 
 
 
