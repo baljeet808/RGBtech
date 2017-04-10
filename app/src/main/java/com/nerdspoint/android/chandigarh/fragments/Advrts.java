@@ -1,6 +1,7 @@
 package com.nerdspoint.android.chandigarh.fragments;
 
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,8 +11,11 @@ import android.view.ViewGroup;
 import com.loopeer.cardstack.CardStackView;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.adapters.TestStackAdapter;
+import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -53,6 +57,7 @@ public class Advrts extends Fragment implements CardStackView.ItemExpendListener
     };
 
 
+    public static List<Integer> Colors;
     CardStackView mStackView;
     TestStackAdapter mTestStackAdapter;
 
@@ -68,11 +73,25 @@ public class Advrts extends Fragment implements CardStackView.ItemExpendListener
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_advrts, container, false);
 
+        Colors= new ArrayList<>();
+
+        Cursor cursor= new DBHandler(getContext()).getAll("ShopMasterTable");
+        int i =0;
+        if(cursor.moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                Colors.add(TEST_DATAS[i]);
+                i++;
+                cursor.moveToNext();
+            }
+        }
+
         mStackView = (CardStackView) view.findViewById(R.id.stackview_main);
         mTestStackAdapter = new TestStackAdapter(getActivity());
         mStackView.setAdapter(mTestStackAdapter);
         mStackView.setItemExpendListener(this);
-        mTestStackAdapter.updateData((Arrays.asList(TEST_DATAS)));
+        mTestStackAdapter.updateData(Colors);
 
 
         return view;

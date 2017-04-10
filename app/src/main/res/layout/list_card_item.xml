@@ -47,13 +47,6 @@
             />
 
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/background4"
-        android:background="#fff"
-        android:layout_below="@id/body"
-        android:id="@+id/imageView3" />
 
 </RelativeLayout>
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.nerdspoint.android.chandigarh.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -10,13 +11,39 @@ import android.widget.TextView;
 import com.loopeer.cardstack.CardStackView;
 import com.loopeer.cardstack.StackAdapter;
 import com.nerdspoint.android.chandigarh.R;
+import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
+import com.nerdspoint.android.chandigarh.sharedPrefs.ShopDetails;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestStackAdapter extends StackAdapter<Integer> {
-    public static String[] values = new String[]{"mondat offer","tuesday offer","march offer","feb","hjkl","jadjakdj","hcka","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh","hihh"};
 
+    static Context context;
+
+    static  List<ShopDetails> shops;
+   static ShopDetails details;
 
     public TestStackAdapter(Context context) {
         super(context);
+        this.context= context;
+        shops= new ArrayList<>();
+        Cursor cursor= new DBHandler(context).getAll("ShopMasterTable");
+
+        if(cursor.moveToFirst())
+        {
+            while (!cursor.isAfterLast())
+            {
+                details = new ShopDetails();
+                details.ShopID= cursor.getString(cursor.getColumnIndex("ShopID"));
+                details.shopName = cursor.getString(cursor.getColumnIndex("ShopName"));
+                details.contactNumber= cursor.getString(cursor.getColumnIndex("ShopContactNo"));
+                details.address = cursor.getString(cursor.getColumnIndex("ShopAddress"))+", SCO - "+cursor.getString(cursor.getColumnIndex("SCO"))+", Sector "+cursor.getString(cursor.getColumnIndex("Sector"));
+                shops.add(details);
+                cursor.moveToNext();
+            }
+        }
+
     }
 
     @Override
@@ -72,6 +99,8 @@ public class TestStackAdapter extends StackAdapter<Integer> {
             mContainerContent = view.findViewById(R.id.container_list_content);
             mTextTitle = (TextView) view.findViewById(R.id.text_list_card_title);
             body=(TextView) view.findViewById(R.id.body);
+
+            mTextTitle.setTextSize(18);
         }
 
         @Override
@@ -80,9 +109,12 @@ public class TestStackAdapter extends StackAdapter<Integer> {
         }
 
         public void onBind(Integer data, int position) {
+            details = new ShopDetails();
+            details = shops.get(position);
+
             mLayout.getBackground().setColorFilter(ContextCompat.getColor(getContext(), data), PorterDuff.Mode.SRC_IN);
-            mTextTitle.setText(values[position]);
-            body.setText("ye khul gya g body textview "+position+" huhuhu");
+            mTextTitle.setText(details.shopName+" Offers");
+            body.setText(" Address > "+details.address+" \n\n Contact number > "+details.contactNumber);
         }
 
     }
@@ -96,7 +128,7 @@ public class TestStackAdapter extends StackAdapter<Integer> {
             super(view);
             mLayout = view.findViewById(R.id.frame_list_card_item);
             mTextTitle = (TextView) view.findViewById(R.id.text_list_card_title);
-            body=(TextView) view.findViewById(R.id.body);
+
         }
 
         @Override
@@ -104,9 +136,12 @@ public class TestStackAdapter extends StackAdapter<Integer> {
         }
 
         public void onBind(Integer data, int position) {
+            details = new ShopDetails();
+            details = shops.get(position);
+
             mLayout.getBackground().setColorFilter(ContextCompat.getColor(getContext(), data), PorterDuff.Mode.SRC_IN);
-            mTextTitle.setText(values[position]);
-            body.setText("ye khul gya g body textview "+position+" huhuhu");
+            mTextTitle.setText(details.shopName+" Offers");
+            body.setText(" Address > "+details.address+" \n\n Contact number > "+details.contactNumber);
         }
 
     }
@@ -122,7 +157,7 @@ public class TestStackAdapter extends StackAdapter<Integer> {
             mLayout = view.findViewById(R.id.frame_list_card_item);
             mContainerContent = view.findViewById(R.id.container_list_content);
             mTextTitle = (TextView) view.findViewById(R.id.text_list_card_title);
-            body=(TextView) view.findViewById(R.id.body);
+            body=(TextView) view.findViewById(R.id.text_view);
         }
 
         @Override
@@ -142,9 +177,12 @@ public class TestStackAdapter extends StackAdapter<Integer> {
         }
 
         public void onBind(Integer data, int position) {
+            details = new ShopDetails();
+            details = shops.get(position);
+
             mLayout.getBackground().setColorFilter(ContextCompat.getColor(getContext(), data), PorterDuff.Mode.SRC_IN);
-            mTextTitle.setText(values[position]);
-            body.setText("ye khul gya g body textview "+position+" huhuhu");
+            mTextTitle.setText(details.shopName+" Offers");
+            body.setText(" Address > "+details.address+" \n\n Contact number > "+details.contactNumber);
             itemView.findViewById(R.id.text_view).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

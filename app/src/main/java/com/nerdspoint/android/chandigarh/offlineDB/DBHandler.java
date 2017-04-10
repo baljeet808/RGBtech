@@ -113,7 +113,7 @@ public class DBHandler extends SQLiteOpenHelper
         String sql1 = "CREATE TABLE IF NOT EXISTS Receiver (messageId Integer PRIMARY KEY AUTOINCREMENT,Name text, title text, message text, fid text, UID text, myDate text, CPIDS text);";
         db.execSQL(sql1);
         db.close();
-        Toast.makeText(context, "firebase tables created", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(context, "firebase tables created", Toast.LENGTH_SHORT).show();
     }
 
     public Cursor getSenderNotifications()
@@ -204,13 +204,13 @@ public class DBHandler extends SQLiteOpenHelper
                         TextView textView = (TextView) poppup.findViewById(id);
                         textView.setText(count);
                         poppup.setVisibility(View.VISIBLE);
-                        Toast.makeText(context, "values to update "+response, Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(context, "values to update "+response, Toast.LENGTH_SHORT).show();
                     }
                     else {
                          poppup.setVisibility(View.GONE);
                         TextView textView = (TextView) poppup.findViewById(id);
                         textView.setText("0");
-                           Toast.makeText(context,"already updated",Toast.LENGTH_SHORT).show();
+                      //     Toast.makeText(context,"already updated",Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -220,7 +220,7 @@ public class DBHandler extends SQLiteOpenHelper
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                  Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+              //    Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
                 Log.d("ERROR","error => "+error.toString());
             }
         }
@@ -282,15 +282,15 @@ public class DBHandler extends SQLiteOpenHelper
             @Override
             public void onResponse(String response) {
                 if (response.equals("Success")) {
-                    Toast.makeText(context, "Firebase is Ready to use", Toast.LENGTH_SHORT).show();
+                   Toast.makeText(context, "Firebase is Ready to use", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "error showed in else " + response.toString(), Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(context, "error showed in else " + response.toString(), Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Firebase id not saved "+error.getMessage(), Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(context, "Firebase id not saved "+error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }){
 
@@ -462,7 +462,7 @@ public class DBHandler extends SQLiteOpenHelper
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(context, " "+TableName+" catch showing "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(context, " "+TableName+" catch showing "+e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
                     progress=progress+25;
@@ -491,7 +491,7 @@ public class DBHandler extends SQLiteOpenHelper
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-               Toast.makeText(context,""+TableName+" showing error on response error -"+error.toString(), Toast.LENGTH_LONG).show();
+             //  Toast.makeText(context,""+TableName+" showing error on response error -"+error.toString(), Toast.LENGTH_LONG).show();
               Log.d("ERROR","error => "+error.toString());
             }
         }
@@ -713,7 +713,7 @@ public class DBHandler extends SQLiteOpenHelper
 
         //  Log.i("haiyang:createDB=","\t\t\t\t\t\t\t\t"+sql);
         db.execSQL(sql);
-      Toast.makeText(context,"created "+tableName,Toast.LENGTH_SHORT).show();
+     // Toast.makeText(context,"created "+tableName,Toast.LENGTH_SHORT).show();
 
         db.close();
 
@@ -784,7 +784,7 @@ public class DBHandler extends SQLiteOpenHelper
         }
         catch (Exception e)
         {
-            Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return view;
     }
