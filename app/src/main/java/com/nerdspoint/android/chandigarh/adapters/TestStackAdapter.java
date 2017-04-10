@@ -92,6 +92,7 @@ public class TestStackAdapter extends StackAdapter<Integer> {
         View mContainerContent;
         TextView mTextTitle;
         TextView body;
+        TextView offer;
 
         public ColorItemViewHolder(View view) {
             super(view);
@@ -99,7 +100,7 @@ public class TestStackAdapter extends StackAdapter<Integer> {
             mContainerContent = view.findViewById(R.id.container_list_content);
             mTextTitle = (TextView) view.findViewById(R.id.text_list_card_title);
             body=(TextView) view.findViewById(R.id.body);
-
+            offer = (TextView) view.findViewById(R.id.offer);
             mTextTitle.setTextSize(18);
         }
 
@@ -114,6 +115,23 @@ public class TestStackAdapter extends StackAdapter<Integer> {
 
             mLayout.getBackground().setColorFilter(ContextCompat.getColor(getContext(), data), PorterDuff.Mode.SRC_IN);
             mTextTitle.setText(details.shopName+" Offers");
+            if(position==1)
+            {
+                offer.setText("Flat 80% OFF Buy Now");
+            }
+            else if(position==2)
+            {
+                offer.setText("BUY Two Get One Free");
+
+            }
+            else if(position==3)
+            {
+                offer.setText("Shop 10000 get %50 Off");
+            }
+            else if(position== 4)
+            {
+                offer.setText("Get 30% on Shoes");
+            }
             body.setText(" Address > "+details.address+" \n\n Contact number > "+details.contactNumber);
         }
 
