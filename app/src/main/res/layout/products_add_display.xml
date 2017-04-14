@@ -17,27 +17,27 @@
             android:id="@+id/textView_productName"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:textColor="#000"
-            android:background="#cff"
             android:layout_weight="1"
-             />
+            android:background="#cff"
+            android:textColor="#000" />
+
         <TextView
             android:id="@+id/textView_productAval"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:textColor="#000"
-            android:background="#cff"
             android:layout_weight="1"
-            />
+            android:background="#cff"
+            android:textColor="#000" />
+
         <TextView
             android:id="@+id/textView_productPrice"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:textColor="#000"
-            android:background="#cff"
             android:layout_weight="1"
+            android:background="#cff"
             android:gravity="center"
-            />
+            android:textColor="#000" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="0dp"

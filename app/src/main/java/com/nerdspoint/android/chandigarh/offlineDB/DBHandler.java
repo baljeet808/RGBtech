@@ -541,7 +541,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select ProductName FROM Product Where CategoryID = (Select CategoryID FROM Category Where CategoryName = '"+Category+"')",null);
+        return db.rawQuery("select ProductName, ProductID FROM Product Where CategoryID = (Select CategoryID FROM Category Where CategoryName = '"+Category+"')",null);
     }
 
     public Cursor getShopByID(String shopId)

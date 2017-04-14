@@ -1,26 +1,25 @@
 package com.nerdspoint.android.chandigarh.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nerdspoint.android.chandigarh.R;
-import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ProductDetails;
 
 import java.util.List;
 
 /**
- * Created by android on 3/30/2017.
+ * Created by Naruto on 13-Apr-17.
  */
 
-public class productListAdapter extends BaseAdapter {
+public class AddProductListAdapter extends BaseAdapter {
+
+
     Context context;
     List<ProductDetails> list;
     private static LayoutInflater inflater=null;
@@ -28,7 +27,7 @@ public class productListAdapter extends BaseAdapter {
     ProductDetails productDetails =null;
 
 
-    public productListAdapter( Context context, List<ProductDetails> list) {
+    public  AddProductListAdapter( Context context, List<ProductDetails> list) {
         this.context=context;
         this.list=list;
 
@@ -38,8 +37,7 @@ public class productListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if(list.size()<=0)
-            return 1;
+
         return list.size();
     }
 
@@ -54,68 +52,51 @@ public class productListAdapter extends BaseAdapter {
     }
     public static class ViewHolder{
 
-        public TextView cpId;
-        public TextView text;
-        public TextView text1;
-        public TextView text2;
+        public TextView productname;
+        public EditText price;
+
 
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
-        ViewHolder holder;
+         ViewHolder holder;
 
         if(convertView==null){
 
             /****** Inflate tabitem.xml file for each row ( Defined below ) *******/
-            vi = inflater.inflate(R.layout.products_add_display, null);
+            vi = inflater.inflate(R.layout.custom_listview, null);
 
             /****** View Holder Object to contain tabitem.xml file elements ******/
 
-            holder = new ViewHolder();
-            holder.cpId = (TextView) vi.findViewById(R.id.customPid_tv);
-            holder.text = (TextView) vi.findViewById(R.id.textView_productName);
-            holder.text1=(TextView)vi.findViewById(R.id.textView_productAval);
-            holder.text2= (TextView) vi.findViewById(R.id.textView_productPrice);
+            holder = new  ViewHolder();
+            holder.productname = (TextView) vi.findViewById(R.id.textView_productName);
+            holder.price = (EditText) vi.findViewById(R.id.productPrice);
+
 
 
             /************  Set holder with LayoutInflater ************/
             vi.setTag( holder );
         }
         else {
-            holder = (ViewHolder) vi.getTag();
+            holder = ( ViewHolder) vi.getTag();
         }
 
 
-        if(list.size()<=0)
-        {
 
-            holder.text.setText("No Data");
-            holder.text1.setText("NO");
-            holder.text2.setText("_");
-        }
 
-        else {
+           {
             /***** Get each Model object from Arraylist ********/
             productDetails = null;
             productDetails =list.get(position);
 
             /************  Set Model values in Holder elements ***********/
 
-            holder.text.setText(productDetails.ProductName);
-            if(productDetails.CustomPID!=null)
-            {
-                holder.cpId.setText(productDetails.CustomPID);
-            }
-            if(productDetails.IsActive.equals("1")) {
-                holder.text1.setText("YES");
-            }
-            else
-            {
-                holder.text1.setText("NO");
-            }
-                holder.text2.setText(productDetails.price);
+            holder.productname.setText(productDetails.ProductName);
+
+
+            holder.price.setText(productDetails.price);
             /******** Set Item Click Listner for LayoutInflater for each row *******/
 
 

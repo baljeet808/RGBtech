@@ -3,6 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="themecolor1">#bf360c</color>
+    <color name="themecolorD">#870000</color>
+    <color name="themecolorL">#f9683a</color>
 
     <color name="color_1">#EF9A9A</color>
     <color name="color_2">#E53935</color>

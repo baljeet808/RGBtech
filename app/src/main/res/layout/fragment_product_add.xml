@@ -45,35 +45,22 @@
                 android:layout_marginRight="10dp"
 
                 />
-            <TextView
-                android:id="@+id/search_prodcuts"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Search Products"
-                android:textSize="25dp"
-                android:gravity="center|center_horizontal"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="10dp"
-                android:background="#FF8A80"
-                android:elevation="15dp"
-                android:layout_below="@+id/products_category"
-                android:layout_alignBottom="@+id/button6" />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/search_prodcuts"
-                android:layout_below="@id/products_category"
-                android:background="#13b586"
-                android:layout_marginRight="10dp"
-                android:elevation="15dp"
-                android:text="Search"
-                android:id="@+id/button6" />
+
+             <AutoCompleteTextView
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/Search"
+                 android:hint="Search Products"
+                 android:drawableLeft="@drawable/places_ic_search"
+                 android:drawablePadding="5dp"
+                 android:layout_below="@id/products_category"
+                 />
 
             <ListView
                 android:id="@+id/listView_Products"
                 android:layout_width="match_parent"
                 android:layout_height="360dp"
-                android:layout_below="@id/search_prodcuts">
+                android:layout_below="@id/Search">
             </ListView>
 
             <Button

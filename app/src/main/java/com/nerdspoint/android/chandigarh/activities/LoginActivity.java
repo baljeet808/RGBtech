@@ -1,5 +1,6 @@
 package com.nerdspoint.android.chandigarh.activities;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -40,7 +42,7 @@ import java.util.Map;
 
 import jp.wasabeef.blurry.Blurry;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends Activity {
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -56,6 +58,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
         login_URL= ipAddress.getCustomInstance(getApplicationContext()).getIp()+login_URL;
         ForgotPass=(TextView)findViewById(R.id.ForgotPass);

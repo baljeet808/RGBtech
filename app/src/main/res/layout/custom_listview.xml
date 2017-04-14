@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+
+        android:id="@+id/textView_productName"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:hint="Product Name" />
+
+    <EditText
+            android:id="@+id/productPrice"
+            android:hint="Price"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_toEndOf="@id/textView_productName"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.4"
+            android:inputType="numberDecimal"
+            />
+
+
+
+
+</LinearLayout>

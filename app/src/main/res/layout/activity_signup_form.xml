@@ -4,7 +4,7 @@
     android:id="@+id/activity_signup_form"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF8A80"
+    android:background="#870000"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -18,11 +18,12 @@
     android:layout_height="match_parent"
     android:id="@+id/fragment_container"
     android:layout_alignParentTop="true"
-    android:layout_alignParentStart="true">
+    android:layout_alignParentStart="true"
+ >
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#424242"
+            android:background="#f9683a"
             android:id="@+id/holder"
             android:padding="10dp"
             android:layout_alignParentTop="true"
@@ -125,10 +126,11 @@
                 />
 
             <Button
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:id="@+id/btnBack"
-                android:background="@drawable/back"
+                 android:background="#870000"
+                android:text="Back"
                 android:layout_marginLeft="10dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignStart="@+id/mobileNo"
@@ -141,7 +143,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="7dp"
                 android:text="Continue"
-                android:background="#13b586"
+                android:background="#870000"
                 android:id="@+id/button4"
                 android:onClick="signup"
 
