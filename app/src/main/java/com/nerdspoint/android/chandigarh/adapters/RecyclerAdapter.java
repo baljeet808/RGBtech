@@ -2,6 +2,7 @@ package com.nerdspoint.android.chandigarh.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +48,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         if(type=="shop") {
-            ShopDetails details = list.get(position);
+            final ShopDetails details = list.get(position);
             final String shopName = details.shopName;
             String product = details.productName;
             String price = details.price;
@@ -80,6 +81,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             }else {
                 holder.product.setVisibility(View.INVISIBLE);
             }
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainPage)context).setMapHistory(details.shopName,details.ShopID);
+                    ((MainPage)context).driveToShop(details.latitude,details.longitude);
+                }
+            });
+
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
 
@@ -87,6 +96,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 public void onClick(View v) {
 
                     ((MainPage)context).showShop(ShopId,shopName);
+
                 }
             });
         }
@@ -121,6 +131,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             }else {
                 holder.address.setVisibility(View.INVISIBLE);
             }
+            holder.cardView.setVisibility(View.INVISIBLE);
+
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -155,6 +167,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
 
         TextView shopName,product,price,address,contactNumber;
+        CardView  cardView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -164,6 +177,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             product=(TextView) itemView.findViewById(R.id.productHolder);
             address=(TextView) itemView.findViewById(R.id.AddressHolder);
             contactNumber=(TextView) itemView.findViewById(R.id.ContactNumberHolder);
+            cardView=(CardView) itemView.findViewById(R.id.map_button);
         }
     }
 }

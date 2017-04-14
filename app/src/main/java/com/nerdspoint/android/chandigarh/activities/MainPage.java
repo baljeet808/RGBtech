@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -18,11 +20,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -37,7 +35,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -50,8 +47,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-
+import com.ahmadrosid.lib.drawroutemap.DrawMarker;
+import com.ahmadrosid.lib.drawroutemap.DrawRouteMaps;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.nerdspoint.android.chandigarh.R;
+import com.nerdspoint.android.chandigarh.adapters.GPSTracker;
+import com.nerdspoint.android.chandigarh.adapters.MapHistoryAdapter;
 import com.nerdspoint.android.chandigarh.adapters.TempShopAdapter;
 import com.nerdspoint.android.chandigarh.adapters.populateSearchArray;
 
@@ -72,14 +79,16 @@ import com.nerdspoint.android.chandigarh.fragments.shopRegistration;
 import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.permissionCheck.checkInternet;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
+import com.nerdspoint.android.chandigarh.sharedPrefs.ShopDetails;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import jp.wasabeef.blurry.Blurry;
 
 public class MainPage extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 public int backcount;
     NavigationView navigationView;
     View view;
@@ -88,7 +97,8 @@ public int backcount;
     FragmentManager fragmentManager;
     TextView tv_home,tv_maps,tv_notifications,tv_compare,tv_shopManager;
     TabHost host;
-    RelativeLayout main_fragment_holder,ShopManager_layout,Maps_layout,Notification_layout,Compare_layout;
+    RelativeLayout main_fragment_holder,ShopManager_layout,Notification_layout,Compare_layout;
+    LinearLayout Maps_layout;
     MenuItem menuItem;
     Menu menu;
     BroadcastReceiver br;
@@ -106,6 +116,8 @@ public int backcount;
     DrawerLayout mainPage;
     AutoCompleteTextView searchBar;
     ArrayList<String> items,itemsCopy,shopHistory;
+    List<ShopDetails> map_history;
+
     String temp="Shops",shopID="1",ShopName="nerdspoint";
     FloatingActionButton floatingButton;
     boolean fragmentFlag=true;
@@ -113,12 +125,16 @@ public int backcount;
     AlertDialog dialog,dialog1;
     boolean actionButtonFlag= true;
     boolean flag2= true;
-    ListView result_list;
+    ListView result_list,map_history_list;
     LayoutInflater inflater;
     TempShopAdapter tempAdapter;
     View historylist;
     Button clear;
     Boolean flag=true;
+    GoogleMap  mMap;
+    GPSTracker tracker;
+    ShopDetails details;
+    MapHistoryAdapter historyAdapter;
 
 
 
@@ -130,12 +146,45 @@ public int backcount;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
-        mainPage= (DrawerLayout) findViewById(R.id.drawer_layout);
+        tracker = new GPSTracker(getApplicationContext());
+
+        mainPage = (DrawerLayout) findViewById(R.id.drawer_layout);
         inflater = getLayoutInflater();
 
         historylist = inflater.inflate(R.layout.history_list,null);
-        clear= (Button) historylist.findViewById(R.id.clearAll_button);
+        map_history_list = (ListView) findViewById(R.id.map_history_list);
 
+        map_history = new ArrayList<>();
+
+        Cursor cursor = new DBHandler(getApplicationContext()).getMapHistory();
+        if(cursor.moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                details = new ShopDetails();
+                details.shopName = cursor.getString(cursor.getColumnIndex("ShopName"));
+                details.ShopID= cursor.getString(cursor.getColumnIndex("ShopID"));
+                map_history.add(details);
+                cursor.moveToNext();
+            }
+        }
+        historyAdapter = new MapHistoryAdapter(getApplicationContext(),map_history);
+        map_history_list.setAdapter(historyAdapter);
+
+        map_history_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                view.setAlpha(0.5f);
+                ShopDetails shopDetails=map_history.get(position);
+                Cursor cursor1= new DBHandler(getApplicationContext()).getShopByID(shopDetails.ShopID);
+                if(cursor1.moveToFirst())
+                {
+                    driveToShop(Double.valueOf(cursor1.getString(cursor1.getColumnIndex("Latitude"))),Double.valueOf(cursor1.getString(cursor1.getColumnIndex("Longitude"))));
+                }
+            }
+        });
+
+        clear= (Button) historylist.findViewById(R.id.clearAll_button);
 
         floatingButton= (FloatingActionButton) findViewById(R.id.float_button);
         result_list = (ListView) historylist.findViewById(R.id.result_list);
@@ -229,7 +278,7 @@ public int backcount;
         Notification_layout.setVisibility(View.INVISIBLE);
 
 
-        Maps_layout=(RelativeLayout) findViewById(R.id.maps_holder);
+        Maps_layout=(LinearLayout) findViewById(R.id.maps_holder);
         Maps_layout.setVisibility(View.INVISIBLE);
 
         compareLayout=(RelativeLayout) findViewById(R.id.compare_main_frag);
@@ -333,7 +382,7 @@ public int backcount;
 
             try {
                 Toast.makeText(this, "syncing for first time", Toast.LENGTH_LONG).show();
-                db.syncOffline(searchBar);
+                new DBHandler(MainPage.this,getApplicationContext()).syncOffline(searchBar);
                 popPup.setVisibility(View.INVISIBLE);
             }
             catch (Exception e)
@@ -403,8 +452,62 @@ public int backcount;
 
 
 
-
         checkInternetConnection();
+    }
+
+    public void setAdds()
+    {
+        Advrts advrts = new Advrts();
+
+        fragmentManager =getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.my_layout3,advrts);
+        fragmentTransaction.commit();
+
+    }
+
+    public void driveToShop(Double latitude , Double Longitude)
+    {
+        try {
+            MapsInitializer.initialize(getApplicationContext());
+
+            MapFragment mapFragment = (MapFragment) getFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(this, "error setting map "+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        searchBar.setText("");
+        host.setVisibility(View.INVISIBLE);
+        ShopManager_layout.setVisibility(View.INVISIBLE);
+        Maps_layout.setVisibility(View.VISIBLE);
+        main_fragment_holder.setVisibility(View.INVISIBLE);
+        Notification_layout.setVisibility(View.INVISIBLE);
+        compareLayout.setVisibility(View.INVISIBLE);
+        floatingButton.setVisibility(View.INVISIBLE);
+
+
+        Cursor cursor = new DBHandler(getApplicationContext()).getAll("Places");
+        if(cursor.moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                ShopDetails details = new ShopDetails();
+                details.shopName = cursor.getString(cursor.getColumnIndex("ShopName"));
+                details.ShopID= cursor.getString(cursor.getColumnIndex("ShopID"));
+                map_history.add(details);
+            }
+        }
+        try {
+            showroute(latitude, Longitude);
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(), "error on showrouute Call "+e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
 
@@ -551,6 +654,16 @@ public int backcount;
     {
         shopHistory.add(SHOPID);
         tempAdapter.notifyDataSetChanged();
+    }
+
+    public void setMapHistory(String shopName, String ShopId)
+    {
+        details = new ShopDetails();
+        details.ShopID=ShopId;
+        details.shopName = shopName;
+        map_history.add(details);
+        historyAdapter.notifyDataSetChanged();
+
     }
 
 
@@ -890,6 +1003,18 @@ fragmentFlag=false;
             }break;
             case R.id.tv_maps :
             {
+
+                try {
+
+                    MapFragment mapFragment = (MapFragment) getFragmentManager()
+                            .findFragmentById(R.id.map);
+                    mapFragment.getMapAsync(this);
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(this, "error setting map "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
                 searchBar.setText("");
                 host.setVisibility(View.INVISIBLE);
                 ShopManager_layout.setVisibility(View.INVISIBLE);
@@ -898,6 +1023,19 @@ fragmentFlag=false;
                 Notification_layout.setVisibility(View.INVISIBLE);
                 compareLayout.setVisibility(View.INVISIBLE);
                 floatingButton.setVisibility(View.INVISIBLE);
+
+
+                Cursor cursor = new DBHandler(getApplicationContext()).getAll("Places");
+                if(cursor.moveToFirst())
+                {
+                    while(!cursor.isAfterLast())
+                    {
+                        ShopDetails details = new ShopDetails();
+                        details.shopName = cursor.getString(cursor.getColumnIndex("ShopName"));
+                        details.ShopID= cursor.getString(cursor.getColumnIndex("ShopID"));
+                        map_history.add(details);
+                    }
+                }
 
 
             }break;
@@ -1017,4 +1155,32 @@ fragmentFlag=false;
         return true;
     }
 
+    @Override
+    public void onMapReady(GoogleMap map) {
+        mMap=map;
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        map.setMyLocationEnabled(true);
+        map.setTrafficEnabled(true);
+        map.setIndoorEnabled(true);
+        map.setBuildingsEnabled(true);
+        map.getUiSettings().setZoomControlsEnabled(true);
+    }
+
+    public void showroute(Double latitude, Double longitude)
+    {
+        Location location = tracker.getLocation();
+        LatLng origin = new LatLng(location.getLatitude(),location.getLongitude());
+        LatLng destination = new LatLng(latitude,longitude);
+        DrawRouteMaps.getInstance(this)
+                .draw(origin, destination, mMap);
+        DrawMarker.getInstance(this).draw(mMap, origin, R.drawable.ic_place_black_24dp, "Origin Location");
+        DrawMarker.getInstance(this).draw(mMap, destination, R.drawable.ic_person_pin_circle_black_24dp, "Destination Location");
+
+        LatLngBounds bounds = new LatLngBounds.Builder()
+                .include(origin)
+                .include(destination).build();
+        Point displaySize = new Point();
+        getWindowManager().getDefaultDisplay().getSize(displaySize);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, displaySize.x, 250, 30));
+    }
 }

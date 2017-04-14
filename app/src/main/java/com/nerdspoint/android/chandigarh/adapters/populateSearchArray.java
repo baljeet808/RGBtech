@@ -12,6 +12,7 @@ import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.nerdspoint.android.chandigarh.R;
+import com.nerdspoint.android.chandigarh.activities.MainPage;
 import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class populateSearchArray
     {
         searchBar.setAdapter(quickSearchAdapter.getCustomInstance(context).getArrayAdapter(tableName));
         searchBar.setThreshold(1);
+        
     }
 
 

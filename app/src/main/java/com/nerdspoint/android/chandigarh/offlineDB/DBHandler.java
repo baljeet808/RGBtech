@@ -5,19 +5,14 @@ package com.nerdspoint.android.chandigarh.offlineDB;
  */
 
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,26 +34,17 @@ import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.activities.MainPage;
 import com.nerdspoint.android.chandigarh.adapters.populateSearchArray;
 import com.nerdspoint.android.chandigarh.adapters.productListAdapter;
-import com.nerdspoint.android.chandigarh.adapters.quickSearchAdapter;
-import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ProductDetails;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import android.os.Handler;
-import java.util.logging.LogRecord;
-
-import static android.net.sip.SipErrorCode.TIME_OUT;
 
 
 public class DBHandler extends SQLiteOpenHelper
@@ -87,8 +72,7 @@ public class DBHandler extends SQLiteOpenHelper
     private String update_url = "/offlineUpdate.php";
     private String vendorProfile_url = "/ShopOwnerProfile.php";
     private String updateFirebase_url = "/Update_FireBaseID.php";
-
-
+    private Activity mActivity;
     private String count_url ="/CountNewData.php";
 
 
@@ -100,6 +84,20 @@ public class DBHandler extends SQLiteOpenHelper
         count_url=ipAddress.getCustomInstance(context).getIp()+count_url;
         vendorProfile_url=ipAddress.getCustomInstance(context).getIp()+vendorProfile_url;
         updateFirebase_url = ipAddress.getCustomInstance(context).getIp()+updateFirebase_url;
+
+
+    }
+
+
+    public DBHandler(Activity activity,Context context)
+    {
+        super(context, "OfflineDB.db",null,1);
+        update_url=ipAddress.getCustomInstance(context).getIp()+update_url;
+        count_url=ipAddress.getCustomInstance(context).getIp()+count_url;
+        vendorProfile_url=ipAddress.getCustomInstance(context).getIp()+vendorProfile_url;
+        updateFirebase_url = ipAddress.getCustomInstance(context).getIp()+updateFirebase_url;
+        this.context=context;
+        mActivity=activity;
     }
 
     public void createFirebaseHistory()
@@ -112,8 +110,20 @@ public class DBHandler extends SQLiteOpenHelper
         db.execSQL(sql);
         String sql1 = "CREATE TABLE IF NOT EXISTS Receiver (messageId Integer PRIMARY KEY AUTOINCREMENT,Name text, title text, message text, fid text, UID text, myDate text, CPIDS text);";
         db.execSQL(sql1);
+        String sql2 = "CREATE TABLE IF NOT EXISTS Places (placeId Integer PRIMARY KEY AUTOINCREMENT,ShopName text, ShopID text);";
+        db.execSQL(sql2);
         db.close();
       //  Toast.makeText(context, "firebase tables created", Toast.LENGTH_SHORT).show();
+    }
+
+    public Cursor getMapHistory()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if(db == null)
+        {
+            return null;
+        }
+        return db.rawQuery("Select ShopName , ShopID from Places ",null);
     }
 
     public Cursor getSenderNotifications()
@@ -530,7 +540,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select ShopID, ShopName, ShopAddress, UID, Sector, SCO , ShopContactNo from ShopMasterTable where ShopName LIKE '%"+shopName+"%'",null);
+        return db.rawQuery("select ShopID, ShopName, ShopAddress, UID, Sector, SCO , ShopContactNo, Latitude , Longitude from ShopMasterTable where ShopName LIKE '%"+shopName+"%'",null);
     }
 
 
@@ -666,6 +676,9 @@ public class DBHandler extends SQLiteOpenHelper
 
       // Toast.makeText(context,"last shopid "+ActiveUserDetail.getCustomInstance(context).getLastShopID()+" Last ProductID "+ActiveUserDetail.getCustomInstance(context).getLastProductID()+" Category id "+ActiveUserDetail.getCustomInstance(context).getLastCategoryID()+" customPID "+ActiveUserDetail.getCustomInstance(context).getLastCustomPID()+" ",Toast.LENGTH_LONG).show();
         populateSearchArray.getCustomInstance(context,searchBar).populate("Shops");
+      if(mActivity!=null) {
+          ((MainPage) mActivity).setAdds();
+      }
     }
 
 
