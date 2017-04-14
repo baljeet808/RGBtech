@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fcc"
+    android:elevation="10dp"
+    >
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_weight="1"
+        android:textColor="#000"
+        android:textSize="18dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="Hello"
+        android:textStyle="bold"
+
+        android:id="@+id/place_name"
+        />
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textColor="#000"
+        android:textSize="18dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:visibility="gone"
+        android:text="Hello"
+        android:id="@+id/place_id"
+        />
+
+</LinearLayout>

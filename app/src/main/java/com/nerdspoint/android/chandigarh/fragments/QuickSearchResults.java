@@ -146,6 +146,8 @@ public class QuickSearchResults extends Fragment implements View.OnClickListener
                             details.shopName = cursor.getString(cursor.getColumnIndex("ShopName"));
                             details.productName=null;
                             details.price=null;
+                            details.latitude = Double.valueOf(cursor.getString(cursor.getColumnIndex("Latitude")));
+                            details.longitude= Double.valueOf(cursor.getString(cursor.getColumnIndex("Longitude")));
                             details.contactNumber=cursor.getString(cursor.getColumnIndex("ShopContactNo"));
                             details.ShopID=cursor.getString(cursor.getColumnIndex("ShopID"));
                             list.add(details);

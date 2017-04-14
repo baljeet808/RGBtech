@@ -16,9 +16,7 @@ public class ShopDetails {
     public String price;
     public String ShopID;
     public String category;
-
-
-
-
+    public Double longitude;
+    public Double latitude;
 }
 

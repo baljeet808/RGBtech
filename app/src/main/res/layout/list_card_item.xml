@@ -27,6 +27,19 @@
             android:textSize="40sp"
             android:fontFamily="sans-serif-smallcaps"
             tools:text="12"/>
+
+        <TextView
+            android:id="@+id/offer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SALE !!     SALE !!    SALE !!"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="80dp"
+            android:layout_marginLeft="20dp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="28dp"
+            />
     </FrameLayout>
 
     <RelativeLayout
@@ -47,13 +60,6 @@
             />
 
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/background4"
-        android:background="#fff"
-        android:layout_below="@id/body"
-        android:id="@+id/imageView3" />
 
 </RelativeLayout>
 </LinearLayout>

@@ -159,7 +159,7 @@ public class LoginActivity extends Activity {
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setIsActive(true);
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setLoginType("Simple");
 
-                                    Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                                   // Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
 
                                     Intent i= new Intent(LoginActivity.this,MainPage.class);
                                     startActivity(i);
