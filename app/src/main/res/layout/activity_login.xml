@@ -13,9 +13,9 @@
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
+        android:background="@drawable/demo"
         android:layout_alignParentTop="true"
-        android:background="@drawable/demo">
+        android:layout_alignParentStart="true">
 
         <ImageView
             android:id="@+id/imageLogo"
@@ -64,7 +64,39 @@
             android:elevation="0dp"
             android:onClick="simpleLogin"
             android:text="Login" />
+        <com.facebook.login.widget.LoginButton
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/button2"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/fb_login_bn"
+            ></com.facebook.login.widget.LoginButton>
 
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/fb_login_bn"
+    android:text="fb status"
+    android:gravity="center"
+    android:id="@+id/Face"
+
+    />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logout"
+            android:text="log out"
+            android:layout_alignTop="@+id/signInButton"
+            android:layout_alignParentStart="true" />
+        <com.google.android.gms.common.SignInButton
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/ForgotPass"
+            android:layout_alignEnd="@+id/textView2"
+            android:id="@+id/signInButton"></com.google.android.gms.common.SignInButton>
 
         <TextView
             android:id="@+id/textView5"
