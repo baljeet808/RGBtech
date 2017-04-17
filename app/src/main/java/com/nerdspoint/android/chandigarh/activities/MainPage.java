@@ -64,6 +64,7 @@ import com.nerdspoint.android.chandigarh.adapters.populateSearchArray;
 
 import com.nerdspoint.android.chandigarh.fragments.Advrts;
 import com.nerdspoint.android.chandigarh.fragments.EditProfile;
+import com.nerdspoint.android.chandigarh.fragments.ImageHandler;
 import com.nerdspoint.android.chandigarh.fragments.Notification;
 import com.nerdspoint.android.chandigarh.fragments.ProductAdd;
 import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
@@ -448,6 +449,15 @@ public int backcount;
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
         fragmentTransaction.add(R.id.compare_main_frag,shopPage);
+        fragmentTransaction.commit();
+
+
+        ImageHandler imageHandler = new ImageHandler();
+
+
+        fragmentManager =getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.Main_Fragment_Holder,imageHandler);
         fragmentTransaction.commit();
 
 
@@ -1096,8 +1106,19 @@ fragmentFlag=false;
 
        if (id == R.id.nav_addShop) {
 
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            drawer.closeDrawer(GravityCompat.START);
+
+
+           searchBar.setText("");
+           host.setVisibility(View.INVISIBLE);
+           ShopManager_layout.setVisibility(View.INVISIBLE);
+           Maps_layout.setVisibility(View.INVISIBLE);
+           main_fragment_holder.setVisibility(View.VISIBLE);
+           Notification_layout.setVisibility(View.INVISIBLE);
+           compareLayout.setVisibility(View.INVISIBLE);
+           floatingButton.setVisibility(View.INVISIBLE);
+              DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+           drawer.closeDrawer(GravityCompat.START);
 
         } else if (id == R.id.nav_manage) {
             searchBar.setText("");

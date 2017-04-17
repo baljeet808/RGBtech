@@ -36,6 +36,7 @@ import com.digits.sdk.android.DigitsException;
 import com.digits.sdk.android.DigitsSession;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.fragments.profileUpdation;
+import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
 import java.util.HashMap;
@@ -56,13 +57,16 @@ public class SignupForm extends AppCompatActivity {
 
     Boolean isLocationSet=false;
 
-    private String signup_url ="https://baljeet808singh.000webhostapp.com/chandigarh/signup.php";          // enter the url here for signup purpose
+    private String signup_url ="/signup.php";          // enter the url here for signup purpose
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_form);
+
+        signup_url= ipAddress.getCustomInstance(getApplicationContext()).getIp()+signup_url;
+
         sharedPreferences = getSharedPreferences("userDetail",MODE_PRIVATE);     // SharedPreferences Name >> usrDetail
         editor= sharedPreferences.edit();                                       // SharedPreferences contain >>  email , password , location, sex , age, interests,name , type  of user
         editor.apply();
