@@ -138,6 +138,7 @@ public class shopRegistration extends Fragment   {
                 if(cursor.moveToFirst())
                 {
                     cid=cursor.getString(cursor.getColumnIndex("CategoryID"));
+
                 }
 
                 if(tv_shopname.getText().toString().length()==0 || tv_shopAddress.getText().toString().length()==0 || tv_pincode.getText().toString().length()==0  || tv_SCO.getText().toString().length()==0 || tv_Sctor.getText().toString().length()==0 || tv_Shopnumber.getText().toString().length()==0 || tv_pincode.getText().toString().length()==0)

@@ -1,11 +1,13 @@
 package com.nerdspoint.android.chandigarh.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -20,7 +22,7 @@ import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import io.fabric.sdk.android.Fabric;
 
-public class Splash extends AppCompatActivity {
+public class Splash extends Activity {
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "4LvRbG0cIcGdE1nnd2G8X6r28";
@@ -39,9 +41,13 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new TwitterCore(authConfig), new Digits.Builder().build());
         setContentView(R.layout.activity_splash);
+
+
+
 
 
         animation= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.scalefade);

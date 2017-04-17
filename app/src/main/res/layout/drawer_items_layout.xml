@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/drawer_title_shape"
+    android:background="#870000"
     android:id="@+id/popPup"
+
     android:layout_width="match_parent" android:layout_height="40dp">
 
 
@@ -26,6 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:text="SYNC"
+
+        android:textColor="#ffffff"
         android:layout_toRightOf="@id/flag"
         android:layout_centerVertical="true"
         android:textSize="15sp" />

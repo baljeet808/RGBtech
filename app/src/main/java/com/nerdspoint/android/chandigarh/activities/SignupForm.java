@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -63,6 +64,8 @@ public class SignupForm extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_signup_form);
 
         signup_url= ipAddress.getCustomInstance(getApplicationContext()).getIp()+signup_url;
@@ -201,12 +204,14 @@ public class SignupForm extends AppCompatActivity {
                 Log.d("Response", response+"Done");
                 if(response.equals("Already"))
                 {
+
+                    alert.dismiss();
                     Snackbar.make(getCurrentFocus(),"User already exists with this detail",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                 }
 
                 if(response.equals("User Successfully Registered"))
                 {
-                    alert.cancel();
+                    alert.dismiss();
                  //   Snackbar.make(v.findFocus(),"Moving to next fragment",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
 
                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setLoginType("Simple");
@@ -229,6 +234,7 @@ public class SignupForm extends AppCompatActivity {
                 else
                 {
                     Log.d("response",response);
+                    alert.dismiss();
                   //  Snackbar.make(v.findFocus(),response.toString(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                 }
             }
@@ -236,6 +242,7 @@ public class SignupForm extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("ERROR","error => "+error.toString());
+                alert.dismiss();
             //    Snackbar.make(v.findFocus(),error.getMessage(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
             }
         }
