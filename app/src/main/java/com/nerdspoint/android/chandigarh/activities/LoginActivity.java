@@ -32,6 +32,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.bumptech.glide.Glide;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -66,7 +68,7 @@ import java.util.Map;
 
 import jp.wasabeef.blurry.Blurry;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener{
+public class LoginActivity extends AppCompatActivity {
 
 
     LoginButton loginButton;
@@ -76,15 +78,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText et_username,et_password;
     private TextView ForgotPass,status;
     ImageView imageView;
-    GoogleApiClient googleApiClient;
-    private  static final int REQ_CODE=9001;
-    Button Signout;
-    SignInButton signInButton;
+
+
+
+
 
 
     RelativeLayout login_activity;
 
     private String login_URL="/login.php";
+    private AccessToken accessToken;
+
     // paste login file url in this string    it will check that user is present or not
     // by matching email and password in the database
     // sending arguments name > UserName, password use same in php file
@@ -99,44 +103,61 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
-        Signout=(Button)findViewById(R.id.logout);
-        signInButton=(SignInButton)findViewById(R.id.signInButton);
+
         imageView=(ImageView)findViewById(R.id.imageLogo);
         loginButton=(LoginButton)findViewById(R.id.fb_login_bn);
         status=(TextView)findViewById(R.id.Face);
-
-
+       /* loginButton.setReadPermissions("user_friends");
+        loginButton.setReadPermissions("public_profile");
+        loginButton.setReadPermissions("email");
+        loginButton.setReadPermissions("user_birthday");
+      */
         //google sign in button coding
 
-        signInButton.setOnClickListener(this);
-        Signout.setOnClickListener(this);
-        GoogleSignInOptions signInOptions=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-
-     googleApiClient=new GoogleApiClient.Builder(this).enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-         @Override
-         public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-             Toast.makeText(LoginActivity.this, "jhfdjkfh", Toast.LENGTH_SHORT).show();
-         }
-     }).addApi(Auth.GOOGLE_SIGN_IN_API,signInOptions).build();
 
 
         callbackManager=CallbackManager.Factory.create();
-        //loginButton.setReadPermissions(Arrays.asList("public_profile,email,user_friends,read_custom_friendlists"));
+
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
 
 
-                //Profile profile = Profile.getCurrentProfile();
-                //Log.d("Shreks Fragment onSuccess", "" +profile);
-
-                // Get User Name
-               // status.setText(profile.getName() + "");
 
 
 
-                status.setText("Login \n"+loginResult.getAccessToken().getUserId()+"\n"+loginResult.getAccessToken().getToken());
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object,GraphResponse response) {
+                                try {
+
+
+                                    Intent i= new Intent(LoginActivity.this,MainPage.class);
+                                    startActivity(i);
+                                    finish();
+
+
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setEmailAddress( object.getString("email"));
+                                   // ActiveUserDetail.getCustomInstance(getApplicationContext()).setLastName( );
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setFirstName(object.getString("name") );
+                                    status.setText(object.getString("name")+" "+object.getString("email")+" "+object.getString("id"));
+                                } catch(JSONException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        });
+
+
+               Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender, birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+                Toast.makeText(LoginActivity.this, ""+parameters.toString(), Toast.LENGTH_SHORT).show();
+
+
+
 
             }
 
@@ -151,6 +172,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             }
         });
+
+
 
         login_URL= ipAddress.getCustomInstance(getApplicationContext()).getIp()+login_URL;
         ForgotPass=(TextView)findViewById(R.id.ForgotPass);
@@ -310,71 +333,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //super.onActivityResult(requestCode, resultCode, data);
 
 
-        if(requestCode==REQ_CODE)
-        {
-            GoogleSignInResult result=Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleResult(result);
-        }
-        else
-        {
-            callbackManager.onActivityResult(requestCode,resultCode,data);
-            Toast.makeText(this, "fail", Toast.LENGTH_SHORT).show();
-        }
-    }
+         callbackManager.onActivityResult(requestCode,resultCode,data);
 
-    private void handleResult(GoogleSignInResult result) {
-        if(result.isSuccess())
-        {
-            GoogleSignInAccount account=result.getSignInAccount();
-             String name=account.getDisplayName();
-             String email=account.getEmail();
-             String img_url=account.getPhotoUrl().toString();
-            status.setText(""+name.toString()+"  "+email.toString());
-            Glide.with(this).load(img_url).into(imageView);
-            Toast.makeText(this, "login sucsess", Toast.LENGTH_SHORT).show();
-            //UpdateUI(true);
 
-        }
+
+
 
     }
 
 
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId())
-        {
-            case R.id.signInButton:
-                signIn();
-                break;
-            case R.id.logout:
-                signout();
-                break;
-        }
-
-    }
-
-    private void signout() {
-        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                Toast.makeText(LoginActivity.this, "log out", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void signIn()
-    {
-
-        Intent intent =Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-        startActivityForResult(intent,REQ_CODE);
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 
 
 }

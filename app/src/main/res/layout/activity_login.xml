@@ -5,7 +5,7 @@
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#870000"
+    android:background="#ff8a81"
     android:padding="10dp"
     tools:context="com.nerdspoint.android.chandigarh.activities.LoginActivity">
 
@@ -53,7 +53,7 @@
 
         <Button
             android:id="@+id/button2"
-            android:layout_width="200dp"
+            android:layout_width="188dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/editText2"
             android:layout_centerHorizontal="true"
@@ -64,39 +64,27 @@
             android:elevation="0dp"
             android:onClick="simpleLogin"
             android:text="Login" />
+
         <com.facebook.login.widget.LoginButton
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_below="@id/button2"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true"
+            android:layout_width="195dp"
             android:id="@+id/fb_login_bn"
-            ></com.facebook.login.widget.LoginButton>
+            android:gravity="center"
+            android:layout_below="@id/button2"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="11dp"></com.facebook.login.widget.LoginButton>
 
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/fb_login_bn"
-    android:text="fb status"
-    android:gravity="center"
-    android:id="@+id/Face"
-
-    />
-        <Button
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/Face"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/logout"
-            android:text="log out"
-            android:layout_alignTop="@+id/signInButton"
-            android:layout_alignParentStart="true" />
-        <com.google.android.gms.common.SignInButton
+            android:layout_below="@id/fb_login_bn"
+            android:gravity="center"
+            android:text="fb status"
 
-            android:layout_width="wrap_content"
+              />
 
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/ForgotPass"
-            android:layout_alignEnd="@+id/textView2"
-            android:id="@+id/signInButton"></com.google.android.gms.common.SignInButton>
+
 
         <TextView
             android:id="@+id/textView5"
