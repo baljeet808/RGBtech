@@ -72,7 +72,7 @@ EditProfile extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_edit_profile, container, false);
         edit_profilento= (RelativeLayout) view.findViewById(R.id.edit_profilento);
-
+        String usertype=ActiveUserDetail.getCustomInstance(getActivity()).getLoginType();
         EditProfile_URL= ipAddress.getCustomInstance(getActivity()).getIp()+EditProfile_URL;
         FirstName=(TextView) view.findViewById(R.id.FirstName);
         LastName=(TextView) view.findViewById(R.id.LastName);
@@ -81,12 +81,29 @@ EditProfile extends Fragment implements View.OnClickListener {
         Email=(TextView) view.findViewById(R.id.Email);
         UserName=(TextView) view.findViewById(R.id.Username);
 
+        if(usertype=="facebook")
+        {
+
+
+
+
+            LastName.setVisibility(View.GONE);
+
+            UserName.setVisibility(View.GONE);
+            Password.setVisibility(View.GONE);
+            PhoneNumber.setVisibility(View.GONE);
+
+        }
+
         FirstName.setText(ActiveUserDetail.getCustomInstance(getActivity()).getFirstName());
         LastName.setText(ActiveUserDetail.getCustomInstance(getActivity()).getLastName());
         PhoneNumber.setText(ActiveUserDetail.getCustomInstance(getActivity()).getPhoneNumber());
         Password.setText(ActiveUserDetail.getCustomInstance(getActivity()).getPassword());
         Email.setText(ActiveUserDetail.getCustomInstance(getActivity()).getEmailAddress());
         UserName.setText(ActiveUserDetail.getCustomInstance(getActivity()).getUserName());
+
+
+
 
         UID=(ActiveUserDetail.getCustomInstance(getActivity()).getUID());
         FirstName.setOnClickListener(this);

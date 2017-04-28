@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.net.wifi.WifiManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -11,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Formatter;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +22,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -61,6 +66,8 @@ import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -76,18 +83,14 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private EditText et_username,et_password;
-    private TextView ForgotPass,status;
+    private TextView ForgotPass ;
     ImageView imageView;
 
 
 
-
-
-
-    RelativeLayout login_activity;
+    LinearLayout login_activity;
 
     private String login_URL="/login.php";
-    private AccessToken accessToken;
 
     // paste login file url in this string    it will check that user is present or not
     // by matching email and password in the database
@@ -100,19 +103,15 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+
      FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
 
-        imageView=(ImageView)findViewById(R.id.imageLogo);
+        //imageView=(ImageView)findViewById(R.id.imageLogo);
         loginButton=(LoginButton)findViewById(R.id.fb_login_bn);
-        status=(TextView)findViewById(R.id.Face);
-       /* loginButton.setReadPermissions("user_friends");
-        loginButton.setReadPermissions("public_profile");
-        loginButton.setReadPermissions("email");
-        loginButton.setReadPermissions("user_birthday");
-      */
-        //google sign in button coding
+
+
 
 
 
@@ -123,10 +122,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
 
 
-
-
-
-
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
@@ -134,15 +129,26 @@ public class LoginActivity extends AppCompatActivity {
                                 try {
 
 
+                                    Toast.makeText(LoginActivity.this, "hello", Toast.LENGTH_SHORT).show();
+
+
                                     Intent i= new Intent(LoginActivity.this,MainPage.class);
                                     startActivity(i);
                                     finish();
 
 
-                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setEmailAddress( object.getString("email"));
-                                   // ActiveUserDetail.getCustomInstance(getApplicationContext()).setLastName( );
+
+                                   ActiveUserDetail.getCustomInstance(getApplicationContext()).setEmailAddress( object.getString("email"));
+
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setFirstName(object.getString("name") );
-                                    status.setText(object.getString("name")+" "+object.getString("email")+" "+object.getString("id"));
+
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setLoginType("facebook");
+
+                                    //ActiveUserDetail.getCustomInstance(getApplicationContext()).setPhoneNumber(object.getString ("number"));
+                                    //status.setText(object.getString("name")+" "+object.getString("email")+" "+object.getString("id")  );
+
+                                    Toast.makeText(LoginActivity.this, "login success", Toast.LENGTH_SHORT).show();
+
                                 } catch(JSONException ex) {
                                     ex.printStackTrace();
                                 }
@@ -154,7 +160,7 @@ public class LoginActivity extends AppCompatActivity {
                 parameters.putString("fields", "id,name,email,gender, birthday");
                 request.setParameters(parameters);
                 request.executeAsync();
-                Toast.makeText(LoginActivity.this, ""+parameters.toString(), Toast.LENGTH_SHORT).show();
+
 
 
 
@@ -163,12 +169,15 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancel() {
-                status.setText("login cancel");
+
 
             }
 
             @Override
             public void onError(FacebookException error) {
+
+                Toast.makeText(LoginActivity.this, ""+error.toString(), Toast.LENGTH_SHORT).show();
+
 
             }
         });
@@ -182,7 +191,7 @@ public class LoginActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("userDetail",MODE_PRIVATE);     // SharedPreferences Name >> usrDetail
         editor= sharedPreferences.edit();                                       // SharedPreferences contain >>  email , password , location, sex , age, interests,name , type  of user
         editor.apply();
-        login_activity=(RelativeLayout) findViewById(R.id.activity_login);
+        //login_activity=(RelativeLayout) findViewById(R.id.activity_login);
 
 
 
@@ -195,13 +204,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    public void skip(View v)
-    {
-        Intent i = new Intent(LoginActivity.this,MainPage.class);
-        startActivity(i);
-        finish();
-        Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-    }
+
 
     public void SignUp(View v)                              //  calling signUpForm class to SignUp a user
     {
@@ -243,7 +246,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                     alert.show();
-                    Blurry.with(getApplicationContext()).radius(25).sampling(2).onto((ViewGroup) login_activity.getRootView());
+//                   Blurry.with(getApplicationContext()).radius(25).sampling(2).onto((ViewGroup) login_activity.getRootView());
                     Log.d("alert dialog","\t\t\talert started");
                     StringRequest request = new StringRequest(Request.Method.POST, login_URL, new Response.Listener<String>() {
 
@@ -254,7 +257,7 @@ public class LoginActivity extends AppCompatActivity {
                             {
 
                                 alert.cancel();
-                                Blurry.delete((ViewGroup) login_activity.getRootView());
+                           //     Blurry.delete((ViewGroup) login_activity.getRootView());
                                 Snackbar.make(getCurrentFocus(),"LOGIN SUCCESSFUL",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                                 try {
 
@@ -289,7 +292,7 @@ public class LoginActivity extends AppCompatActivity {
                             else
                             {
                                 alert.cancel();
-                                Blurry.delete((ViewGroup) login_activity.getRootView());
+                             //   Blurry.delete((ViewGroup) login_activity.getRootView());
                                 Snackbar.make(getCurrentFocus(),"LOGIN FAILED",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                             }
                         }
@@ -299,7 +302,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("ERROR","error => "+error.toString());
 
                             alert.cancel();
-                            Blurry.delete((ViewGroup) login_activity.getRootView());
+                          //  Blurry.delete((ViewGroup) login_activity.getRootView());
                             Snackbar.make(getCurrentFocus(),error.getMessage(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                         }
                     }
@@ -325,6 +328,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         }
+        Toast.makeText(this, "Password length should be greater then 5", Toast.LENGTH_SHORT).show();
 
     }
 

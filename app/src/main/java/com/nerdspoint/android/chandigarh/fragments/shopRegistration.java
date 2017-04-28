@@ -208,60 +208,60 @@ public class shopRegistration extends Fragment   {
 
 
 
-          StringRequest request = new StringRequest(Request.Method.POST, shopRegistering_url, new Response.Listener<String>() {
-              @Override
-              public void onResponse(String response) {
-                  Log.d("Response", response + "Done");
+        StringRequest request = new StringRequest(Request.Method.POST, shopRegistering_url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Response", response + "Done");
 
 
-                  if (response.equals("Success")) {
-                      alert.cancel();
-                      Snackbar.make(getActivity().getCurrentFocus(), "record saved", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                if (response.equals("Success")) {
+                    alert.cancel();
+                    Snackbar.make(getActivity().getCurrentFocus(), "record saved", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
-                      Toast.makeText(getActivity(), "shop registration Success", Toast.LENGTH_SHORT).show();
-                      ((MainPage)getActivity()).AddShop();
-                  } else {
-                      alert.cancel();
-                      Snackbar.make(getActivity().getCurrentFocus(), response.toString(), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                  }
-              }
-          }, new Response.ErrorListener() {
-              @Override
-              public void onErrorResponse(VolleyError error) {
-                  alert.cancel();
-                  Log.d("ERROR", "error => " + error.toString());
-                  Snackbar.make(getActivity().getCurrentFocus(), error.getMessage(), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-              }
-          }
-          ) {
-              @Override
-              protected Map getParams() throws AuthFailureError {
-
-
-                  Map<String, String> params = new HashMap<>();
-                  params.put("ShopName",tv_shopname.getText().toString());
-                  params.put("ShopAddress",tv_shopAddress.getText().toString());
-                  params.put("ShopContactNo",tv_Shopnumber.getText().toString());
-                  params.put("Pincode",tv_pincode.getText().toString());
-                  params.put("Sector",tv_Sctor.getText().toString());
-                  params.put("SCO",tv_SCO.getText().toString());
-                  params.put("CategoryID",cid);
-                  params.put("Latitude",  ""+latitude );
-                  params.put("Longitude",""+longitude );
-                  params.put("UID",ActiveUserDetail.getCustomInstance(getActivity()).getUID());
+                    Toast.makeText(getActivity(), "shop registration Success", Toast.LENGTH_SHORT).show();
+                    ((MainPage)getActivity()).AddShop();
+                } else {
+                    alert.cancel();
+                    Snackbar.make(getActivity().getCurrentFocus(), response.toString(), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                alert.cancel();
+                Log.d("ERROR", "error => " + error.toString());
+                Snackbar.make(getActivity().getCurrentFocus(), error.getMessage(), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+            }
+        }
+        ) {
+            @Override
+            protected Map getParams() throws AuthFailureError {
 
 
+                Map<String, String> params = new HashMap<>();
+                params.put("ShopName",tv_shopname.getText().toString());
+                params.put("ShopAddress",tv_shopAddress.getText().toString());
+                params.put("ShopContactNo",tv_Shopnumber.getText().toString());
+                params.put("Pincode",tv_pincode.getText().toString());
+                params.put("Sector",tv_Sctor.getText().toString());
+                params.put("SCO",tv_SCO.getText().toString());
+                params.put("CategoryID",cid);
+                params.put("Latitude",  ""+latitude );
+                params.put("Longitude",""+longitude );
+                params.put("UID",ActiveUserDetail.getCustomInstance(getActivity()).getUID());
 
 
 
-                  return params;
 
 
-              }
-          };
+                return params;
 
-          RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
-          queue.add(request);
+
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        queue.add(request);
 
     }
 

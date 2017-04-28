@@ -198,7 +198,7 @@ public class ActiveUserDetail {
         bundle.putString("Password",sharedPreferences.getString("Password","nerdspoint"));
         bundle.putString("UserType",sharedPreferences.getString("UserType","nerdspoint"));
         bundle.putString("IsActive",sharedPreferences.getString("IsActive","logOut"));
-        bundle.putString("LoginType",sharedPreferences.getString("LoginType","Simple"));
+        bundle.putString("LoginType",sharedPreferences.getString("LoginType",""));
         return bundle;
     }
 

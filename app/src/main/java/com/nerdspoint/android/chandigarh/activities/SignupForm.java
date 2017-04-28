@@ -18,8 +18,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -45,8 +48,11 @@ import java.util.Map;
 public class SignupForm extends AppCompatActivity {
 
     EditText mobile,Email,Password,ConfirmPassword,userName;
-    CheckBox visitor,shopowner;
+
+    String condition;
     Button Back,OTP;
+    TextView login;
+    RadioButton shopkeeper, vistor;
     RelativeLayout holder;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -70,6 +76,38 @@ public class SignupForm extends AppCompatActivity {
         editor= sharedPreferences.edit();                                       // SharedPreferences contain >>  email , password , location, sex , age, interests,name , type  of user
         editor.apply();
         OTP=(Button)findViewById(R.id.otp);
+        login=(TextView)findViewById(R.id.link_login);
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplication(), LoginActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
+
+        RadioGroup newORold = (RadioGroup) findViewById(R.id.UserType);
+
+        newORold.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.visitor:
+
+                        condition="Visitor";
+                        // do operations specific to this selection
+                        // Toast.makeText(AddBook.this, "new", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.shopowner:
+                        // do operations specific to this selection
+                        condition="Shop Owner";
+                        // Toast.makeText(AddBook.this, "old", Toast.LENGTH_SHORT).show();
+
+                        break;
+
+                }
+            }
+        });
 
 
         holder = (RelativeLayout) findViewById(R.id.holder);
@@ -220,7 +258,7 @@ public class SignupForm extends AppCompatActivity {
                    profileUpdation profileUpdation = new profileUpdation();
                     fragmentManager =getSupportFragmentManager();
                     fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.add(R.id.fragment_container,profileUpdation);
+                   //  fragmentTransaction.add(R.id.fragment_container,profileUpdation);
                     fragmentTransaction.commit();
                     holder.setVisibility(View.GONE);
 
