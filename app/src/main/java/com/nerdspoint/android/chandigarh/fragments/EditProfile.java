@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -36,7 +35,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.activities.MainPage;
-import com.nerdspoint.android.chandigarh.adapters.GetImages;
 import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
@@ -59,7 +57,6 @@ EditProfile extends Fragment implements View.OnClickListener {
     private String EditProfile_URL="/EditProfile.php";
     RelativeLayout edit_profilento;
 
-    ImageView userPhoto;
     String[] messahes={"enter First Name","enter Last Name","enter userName","enter email","enter phone","enter password"};
     public EditProfile() {
         // Required empty public constructor
@@ -75,10 +72,7 @@ EditProfile extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_edit_profile, container, false);
         edit_profilento= (RelativeLayout) view.findViewById(R.id.edit_profilento);
-
-
-
-       userPhoto=(ImageView) view.findViewById(R.id.photo);
+        String usertype=ActiveUserDetail.getCustomInstance(getActivity()).getLoginType();
         EditProfile_URL= ipAddress.getCustomInstance(getActivity()).getIp()+EditProfile_URL;
         FirstName=(TextView) view.findViewById(R.id.FirstName);
         LastName=(TextView) view.findViewById(R.id.LastName);
@@ -87,12 +81,29 @@ EditProfile extends Fragment implements View.OnClickListener {
         Email=(TextView) view.findViewById(R.id.Email);
         UserName=(TextView) view.findViewById(R.id.Username);
 
+        if(usertype=="facebook")
+        {
+
+
+
+
+            LastName.setVisibility(View.GONE);
+
+            UserName.setVisibility(View.GONE);
+            Password.setVisibility(View.GONE);
+            PhoneNumber.setVisibility(View.GONE);
+
+        }
+
         FirstName.setText(ActiveUserDetail.getCustomInstance(getActivity()).getFirstName());
         LastName.setText(ActiveUserDetail.getCustomInstance(getActivity()).getLastName());
         PhoneNumber.setText(ActiveUserDetail.getCustomInstance(getActivity()).getPhoneNumber());
         Password.setText(ActiveUserDetail.getCustomInstance(getActivity()).getPassword());
         Email.setText(ActiveUserDetail.getCustomInstance(getActivity()).getEmailAddress());
         UserName.setText(ActiveUserDetail.getCustomInstance(getActivity()).getUserName());
+
+
+
 
         UID=(ActiveUserDetail.getCustomInstance(getActivity()).getUID());
         FirstName.setOnClickListener(this);
@@ -101,9 +112,6 @@ EditProfile extends Fragment implements View.OnClickListener {
         PhoneNumber.setOnClickListener(this);
         Password.setOnClickListener(this);
         UserName.setOnClickListener(this);
-        userPhoto.setOnClickListener(this);
-
-        SetImage();
 
         Submit=(Button) view.findViewById(R.id.DONE);
         Submit.setOnClickListener(this);
@@ -112,27 +120,12 @@ EditProfile extends Fragment implements View.OnClickListener {
         return view;
 
     }
-
-    public void SetImage()
-    {
-        GetImages getImages = new GetImages(getActivity(),UID,"UserImages",userPhoto,null,null);
-        getImages.fetchImages();
-    }
-
     @Override
     public void onClick(final View view) {
         if(view.getId()==R.id.DONE)
         {
             update(view);
-
             return;
-        }
-        if(view.getId()==R.id.photo)
-        {
-            ((MainPage)getActivity()).setBackStack("user");
-            ((MainPage)getActivity()).setProfilePictureParams(getActivity(),UID,"UserImages",userPhoto,null,null);
-            ((MainPage)getActivity()).openImageHandler("UserImages",UID);
-             return;
         }
         //final String MobilePattern = "[7-9]{10}";
         final EditText editText=new EditText(getActivity());
@@ -360,13 +353,8 @@ EditProfile extends Fragment implements View.OnClickListener {
                     alert.cancel();
 
                     Toast.makeText(getActivity(), "update success", Toast.LENGTH_SHORT).show();
-                    ((MainPage)getActivity()).resetTabs();
 
-                }
-                else if(response.equals("already"))
-                {
-                    alert.cancel();
-                    UserName.setError("Already Taken");
+
                 }
                 else
                 {

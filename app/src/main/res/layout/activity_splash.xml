@@ -5,7 +5,7 @@
     android:id="@+id/activity_splash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#870000"
+    android:background="#FF8a81"
     tools:context="com.nerdspoint.android.chandigarh.activities.Splash">
 
 

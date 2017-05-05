@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.net.wifi.WifiManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -11,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Formatter;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +22,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,6 +37,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.bumptech.glide.Glide;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -59,6 +66,8 @@ import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
 import com.nerdspoint.android.chandigarh.sharedPrefs.ActiveUserDetail;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -66,7 +75,7 @@ import java.util.Map;
 
 import jp.wasabeef.blurry.Blurry;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener{
+public class LoginActivity extends AppCompatActivity {
 
 
     LoginButton loginButton;
@@ -74,19 +83,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private EditText et_username,et_password;
-    private TextView ForgotPass,status;
+    private TextView ForgotPass ;
     ImageView imageView;
-    GoogleApiClient googleApiClient;
-    private  static final int REQ_CODE=9001;
-    Button Signout;
-    SignInButton signInButton;
 
 
-    RelativeLayout login_activity;
+
+    LinearLayout login_activity;
 
     private String login_URL="/login.php";
-
-    private String image_UID_URL = "https://baljeet808singh.000webhostapp.com/chandigarh/saveIDforImage.php";
 
     // paste login file url in this string    it will check that user is present or not
     // by matching email and password in the database
@@ -99,61 +103,86 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
 
+
      FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
-        Signout=(Button)findViewById(R.id.logout);
-        signInButton=(SignInButton)findViewById(R.id.signInButton);
-        imageView=(ImageView)findViewById(R.id.imageLogo);
+
+        //imageView=(ImageView)findViewById(R.id.imageLogo);
         loginButton=(LoginButton)findViewById(R.id.fb_login_bn);
-        status=(TextView)findViewById(R.id.Face);
 
 
-        //google sign in button coding
 
-        signInButton.setOnClickListener(this);
-        Signout.setOnClickListener(this);
-        GoogleSignInOptions signInOptions=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-
-     googleApiClient=new GoogleApiClient.Builder(this).enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-         @Override
-         public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-             Toast.makeText(LoginActivity.this, "jhfdjkfh", Toast.LENGTH_SHORT).show();
-         }
-     }).addApi(Auth.GOOGLE_SIGN_IN_API,signInOptions).build();
 
 
         callbackManager=CallbackManager.Factory.create();
-        //loginButton.setReadPermissions(Arrays.asList("public_profile,email,user_friends,read_custom_friendlists"));
+
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
 
-
-                //Profile profile = Profile.getCurrentProfile();
-                //Log.d("Shreks Fragment onSuccess", "" +profile);
-
-                // Get User Name
-               // status.setText(profile.getName() + "");
-
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object,GraphResponse response) {
+                                try {
 
 
-                status.setText("Login \n"+loginResult.getAccessToken().getUserId()+"\n"+loginResult.getAccessToken().getToken());
+                                    Toast.makeText(LoginActivity.this, "hello", Toast.LENGTH_SHORT).show();
+
+
+                                    Intent i= new Intent(LoginActivity.this,MainPage.class);
+                                    startActivity(i);
+                                    finish();
+
+
+
+                                   ActiveUserDetail.getCustomInstance(getApplicationContext()).setEmailAddress( object.getString("email"));
+
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setFirstName(object.getString("name") );
+
+                                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setLoginType("facebook");
+
+                                    //ActiveUserDetail.getCustomInstance(getApplicationContext()).setPhoneNumber(object.getString ("number"));
+                                    //status.setText(object.getString("name")+" "+object.getString("email")+" "+object.getString("id")  );
+
+                                    Toast.makeText(LoginActivity.this, "login success", Toast.LENGTH_SHORT).show();
+
+                                } catch(JSONException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        });
+
+
+               Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender, birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+
+
+
+
 
             }
 
             @Override
             public void onCancel() {
-                status.setText("login cancel");
+
 
             }
 
             @Override
             public void onError(FacebookException error) {
 
+                Toast.makeText(LoginActivity.this, ""+error.toString(), Toast.LENGTH_SHORT).show();
+
+
             }
         });
+
+
 
         login_URL= ipAddress.getCustomInstance(getApplicationContext()).getIp()+login_URL;
         ForgotPass=(TextView)findViewById(R.id.ForgotPass);
@@ -162,7 +191,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         sharedPreferences = getSharedPreferences("userDetail",MODE_PRIVATE);     // SharedPreferences Name >> usrDetail
         editor= sharedPreferences.edit();                                       // SharedPreferences contain >>  email , password , location, sex , age, interests,name , type  of user
         editor.apply();
-        login_activity=(RelativeLayout) findViewById(R.id.activity_login);
+        //login_activity=(RelativeLayout) findViewById(R.id.activity_login);
 
 
 
@@ -175,13 +204,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
 
-    public void skip(View v)
-    {
-        Intent i = new Intent(LoginActivity.this,MainPage.class);
-        startActivity(i);
-        finish();
-        Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-    }
+
 
     public void SignUp(View v)                              //  calling signUpForm class to SignUp a user
     {
@@ -223,7 +246,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     });
                     alert.show();
-                    Blurry.with(getApplicationContext()).radius(25).sampling(2).onto((ViewGroup) login_activity.getRootView());
+//                   Blurry.with(getApplicationContext()).radius(25).sampling(2).onto((ViewGroup) login_activity.getRootView());
                     Log.d("alert dialog","\t\t\talert started");
                     StringRequest request = new StringRequest(Request.Method.POST, login_URL, new Response.Listener<String>() {
 
@@ -234,7 +257,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             {
 
                                 alert.cancel();
-                                Blurry.delete((ViewGroup) login_activity.getRootView());
+                           //     Blurry.delete((ViewGroup) login_activity.getRootView());
                                 Snackbar.make(getCurrentFocus(),"LOGIN SUCCESSFUL",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                                 try {
 
@@ -255,8 +278,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                    // Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
 
-                                    updateUserImageTable();
-
+                                    Intent i= new Intent(LoginActivity.this,MainPage.class);
+                                    startActivity(i);
+                                    finish();
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -268,7 +292,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             else
                             {
                                 alert.cancel();
-                                Blurry.delete((ViewGroup) login_activity.getRootView());
+                             //   Blurry.delete((ViewGroup) login_activity.getRootView());
                                 Snackbar.make(getCurrentFocus(),"LOGIN FAILED",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                             }
                         }
@@ -278,7 +302,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Log.d("ERROR","error => "+error.toString());
 
                             alert.cancel();
-                            Blurry.delete((ViewGroup) login_activity.getRootView());
+                          //  Blurry.delete((ViewGroup) login_activity.getRootView());
                             Snackbar.make(getCurrentFocus(),error.getMessage(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                         }
                     }
@@ -304,131 +328,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
         }
+        Toast.makeText(this, "Password length should be greater then 5", Toast.LENGTH_SHORT).show();
 
     }
-
-    public void updateUserImageTable()
-    {
-        StringRequest request = new StringRequest(Request.Method.POST, image_UID_URL, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d("Response", response+"ok");
-                if(response.equals("Success")==true)
-                {
-
-
-                    try {
-
-                        Intent i= new Intent(LoginActivity.this,MainPage.class);
-                        startActivity(i);
-                        finish();
-
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-
-                    }
-                    Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-                }
-                else
-                {
-
-                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("ERROR","error => "+error.toString());
-
-                 }
-        }
-        )
-        {
-            @Override
-            protected Map<String,String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<>() ;
-                map.put("ID",ActiveUserDetail.getCustomInstance(getApplicationContext()).getUID());
-                map.put("tableName","UserImages");
-                return map;
-            }
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        queue.add(request);
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
 
 
-        if(requestCode==REQ_CODE)
-        {
-            GoogleSignInResult result=Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleResult(result);
-        }
-        else
-        {
-            callbackManager.onActivityResult(requestCode,resultCode,data);
-            Toast.makeText(this, "fail", Toast.LENGTH_SHORT).show();
-        }
-    }
+         callbackManager.onActivityResult(requestCode,resultCode,data);
 
-    private void handleResult(GoogleSignInResult result) {
-        if(result.isSuccess())
-        {
-            GoogleSignInAccount account=result.getSignInAccount();
-             String name=account.getDisplayName();
-             String email=account.getEmail();
-             String img_url=account.getPhotoUrl().toString();
-            status.setText(""+name.toString()+"  "+email.toString());
-            Glide.with(this).load(img_url).into(imageView);
-            Toast.makeText(this, "login sucsess", Toast.LENGTH_SHORT).show();
-            //UpdateUI(true);
 
-        }
+
+
 
     }
 
 
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId())
-        {
-            case R.id.signInButton:
-                signIn();
-                break;
-            case R.id.logout:
-                signout();
-                break;
-        }
-
-    }
-
-    private void signout() {
-        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                Toast.makeText(LoginActivity.this, "log out", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void signIn()
-    {
-
-        Intent intent =Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-        startActivityForResult(intent,REQ_CODE);
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 
 
 }

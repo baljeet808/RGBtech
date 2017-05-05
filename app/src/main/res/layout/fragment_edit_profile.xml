@@ -1,148 +1,157 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/edit_profilento"
+android:id="@+id/edit_profilento"
     android:layout_height="match_parent"
     android:background="#f2f3f4"
     tools:context="com.nerdspoint.android.chandigarh.fragments.EditProfile">
 
 
-    <ScrollView
-        android:layout_width="match_parent"
+<ScrollView
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/sv_data"
-        android:layout_marginBottom="50dp"
+
         >
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<android.support.v7.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="350dp"
-    android:layout_margin="10dp"
-    app:cardCornerRadius="10dp"
-    android:id="@+id/UserImage"
-    android:elevation="15dp"
-    >
-<ImageView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/photo"
-    >
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
 
-</ImageView>
-</android.support.v7.widget.CardView>
-    <TextView
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="36dp"
+            android:id="@+id/UserImage"
+            android:background="@drawable/logo"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="First Name"
-        android:textSize="20dp"
-        android:background="@drawable/border"
-        android:drawableLeft="@drawable/contact"
-        android:drawablePadding="10dp"
+        <TextView
+
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:hint="First Name"
+            android:textSize="20dp"
+            android:background="@drawable/border"
+            android:drawableLeft="@drawable/contact"
+            android:drawablePadding="10dp"
 
 
-        android:layout_marginTop="23dp"
+            android:layout_marginStart="43dp"
+            android:id="@+id/FirstName"
 
-        android:id="@+id/FirstName"
+            android:layout_alignTop="@+id/UserImage"
+            android:layout_toEndOf="@+id/UserImage" />
+        <TextView
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/FirstName"
+            android:layout_alignStart="@+id/FirstName"
+            android:layout_marginTop="15dp"
+            android:hint="Last Name"
+            android:background="@drawable/border"
+            android:drawableLeft="@drawable/contact"
+            android:drawablePadding="10dp"
+            android:id="@+id/LastName"
+            android:textSize="20dp"
+            android:onClick="edit"
+            />
 
-        android:paddingLeft="10dp"
-        android:layout_below="@+id/UserImage" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/FirstName"
-        android:layout_alignStart="@+id/FirstName"
-        android:layout_marginTop="15dp"
-        android:hint="Last Name"
-        android:background="@drawable/border"
-        android:drawableLeft="@drawable/contact"
-        android:drawablePadding="10dp"
-        android:paddingLeft="10dp"
-        android:id="@+id/LastName"
-        android:textSize="20dp"
-        android:onClick="edit"
-        />
-   <TextView
-    android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_marginTop="23dp"
-    android:hint="UserName"
-       android:paddingLeft="10dp"
-       android:background="@drawable/border"
-    android:textSize="20dp"
-       android:drawableLeft="@drawable/uername"
-       android:drawablePadding="10dp"
-    android:id="@+id/Username"
-       android:onClick="edit"
-       android:layout_below="@+id/LastName"
-       android:layout_alignParentStart="true" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-       android:paddingLeft="10dp"
-        android:hint="Email id"
-        android:background="@drawable/border"
-        android:drawablePadding="10dp"
-        android:drawableLeft="@drawable/cmail"
-        android:textSize="20dp"
-        android:id="@+id/Email"
-        android:layout_marginTop="25dp"
-        android:layout_below="@+id/Username"
-        android:layout_alignParentStart="true"
-        android:onClick="edit"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Phone Number"
-        android:paddingLeft="10dp"
-        android:textSize="20dp"
-        android:background="@drawable/border"
-        android:layout_marginTop="25dp"
-        android:id="@+id/PhoneNumber"
-        android:drawablePadding="10dp"
-        android:onClick="edit"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:hint="Email id"
+            android:background="@drawable/border"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/cmail"
+            android:textSize="20dp"
+            android:id="@+id/Email"
+            android:layout_marginTop="25dp"
+            android:onClick="edit"
+            android:layout_below="@+id/LastName"
+            android:layout_alignParentStart="true" />
 
 
-        android:inputType="phone"
-        android:drawableLeft="@drawable/cphone"
-
-        android:layout_below="@+id/Email"
-        android:layout_alignParentStart="true" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:drawablePadding="10dp"
-        android:textSize="20dp"
-        android:background="@drawable/border"
-        android:paddingLeft="10dp"
-        android:drawableLeft="@drawable/key"
 
 
-        android:layout_marginTop="25dp"
-        android:id="@+id/Password"
-        android:onClick="edit"
-        android:layout_below="@+id/PhoneNumber"
-        android:layout_alignParentStart="true" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:hint="UserName"
+            android:paddingLeft="10dp"
+            android:background="@drawable/border"
+            android:textSize="20dp"
+            android:drawableLeft="@drawable/uername"
+            android:drawablePadding="10dp"
+            android:id="@+id/Username"
+            android:onClick="edit"
+            android:layout_below="@+id/Email"
+            android:layout_alignParentStart="true" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:drawablePadding="10dp"
+            android:textSize="20dp"
+            android:background="@drawable/border"
+            android:paddingLeft="10dp"
+            android:drawableLeft="@drawable/key"
 
 
-</RelativeLayout>
+            android:layout_marginTop="25dp"
+            android:id="@+id/Password"
+            android:onClick="edit"
+            android:layout_below="@+id/Username"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone Number"
+            android:paddingLeft="10dp"
+            android:textSize="20dp"
+            android:background="@drawable/border"
+            android:layout_marginTop="25dp"
+            android:id="@+id/PhoneNumber"
+            android:drawablePadding="10dp"
+            android:onClick="edit"
 
 
+            android:inputType="phone"
+            android:drawableLeft="@drawable/cphone"
+
+            android:layout_below="@+id/Password"
+            android:layout_alignParentStart="true" />
+
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="DONE"
+            android:id="@+id/DONE"
+
+
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/PhoneNumber"
+            android:layout_marginTop="25dp"
+            />
+
+
+
+
+
+
+    </RelativeLayout>
 </ScrollView>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="DONE"
-        android:id="@+id/DONE"
-        android:layout_alignParentBottom="true"
-        />
+
+
+
 
 
 
