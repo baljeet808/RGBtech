@@ -15,12 +15,16 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-             <android.support.v4.view.ViewPager
+             <ImageView
                  android:id="@+id/viewPageAndroid"
                  android:layout_width="match_parent"
                  android:layout_height="200dp"
                  android:layout_alignParentTop="true"
-                 android:layout_alignParentStart="true" />
+                 android:layout_alignParentStart="true"
+                 android:adjustViewBounds="true"
+                 android:scaleType="fitXY"
+                 />
+
              <android.support.design.widget.TextInputLayout
                  android:id="@+id/TextInputLayout1"
                  android:layout_width="match_parent"

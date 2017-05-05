@@ -66,7 +66,7 @@ public class DBHandler extends SQLiteOpenHelper
     String[] colNames = {"ShopID", "UID", "ShopContactNo", "ShopName", "ShopAddress", "PinCode", "Sector", "SCO", "Latitude", "Longitude", "CategoryID"};
     String[] colNames1 = {"ProductID", "ProductName", "CategoryID"};
     String[] colNames2 = {"CategoryID", "CategoryName"};
-    String[] colNames3 = {"CustomPID","ProductID", "CategoryID", "ShopID", "ProductName", "Price", "IsActive"};
+    String[] colNames3 = {"CustomPID","ProductID", "CategoryID", "ShopID", "ProductName", "Price","Description", "IsActive"};
 
 
     private String update_url = "/offlineUpdate.php";
@@ -106,9 +106,9 @@ public class DBHandler extends SQLiteOpenHelper
         if (db == null) {
             return;
         }
-        String sql = "CREATE TABLE IF NOT EXISTS Sender (messageId Integer PRIMARY KEY AUTOINCREMENT,Name text, title text, message text, fid text, UID text, myDate text, CPIDS text);";
+        String sql = "CREATE TABLE IF NOT EXISTS Sender (messageId Integer PRIMARY KEY AUTOINCREMENT,Name text, title text, message text, fid text, UID text, myDate text, CPIDS text, receiverFID text,status text);";
         db.execSQL(sql);
-        String sql1 = "CREATE TABLE IF NOT EXISTS Receiver (messageId Integer PRIMARY KEY AUTOINCREMENT,Name text, title text, message text, fid text, UID text, myDate text, CPIDS text);";
+        String sql1 = "CREATE TABLE IF NOT EXISTS Receiver (messageId Integer PRIMARY KEY AUTOINCREMENT,Name text, title text, message text, fid text, UID text, myDate text, CPIDS text, senderFID text , status text,foundId int);";
         db.execSQL(sql1);
         String sql2 = "CREATE TABLE IF NOT EXISTS Places (placeId Integer PRIMARY KEY AUTOINCREMENT,ShopName text, ShopID text);";
         db.execSQL(sql2);
@@ -126,6 +126,55 @@ public class DBHandler extends SQLiteOpenHelper
         return db.rawQuery("Select ShopName , ShopID from Places ",null);
     }
 
+    public int getTheLastSenderMessageId()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if(db== null)
+        {
+            return -1;
+        }
+        Cursor cursor = db.rawQuery("Select MAX(messageId) from Sender",null);
+        if(cursor.moveToFirst())
+        {
+            String id = cursor.getString(0);
+            if(id!=null) {
+                return Integer.parseInt(id);
+            }
+            else
+            {
+                return  0;
+            }
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    public int getTheLastReceiverMessageId()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if(db== null)
+        {
+            return -1;
+        }
+        Cursor cursor = db.rawQuery("Select MAX(messageId) from Receiver",null);
+        if(cursor.moveToFirst())
+        {
+            String id = cursor.getString(0);
+            if(id!=null) {
+                return Integer.parseInt(id);
+            }
+            else
+            {
+                return  0;
+            }
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
     public Cursor getSenderNotifications()
     {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -133,7 +182,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select message , Name , messageId, UID , myDate, title ,CPIDS from Sender",null);
+        return db.rawQuery("select message ,receiverFID, Name , messageId, UID , myDate, title ,CPIDS ,status from Sender",null);
     }
 
     public void addNotificationRecieved(String message,String title)
@@ -156,7 +205,23 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return db.rawQuery("select message , Name , messageId, UID , myDate, title , CPIDS from Receiver",null);
+        return db.rawQuery("select message ,senderFID, Name , messageId, UID , myDate, title , CPIDS , foundId ,status from Receiver",null);
+    }
+    public void updateNotificationStatus(String status, String messageId)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (db == null) {
+            return;
+        }
+        db.rawQuery("Update Sender set status = "+status+" where messageId = "+messageId+"",null);
+    }
+    public void updateReceiverStatus(String status, String messageId)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (db == null) {
+            return;
+        }
+        db.rawQuery("Update Receiver set status = "+status+" where messageId = "+messageId+"",null);
     }
 
     public Cursor getShopProducts(String ShopId)
@@ -176,7 +241,7 @@ public class DBHandler extends SQLiteOpenHelper
         {
             return null;
         }
-        return  db.rawQuery("select CustomPID, ProductName, Price from CustomProductDetail where CustomPID = "+CPID+"",null);
+        return  db.rawQuery("select CustomPID, Description, ProductName, Price, ShopId , ProductID from CustomProductDetail where CustomPID = "+CPID+"",null);
     }
 
 
@@ -279,7 +344,7 @@ public class DBHandler extends SQLiteOpenHelper
             CreateTable("ShopMasterTable", colNames, 11);
             CreateTable("Product", colNames1, 3);
             CreateTable("Category", colNames2, 2);
-            CreateTable("CustomProductDetail", colNames3, 7);
+            CreateTable("CustomProductDetail", colNames3,8);
             ActiveUserDetail.getCustomInstance(context).setIsFirstSync(false);
         }
         updateOfflineTable("ShopMasterTable",colNames,"ShopID",ActiveUserDetail.getCustomInstance(context).getLastShopID());
@@ -336,6 +401,7 @@ public class DBHandler extends SQLiteOpenHelper
         updateOfflineTable("CustomProductDetail",colNames3,"CustomPID",ActiveUserDetail.getCustomInstance(context).getLastCustomPID());
 
     }
+
 
 
     public void getVendorProfile(final String ShopId)

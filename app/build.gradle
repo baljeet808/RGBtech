@@ -71,6 +71,7 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:9.6.0'
     compile 'com.github.ar-android:DrawRouteMaps:1.0.0'
     compile 'com.facebook.android:facebook-android-sdk:4.14.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

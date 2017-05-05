@@ -4,7 +4,6 @@ package com.nerdspoint.android.chandigarh.fragments;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,8 +26,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.activities.MainPage;
-import com.nerdspoint.android.chandigarh.adapters.AndroidImageAdapter;
 import com.nerdspoint.android.chandigarh.adapters.GPSTracker;
+import com.nerdspoint.android.chandigarh.adapters.GetImages;
 import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
 import com.nerdspoint.android.chandigarh.offlineDB.ipAddress;
 
@@ -45,7 +45,7 @@ public class ShopInfo extends Fragment {
     TextView latitude,longitude;
 
     private String EditShopProfile_URL="/update_Shop.php";
-    ViewPager mViewPager ;
+    ImageView mViewPager ;
     String shopid;
     ImageButton  PinOnmap;
 
@@ -110,9 +110,18 @@ public class ShopInfo extends Fragment {
 
         Back.setText("Back");
 
-          mViewPager = (ViewPager) view.findViewById(R.id.viewPageAndroid);
-        AndroidImageAdapter adapterView = new AndroidImageAdapter(getActivity());
-        mViewPager.setAdapter(adapterView);
+          mViewPager = (ImageView) view.findViewById(R.id.viewPageAndroid);
+        mViewPager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainPage)getActivity()).setBackStack("shop");
+                ((MainPage)getActivity()).setProfilePictureParams(getActivity(),shopid,"ShopImages",mViewPager,null,null);
+                ((MainPage)getActivity()).openImageHandler("ShopImages",shopid);
+            }
+        });
+
+        setShopImage();
+
         Update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,6 +168,12 @@ public class ShopInfo extends Fragment {
 
 
         return view;
+    }
+
+    public void setShopImage()
+    {
+        GetImages getImages = new GetImages(getActivity(),shopid,"ShopImages",mViewPager,null,null);
+        getImages.fetchImages();
     }
 
 

@@ -208,4 +208,13 @@ public class ActiveUserDetail {
         editor.apply();
     }
 
+    public void setUserImageName(String imageName)
+    {
+        editor.putString("ImageName",imageName);
+        editor.apply();
+    }
+
+    public String getUserImageName() {
+        return sharedPreferences.getString("ImageName","null");
+    }
 }

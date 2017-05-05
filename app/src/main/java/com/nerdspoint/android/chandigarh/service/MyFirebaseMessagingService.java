@@ -6,8 +6,10 @@ package com.nerdspoint.android.chandigarh.service;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.system.Os;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -20,6 +22,7 @@ import com.nerdspoint.android.chandigarh.app.Config;
 import com.nerdspoint.android.chandigarh.fragments.Notification;
 import com.nerdspoint.android.chandigarh.util.NotificationUtils;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,74 +70,120 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
             notificationUtils.playNotificationSound();
         }else{
-            // If the app is in background, firebase itself handles the notification
+
+
         }
     }
 
     private void handleDataMessage(JSONObject json) {
-        Log.e(TAG, "push json: " + json.toString());
+        Log.e(TAG, "\n\n\n\n\n\n\n\n\t\t\t\t\t\t\t\t\t\tpush json: " + json.toString()+"\n\n\n\n\n\n\n\n\n\n");
 
         try {
+
             JSONObject data = json.getJSONObject("data");
 
-            String title = data.getString("title");
-            String message = data.getString("message");
-            boolean isBackground = data.getBoolean("is_background");
-            String imageUrl = data.getString("image");
-            String timestamp = data.getString("timestamp");
             JSONObject payload = data.getJSONObject("payload");
-            String UID = payload.getString("UID");
-            String name= payload.getString("Name");
-            int length = Integer.parseInt(payload.getString("length"));
-            List<String> listOfIds = new ArrayList<>();
+            String status = payload.getString("status");
 
-            for(int i= 0;i<length;i++)
-            {
-                listOfIds.add(payload.getString("CPID"+i));
-            }
-
-            Log.e(TAG, "title: " + title);
-            Log.e(TAG, "message: " + message);
-            Log.e(TAG, "isBackground: " + isBackground);
-            Log.e(TAG, "payload: " + payload.toString());
-            Log.e(TAG, "imageUrl: " + imageUrl);
-            Log.e(TAG, "timestamp: " + timestamp);
-            Log.e(TAG,"length fetched "+length);
+            if(status.equals("accepted")  || status.equals("rejected")) {
+                String msgId = payload.getString("messageId");
+                String name = payload.getString("name");
 
 
-            if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
-                // app is in foreground, broadcast the push message
-                Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-                pushNotification.putExtra("message", message);
-
-                pushNotification.putExtra("title",title);
-                pushNotification.putExtra("timeStamp",timestamp);
-                pushNotification.putExtra("UID",UID);
-                pushNotification.putExtra("Name",name);
-                pushNotification.putExtra("length",""+length);
-                for(int j =0 ; j<length;j++) {
-                    pushNotification.putExtra("cpid"+j,listOfIds.get(j) );
-                }
+                if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+                    // app is in foreground, broadcast the push message
+                    Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+                    pushNotification.putExtra("status", status);
+                    pushNotification.putExtra("messageId",msgId);
+                    pushNotification.putExtra("name",name);
 
                     LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
-                // play notification sound
-                NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
-                notificationUtils.playNotificationSound();
-            } else {
-                // app is in background, show the notification in notification tray
-                Intent resultIntent = new Intent(getApplicationContext(), MainPage.class);
-                resultIntent.putExtra("message", message);
-                resultIntent.putExtra("title",title);
-                resultIntent.putExtra("timeStamp",timestamp);
-                resultIntent.putExtra("UID",UID);
-                resultIntent.putExtra("Name",name);
-                // check for image attachment
-                if (TextUtils.isEmpty(imageUrl)) {
-                    showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
+                    // play notification sound
+                    NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
+                    notificationUtils.playNotificationSound();
                 } else {
-                    // image is present, show notification with image
-                    showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, imageUrl);
+                    // app is in background, show the notification in notification tray
+                    Intent resultIntent = new Intent(getApplicationContext(), MainPage.class);
+                    resultIntent.putExtra("message",""+name+" has "+status+" your request");
+                    // check for image attachment
+
+                        showNotificationMessage(getApplicationContext(),""+name+" "+status+" your demand","message",""+name+" has "+status+" your demand", resultIntent);
+                    /*else {
+                        // image is present, show notification with image
+                        showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, imageUrl);
+                    }*/
+                }
+
+            }
+            else {
+
+
+                String messageId = payload.getString("messageId");
+                String UID = payload.getString("UID");
+                String name = payload.getString("Name");
+                String UFid = payload.getString("uFid");
+
+
+                String title = data.getString("title");
+                String message = data.getString("message");
+                boolean isBackground = data.getBoolean("is_background");
+                String imageUrl = data.getString("image");
+                String timestamp = data.getString("timestamp");
+                int length = Integer.parseInt(payload.getString("length"));
+                List<String> listOfIds = new ArrayList<>();
+
+                for (int i = 0; i < length; i++) {
+                    listOfIds.add(payload.getString("CPID" + i));
+                }
+
+                Log.e(TAG, "title: " + title);
+                Log.e(TAG, "message: " + message);
+                Log.e(TAG, "isBackground: " + isBackground);
+                Log.e(TAG, "payload: " + payload.toString());
+                Log.e(TAG, "imageUrl: " + imageUrl);
+                Log.e(TAG, "timestamp: " + timestamp);
+                Log.e(TAG, "length fetched " + length);
+                Log.e(TAG, "mesage id " + messageId);
+
+
+                if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+                    // app is in foreground, broadcast the push message
+                    Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+                    pushNotification.putExtra("message", message);
+
+                    pushNotification.putExtra("title", title);
+                    pushNotification.putExtra("timeStamp", timestamp);
+                    pushNotification.putExtra("UID", UID);
+                    pushNotification.putExtra("Name", name);
+                    pushNotification.putExtra("uFid", UFid);
+                    pushNotification.putExtra("length", "" + length);
+                    pushNotification.putExtra("messageId", messageId);
+                    pushNotification.putExtra("status", status);
+                    for (int j = 0; j < length; j++) {
+                        pushNotification.putExtra("cpid" + j, listOfIds.get(j));
+                    }
+
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+
+                    // play notification sound
+                    NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
+                    notificationUtils.playNotificationSound();
+                } else {
+                    // app is in background, show the notification in notification tray
+                    Intent resultIntent = new Intent(getApplicationContext(), MainPage.class);
+                    resultIntent.putExtra("message", message);
+                    resultIntent.putExtra("title", title);
+                    resultIntent.putExtra("timeStamp", timestamp);
+                    resultIntent.putExtra("UID", UID);
+                    resultIntent.putExtra("Name", name);
+                    // check for image attachment
+                    if (TextUtils.isEmpty(imageUrl)) {
+                        showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
+                    } else {
+                        // image is present, show notification with image
+                        showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, imageUrl);
+                    }
                 }
             }
         } catch (JSONException e) {

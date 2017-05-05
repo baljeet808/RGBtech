@@ -1,49 +1,47 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.nerdspoint.android.chandigarh.fragments.ProductAdd">
-
+    tools:context="com.nerdspoint.android.chandigarh.fragments.ProductAdd"
+    android:orientation="vertical"
     android:background="#fff">
+
+
+    <TextView
+        android:id="@+id/add_products"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.06"
+        android:gravity="center"
+        android:text="PRODUCTS MANAGER"
+        android:textColor="@color/color_1"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"/>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
 
-        <RelativeLayout
-
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="488dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="12dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
             android:background="#FFF"
             android:padding="10dp"
             >
 
-            <TextView
-                android:id="@+id/add_products"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:text="ADD PRODUCTS"
-                android:textColor="@color/color_1"
-                android:textSize="30dp"
-                android:textStyle="bold"
-                android:layout_marginBottom="5dp"/>
             <Spinner
                 android:id="@+id/products_category"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_below="@+id/add_products"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-
                 />
 
              <AutoCompleteTextView
@@ -62,7 +60,12 @@
                 android:layout_height="360dp"
                 android:layout_below="@id/Search">
             </ListView>
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="horizontal"
+    >
             <Button
                 android:layout_width="95dp"
                 android:layout_height="50dp"
@@ -95,15 +98,14 @@
                 android:layout_height="50dp"
                 android:background="#FF8A80"
                 android:elevation="15dp"
-                android:text="Add Your Own Products"
-                android:textStyle="bold"
+                android:text="Custom Product"
+                android:textStyle="normal"
                 android:layout_below="@id/listView_Products"
                 android:layout_toEndOf="@+id/save_products"
                 android:id="@+id/add_own_products"
-                android:layout_marginTop="15dp"
                 android:layout_marginBottom="20dp"/>
-
-        </RelativeLayout>
+</LinearLayout>
+        </LinearLayout>
     </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

@@ -59,6 +59,7 @@ public class listCustomAdapter extends BaseAdapter {
         public TextView text;
         public TextView text1;
         public TextView text2;
+        public TextView id;
 
     }
 
@@ -75,6 +76,7 @@ public class listCustomAdapter extends BaseAdapter {
             /****** View Holder Object to contain tabitem.xml file elements ******/
 
             holder = new ViewHolder();
+            holder.id=  (TextView) vi.findViewById(R.id.cpid_tv);
             holder.text = (TextView) vi.findViewById(R.id.productNamer);
             holder.text1=(TextView)vi.findViewById(R.id.shop_name_inlist);
             holder.text2= (TextView) vi.findViewById(R.id.product_Price);
@@ -102,6 +104,7 @@ public class listCustomAdapter extends BaseAdapter {
 
             holder.text.setText(productDetails.ProductName);
             holder.text2.setText(productDetails.price);
+            holder.id.setText(productDetails.CustomPID);
             Cursor cursor= new DBHandler(context).getShopByID(productDetails.ShopID);
             if(cursor.moveToFirst())
             {

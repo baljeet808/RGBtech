@@ -50,8 +50,6 @@ public class checkInternet {
             editor.putBoolean("connected", state);
         editor.apply();
 
-
-
     }
     public boolean isConnected()
     {

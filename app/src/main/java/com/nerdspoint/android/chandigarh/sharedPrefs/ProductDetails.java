@@ -16,6 +16,6 @@ public class ProductDetails {
     public String ShopContactNo;
     public String Address;
     public String IsActive;
-
+    public String Image;
 
 }

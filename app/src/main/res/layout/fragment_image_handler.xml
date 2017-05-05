@@ -7,6 +7,20 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:id="@+id/camera_layout"
+        >
+        <SurfaceView
+            android:id="@+id/camerapreview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -14,6 +28,7 @@
         android:layout_weight="1"
         android:layout_marginBottom="10dp"
         android:padding="10dp"
+        android:visibility="visible"
         />
 
     <Button

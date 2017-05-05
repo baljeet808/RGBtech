@@ -1,28 +1,42 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-android:id="@+id/edit_profilento"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/edit_profilento"
     android:layout_height="match_parent"
     android:background="#f2f3f4"
     tools:context="com.nerdspoint.android.chandigarh.fragments.EditProfile">
 
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/sv_data"
+        android:layout_marginBottom="50dp"
+        >
 
-
-<ImageView
-    android:layout_width="100dp"
-    android:layout_height="100dp"
-
-    android:layout_marginStart="17dp"
-    android:layout_marginTop="36dp"
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<android.support.v7.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="350dp"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="10dp"
     android:id="@+id/UserImage"
-android:background="@drawable/logo"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentStart="true" />
+    android:elevation="15dp"
+    >
+<ImageView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/photo"
+    >
 
+</ImageView>
+</android.support.v7.widget.CardView>
     <TextView
 
-        android:layout_width="240dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="First Name"
         android:textSize="20dp"
@@ -31,13 +45,14 @@ android:background="@drawable/logo"
         android:drawablePadding="10dp"
 
 
-        android:layout_marginStart="43dp"
+        android:layout_marginTop="23dp"
+
         android:id="@+id/FirstName"
 
-        android:layout_alignTop="@+id/UserImage"
-        android:layout_toEndOf="@+id/UserImage" />
+        android:paddingLeft="10dp"
+        android:layout_below="@+id/UserImage" />
     <TextView
-        android:layout_width="240dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/FirstName"
         android:layout_alignStart="@+id/FirstName"
@@ -46,6 +61,7 @@ android:background="@drawable/logo"
         android:background="@drawable/border"
         android:drawableLeft="@drawable/contact"
         android:drawablePadding="10dp"
+        android:paddingLeft="10dp"
         android:id="@+id/LastName"
         android:textSize="20dp"
         android:onClick="edit"
@@ -114,20 +130,19 @@ android:background="@drawable/logo"
         android:layout_below="@+id/PhoneNumber"
         android:layout_alignParentStart="true" />
 
+
+</RelativeLayout>
+
+
+</ScrollView>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="DONE"
         android:id="@+id/DONE"
-        android:layout_below="@+id/Password"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="25dp"
-         />
-
-
-
-
-
+        android:layout_alignParentBottom="true"
+        />
 
 
 

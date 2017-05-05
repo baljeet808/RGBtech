@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.offlineDB.DBHandler;
+import com.nerdspoint.android.chandigarh.service.notify;
 import com.nerdspoint.android.chandigarh.sharedPrefs.NotificatioDetail;
 
 import java.lang.reflect.Type;
@@ -77,6 +78,7 @@ public class NotificationAdapter extends BaseAdapter {
             public TextView text2;
             public TextView text3;
             public TextView text4;
+            public TextView status;
         }
 
 
@@ -100,6 +102,8 @@ public class NotificationAdapter extends BaseAdapter {
                 holder.text2 = (TextView) vi.findViewById(R.id.typeTag);
                 holder.text3 =(TextView) vi.findViewById(R.id.message_title);
                 holder.text4 = (TextView) vi.findViewById(R.id.time);
+                holder.status = (TextView) vi.findViewById(R.id.satus);
+
                 /************  Set holder with LayoutInflater ************/
                 vi.setTag( holder );
             }
@@ -125,7 +129,7 @@ public class NotificationAdapter extends BaseAdapter {
                 holder.text3.setText(detail.title);
                 holder.text1.setText(detail.Message);
                 holder.text4.setText(detail.timestamp);
-
+                holder.status.setText(detail.status);
                 /******** Set Item Click Listner for LayoutInflater for each row *******/
 
                 vi.setOnClickListener(new View.OnClickListener() {
@@ -147,20 +151,31 @@ public class NotificationAdapter extends BaseAdapter {
                             }
                         }
                         adapter = new ArrayAdapter(context,android.R.layout.simple_list_item_1,products);
-                            View view = inflater.inflate(R.layout.layout_reply, null);
-                            EditText customMessage =(EditText) view.findViewById(R.id.et_customMessage1);
+
+
+                        View view = inflater.inflate(R.layout.layout_reply, null);
+                            final EditText customMessage =(EditText) view.findViewById(R.id.et_customMessage1);
                             ListView listView =(ListView) view.findViewById(R.id.lv_addProducts1);
                             TextView bill = (TextView) view.findViewById(R.id.bill1);
+                            final TextView status = (TextView) view.findViewById(R.id.status_tv);
+
                             final Button accept = (Button) view.findViewById(R.id.accept_btn);
                             Button back = (Button) view.findViewById(R.id.back_btn1);
                             final Button reject = (Button) view.findViewById(R.id.reject_btn);
                             TextView name = (TextView) view.findViewById(R.id.name);
+
+                        if(detail.type == "sent") {
+                                accept.setVisibility(View.GONE);
+                                reject.setVisibility(View.GONE);
+
+                        }
 
                             customMessage.setText(detail.Message);
                             name.setText(detail.visitorName);
                             listView.setAdapter(adapter);
                             bill.setText("INR. "+price);
 
+                        status.setText(detail.status);
                             back.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -173,7 +188,9 @@ public class NotificationAdapter extends BaseAdapter {
                                 public void onClick(View v) {
                                     reject.setText("Rejected Request");
                                     reject.setClickable(false);
+                                    reject.setEnabled(false);
                                     accept.setVisibility(View.GONE);
+                                    rejectRequest(detail.ShopName,detail.foundMessageId,detail.senderFID,detail.notificationID);
                                 }
                             });
                             accept.setOnClickListener(new View.OnClickListener() {
@@ -182,7 +199,10 @@ public class NotificationAdapter extends BaseAdapter {
                                     Toast.makeText(context, "accpeted", Toast.LENGTH_SHORT).show();
                                     accept.setText("Accepted Request");
                                     accept.setClickable(false);
+                                    accept.setEnabled(false);
+                                    accept.setEnabled(false);
                                     reject.setVisibility(View.GONE);
+                                    acceptRequest(detail.ShopName,detail.foundMessageId,detail.senderFID,detail.notificationID);
                                 }
                             });
 
@@ -224,6 +244,18 @@ public class NotificationAdapter extends BaseAdapter {
 
             return vi;
 
+
+        }
+        public void rejectRequest(String shopName, String foundMessageId, String senderFID, String messageId)
+        {
+            new notify(context).sendNotification(view,"reject",null,foundMessageId,shopName, null, senderFID,null);
+            new DBHandler(context).updateReceiverStatus("rejected",messageId);
+
+        }
+        public void acceptRequest(String shopName,String foundMessageId,String senderFID,String messageId)
+        {
+            new notify(context).sendNotification(view,"accept",null,null,shopName, null, senderFID,null);
+            new DBHandler(context).updateReceiverStatus("accepted",messageId);
 
         }
 

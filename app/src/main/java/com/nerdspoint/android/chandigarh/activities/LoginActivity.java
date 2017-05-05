@@ -85,6 +85,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     RelativeLayout login_activity;
 
     private String login_URL="/login.php";
+
+    private String image_UID_URL = "https://baljeet808singh.000webhostapp.com/chandigarh/saveIDforImage.php";
+
     // paste login file url in this string    it will check that user is present or not
     // by matching email and password in the database
     // sending arguments name > UserName, password use same in php file
@@ -252,9 +255,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                    // Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
 
-                                    Intent i= new Intent(LoginActivity.this,MainPage.class);
-                                    startActivity(i);
-                                    finish();
+                                    updateUserImageTable();
+
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -304,6 +306,58 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
     }
+
+    public void updateUserImageTable()
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, image_UID_URL, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d("Response", response+"ok");
+                if(response.equals("Success")==true)
+                {
+
+
+                    try {
+
+                        Intent i= new Intent(LoginActivity.this,MainPage.class);
+                        startActivity(i);
+                        finish();
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+
+                    }
+                    Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                }
+                else
+                {
+
+                 }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("ERROR","error => "+error.toString());
+
+                 }
+        }
+        )
+        {
+            @Override
+            protected Map<String,String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>() ;
+                map.put("ID",ActiveUserDetail.getCustomInstance(getApplicationContext()).getUID());
+                map.put("tableName","UserImages");
+                return map;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        queue.add(request);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -29,6 +29,12 @@
         android:gravity="center"
         android:id="@+id/product_Price"
         />
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/cpid_tv"
+        android:visibility="gone"
+        />
 
 
 </LinearLayout>

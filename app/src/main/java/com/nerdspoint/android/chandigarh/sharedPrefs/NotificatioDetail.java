@@ -14,6 +14,11 @@ public class NotificatioDetail {
     public String notificationID;
     public String title;
     public String UID;
+    public String senderFID;
+    public String receiverFID;
     public String cpids;
+    public String foundMessageId;
+    public String status;
+
 
 }

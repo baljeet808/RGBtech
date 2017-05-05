@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nerdspoint.android.chandigarh.R;
@@ -54,7 +55,7 @@ public class AddProductListAdapter extends BaseAdapter {
 
         public TextView productname;
         public EditText price;
-
+        public ImageView productPhoto;
 
     }
 
@@ -73,7 +74,7 @@ public class AddProductListAdapter extends BaseAdapter {
             holder = new  ViewHolder();
             holder.productname = (TextView) vi.findViewById(R.id.textView_productName);
             holder.price = (EditText) vi.findViewById(R.id.productPrice);
-
+            holder.productPhoto = (ImageView) vi.findViewById(R.id.product_image_iv);
 
 
             /************  Set holder with LayoutInflater ************/

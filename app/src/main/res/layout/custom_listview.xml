@@ -3,7 +3,15 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
+<ImageView
+    android:padding="5dp"
+    android:background="#000"
+    android:layout_width="0dp"
+    android:src="@drawable/not_available"
+    android:layout_height="match_parent"
+    android:layout_weight="0.4"
+    android:id="@+id/product_image_iv"
+    />
     <TextView
 
         android:id="@+id/textView_productName"

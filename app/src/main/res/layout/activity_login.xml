@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/logout"
             android:text="log out"
-            android:layout_alignTop="@+id/signInButton"
+            android:layout_above="@+id/textView5"
             android:layout_alignParentStart="true" />
         <com.google.android.gms.common.SignInButton
 

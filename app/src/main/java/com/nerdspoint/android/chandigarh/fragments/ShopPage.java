@@ -138,7 +138,7 @@ public class ShopPage extends Fragment implements View.OnClickListener {
 
     public void createMessage()
     {
-        ((MainPage)getActivity()).setCreateMessage(Shopid,fid);
+        ((MainPage)getActivity()).setCreateMessage(shopName.getText().toString(),Shopid,fid,null);
     }
 
     public View prepareUserProfile()

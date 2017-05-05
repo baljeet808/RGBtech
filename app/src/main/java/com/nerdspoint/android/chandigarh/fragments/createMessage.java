@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,8 +45,10 @@ public class createMessage extends Fragment {
     List<String> cpIds;
     productListAdapter adapter;
     ProductDetails details;
-    String Shopid,fid;
+    String Shopid,fid,ShopName;
     TextView bill;
+    String cpid;
+    RelativeLayout create_message_layout;
     int price=0;
 
     public createMessage() {
@@ -58,6 +61,8 @@ public class createMessage extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_message, container, false);
+
+        create_message_layout = (RelativeLayout) view.findViewById(R.id.create_message_layout);
 
         add_btn=(ImageButton) view.findViewById(R.id.add_btn);
         listView=(ListView) view.findViewById(R.id.lv_addProducts);
@@ -75,6 +80,8 @@ public class createMessage extends Fragment {
         Bundle bundle = getArguments();
         Shopid= bundle.getString("shopid");
         fid= bundle.getString("fid");
+        ShopName = bundle.getString("shopName");
+
 
         Cursor cursor= new DBHandler(getActivity()).getShopProducts(Shopid);
         if(cursor.moveToFirst())
@@ -110,6 +117,15 @@ public class createMessage extends Fragment {
         arrayAdapter= new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,addedProducts);
         listView.setAdapter(arrayAdapter);
 
+        if(bundle.getString("cpid")==null) {
+
+        }
+        else
+        {
+            cpid = bundle.getString("cpid");
+            preSetProduct();
+        }
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,7 +140,7 @@ public class createMessage extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if (addedProducts.size() > 0) {
-                        new notify(getActivity()).sendNotification(et_customMessage.getText().toString(), "looking for purchase", fid,cpIds);
+                        new notify(getActivity()).sendNotification(create_message_layout.getRootView(),"waiting",Shopid,et_customMessage.getText().toString(),ShopName, "looking for purchase", fid,cpIds);
 
                     } else {
                         Toast.makeText(getActivity(), "please add any product", Toast.LENGTH_SHORT).show();
@@ -134,6 +150,20 @@ public class createMessage extends Fragment {
 
 
         return view;
+    }
+
+    public void preSetProduct()
+    {
+
+        cpIds.add(cpid);
+        Cursor cursor = new DBHandler(getActivity()).getCustomProductByID(cpid);
+       if(cursor.moveToFirst())
+        {
+            addedProducts.add(cursor.getString(cursor.getColumnIndex("ProductName"))+"    Rs. "+cursor.getString(cursor.getColumnIndex("Price")));
+        }
+        price=price+Integer.parseInt(cursor.getString(cursor.getColumnIndex("Price")));
+        arrayAdapter.notifyDataSetChanged();
+        bill.setText("INR. "+price+"");
     }
 
 }
