@@ -18,6 +18,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -41,6 +42,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -51,7 +53,8 @@ import android.widget.Toast;
 
 import com.ahmadrosid.lib.drawroutemap.DrawMarker;
 import com.ahmadrosid.lib.drawroutemap.DrawRouteMaps;
-import com.facebook.login.LoginManager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -61,12 +64,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.nerdspoint.android.chandigarh.R;
 import com.nerdspoint.android.chandigarh.adapters.GPSTracker;
+import com.nerdspoint.android.chandigarh.adapters.GetImages;
 import com.nerdspoint.android.chandigarh.adapters.MapHistoryAdapter;
 import com.nerdspoint.android.chandigarh.adapters.TempShopAdapter;
 import com.nerdspoint.android.chandigarh.adapters.populateSearchArray;
 
 import com.nerdspoint.android.chandigarh.fragments.Advrts;
 import com.nerdspoint.android.chandigarh.fragments.EditProfile;
+import com.nerdspoint.android.chandigarh.fragments.ImageHandler;
 import com.nerdspoint.android.chandigarh.fragments.Notification;
 import com.nerdspoint.android.chandigarh.fragments.ProductAdd;
 import com.nerdspoint.android.chandigarh.fragments.QuickSearchResults;
@@ -90,22 +95,23 @@ import java.util.List;
 
 import jp.wasabeef.blurry.Blurry;
 
+import static android.os.Build.ID;
+
 public class MainPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
-public int backcount;
+    public int backcount;
     NavigationView navigationView;
     View view;
     FragmentTransaction fragmentTransaction;
-    Fragment fragment;
     FragmentManager fragmentManager;
-    TextView tv_home,tv_maps,tv_notifications,tv_compare,tv_shopManager;
+    TextView tv_home, tv_maps, tv_notifications, tv_compare, tv_shopManager;
     TabHost host;
-    RelativeLayout main_fragment_holder,ShopManager_layout,Notification_layout,Compare_layout;
+    RelativeLayout main_fragment_holder, ShopManager_layout, Notification_layout, Compare_layout;
     LinearLayout Maps_layout;
     MenuItem menuItem;
     Menu menu;
     BroadcastReceiver br;
-    RelativeLayout popPup,compareLayout,content_main;
+    RelativeLayout popPup, compareLayout, content_main;
     Toolbar toolbar;
     Animation animFadein;
     ActionBarDrawerToggle toggle;
@@ -120,6 +126,7 @@ public int backcount;
     AutoCompleteTextView searchBar;
     ArrayList<String> items,itemsCopy,shopHistory;
     List<ShopDetails> map_history;
+
 
     String temp="Shops",shopID="1",ShopName="nerdspoint";
     FloatingActionButton floatingButton;
@@ -138,8 +145,13 @@ public int backcount;
     GPSTracker tracker;
     ShopDetails details;
     MapHistoryAdapter historyAdapter;
+    String backStack = "";
+    Context context;
+    String ID,tableName;
+    ImageView view0,view1,view2,ProfilePicture;
 
 
+    String url = "https://baljeet808singh.000webhostapp.com/chandigarh/images/";
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -163,56 +175,53 @@ public int backcount;
         mainPage = (DrawerLayout) findViewById(R.id.drawer_layout);
         inflater = getLayoutInflater();
 
-        historylist = inflater.inflate(R.layout.history_list,null);
+        historylist = inflater.inflate(R.layout.history_list, null);
         map_history_list = (ListView) findViewById(R.id.map_history_list);
 
         map_history = new ArrayList<>();
 
         Cursor cursor = new DBHandler(getApplicationContext()).getMapHistory();
-        if(cursor.moveToFirst())
-        {
-            while(!cursor.isAfterLast())
-            {
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
                 details = new ShopDetails();
                 details.shopName = cursor.getString(cursor.getColumnIndex("ShopName"));
-                details.ShopID= cursor.getString(cursor.getColumnIndex("ShopID"));
+                details.ShopID = cursor.getString(cursor.getColumnIndex("ShopID"));
                 map_history.add(details);
                 cursor.moveToNext();
             }
         }
-        historyAdapter = new MapHistoryAdapter(getApplicationContext(),map_history);
+        historyAdapter = new MapHistoryAdapter(getApplicationContext(), map_history);
         map_history_list.setAdapter(historyAdapter);
 
         map_history_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setAlpha(0.5f);
-                ShopDetails shopDetails=map_history.get(position);
-                Cursor cursor1= new DBHandler(getApplicationContext()).getShopByID(shopDetails.ShopID);
-                if(cursor1.moveToFirst())
-                {
-                    driveToShop(Double.valueOf(cursor1.getString(cursor1.getColumnIndex("Latitude"))),Double.valueOf(cursor1.getString(cursor1.getColumnIndex("Longitude"))));
+                ShopDetails shopDetails = map_history.get(position);
+                Cursor cursor1 = new DBHandler(getApplicationContext()).getShopByID(shopDetails.ShopID);
+                if (cursor1.moveToFirst()) {
+                    driveToShop(Double.valueOf(cursor1.getString(cursor1.getColumnIndex("Latitude"))), Double.valueOf(cursor1.getString(cursor1.getColumnIndex("Longitude"))));
                 }
             }
         });
 
-        clear= (Button) historylist.findViewById(R.id.clearAll_button);
+        clear = (Button) historylist.findViewById(R.id.clearAll_button);
 
-        floatingButton= (FloatingActionButton) findViewById(R.id.float_button);
+        floatingButton = (FloatingActionButton) findViewById(R.id.float_button);
         result_list = (ListView) historylist.findViewById(R.id.result_list);
 
 
         shopHistory = new ArrayList<String>();
-        tempAdapter = new TempShopAdapter(getApplicationContext(),shopHistory);
+        tempAdapter = new TempShopAdapter(getApplicationContext(), shopHistory);
 
         result_list.setAdapter(tempAdapter);
 
         result_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    TextView textView= (TextView) view.findViewById(R.id.s_id);
+                TextView textView = (TextView) view.findViewById(R.id.s_id);
 
-                showShop(textView.getText().toString(),null);
+                showShop(textView.getText().toString(), null);
                 dialog1.dismiss();
                 Blurry.delete((ViewGroup) compareLayout.getRootView());
             }
@@ -232,25 +241,23 @@ public int backcount;
             public void onClick(View v) {
 
 
-                       Blurry.with(getApplicationContext()).radius(25).sampling(2).onto((ViewGroup) compareLayout.getRootView());
-                      // compareLayout.setVisibility(View.INVISIBLE);
-                        if(dialog1==null) {
-                            final AlertDialog.Builder alert = new AlertDialog.Builder(MainPage.this);
+                Blurry.with(getApplicationContext()).radius(25).sampling(2).onto((ViewGroup) compareLayout.getRootView());
+                // compareLayout.setVisibility(View.INVISIBLE);
+                if (dialog1 == null) {
+                    final AlertDialog.Builder alert = new AlertDialog.Builder(MainPage.this);
 
 
-                            alert.setView(historylist);
-                            alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                    Blurry.delete((ViewGroup) mainPage.getRootView());
-                                }
-                            });
-                            dialog1 = alert.create();
+                    alert.setView(historylist);
+                    alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            Blurry.delete((ViewGroup) mainPage.getRootView());
                         }
-                        dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        dialog1.show();
-
-
+                    });
+                    dialog1 = alert.create();
+                }
+                dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog1.show();
 
 
             }
@@ -261,41 +268,192 @@ public int backcount;
         setSupportActionBar(toolbar);
 
         db = new DBHandler(getApplicationContext());
-        content_main= (RelativeLayout) findViewById(R.id.content_main_page);
+        content_main = (RelativeLayout) findViewById(R.id.content_main_page);
 
-        searchBar=(AutoCompleteTextView) toolbar.findViewById(R.id.et_quickSearch);
-        searchType=(TextView) toolbar.findViewById(R.id.tv_search_type);
-
-
-
-        items=new ArrayList<String>();
-        itemsCopy=new ArrayList<String>();
+        searchBar = (AutoCompleteTextView) toolbar.findViewById(R.id.et_quickSearch);
+        searchType = (TextView) toolbar.findViewById(R.id.tv_search_type);
 
 
+        items = new ArrayList<String>();
+        itemsCopy = new ArrayList<String>();
 
-        host = (TabHost)findViewById(R.id.tabHost);
+
+        host = (TabHost) findViewById(R.id.tabHost);
 
         host.setup();
 
-        tabContent=(FrameLayout) findViewById(android.R.id.tabcontent);
+        tabContent = (FrameLayout) findViewById(android.R.id.tabcontent);
 
-        main_fragment_holder=(RelativeLayout) findViewById(R.id.Main_Fragment_Holder);
+        main_fragment_holder = (RelativeLayout) findViewById(R.id.Main_Fragment_Holder);
         main_fragment_holder.setVisibility(View.INVISIBLE);
 
-        ShopManager_layout=(RelativeLayout) findViewById(R.id.Shop_manager_holder);
+        ShopManager_layout = (RelativeLayout) findViewById(R.id.Shop_manager_holder);
         ShopManager_layout.setVisibility(View.INVISIBLE);
 
 
-        Notification_layout=(RelativeLayout) findViewById(R.id.Notification_holder);
+        Notification_layout = (RelativeLayout) findViewById(R.id.Notification_holder);
         Notification_layout.setVisibility(View.INVISIBLE);
 
 
-        Maps_layout=(LinearLayout) findViewById(R.id.maps_holder);
+        Maps_layout = (LinearLayout) findViewById(R.id.maps_holder);
         Maps_layout.setVisibility(View.INVISIBLE);
 
-        compareLayout=(RelativeLayout) findViewById(R.id.compare_main_frag);
+        compareLayout = (RelativeLayout) findViewById(R.id.compare_main_frag);
         compareLayout.setVisibility(View.INVISIBLE);
 
+        setTabHost();
+
+        tv_compare = (TextView) findViewById(R.id.tv_compare);
+        tv_home = (TextView) findViewById(R.id.tv_home);
+        tv_maps = (TextView) findViewById(R.id.tv_maps);
+        tv_notifications = (TextView) findViewById(R.id.tv_notifications);
+        tv_shopManager = (TextView) findViewById(R.id.tv_shopManager);
+
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                Toast.makeText(getApplicationContext(), "working", Toast.LENGTH_SHORT).show();
+                updateDrawer();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
+            }
+        };
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+
+        navigationView = (NavigationView) drawer.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        View view = navigationView.getHeaderView(0);
+
+        Name = (TextView) view.findViewById(R.id.Name);
+        userType = (TextView) view.findViewById(R.id.UserType);
+        ProfilePicture = (ImageView) view.findViewById(R.id.imageView);
+
+        Name.setText(ActiveUserDetail.getCustomInstance(getApplicationContext()).getFirstName() + " " + ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastName());
+
+        userType.setText(ActiveUserDetail.getCustomInstance(getApplicationContext()).getUserType());
+
+        popPup = (RelativeLayout) view.findViewById(R.id.popPup);
+
+        animFadein = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.fade);
+
+        textView = (TextView) popPup.findViewById(R.id.count);
+        textView.startAnimation(animFadein);
+        textView.setText(count);
+
+        popPup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                sync();
+                popPup.setVisibility(View.GONE);
+                Snackbar.make(getCurrentFocus(), "Syncing.. ", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+            }
+        });
+
+        menu = navigationView.getMenu();
+        menuItem = menu.findItem(R.id.nav_netStatus);
+
+
+        if (ActiveUserDetail.getCustomInstance(getApplicationContext()).getIsFirstSync()) {
+
+            try {
+                Toast.makeText(this, "syncing for first time", Toast.LENGTH_LONG).show();
+                new DBHandler(MainPage.this, getApplicationContext()).syncOffline(searchBar);
+                popPup.setVisibility(View.INVISIBLE);
+            } catch (Exception e) {
+                Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            try {
+                populateSearchArray.getCustomInstance(getApplicationContext(), searchBar).populate(searchType.getText().toString());
+
+            } catch (Exception e) {
+                Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+
+
+        Notification notification = new Notification();
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+
+        fragmentTransaction.add(R.id.Notification_holder, notification);
+        fragmentTransaction.commit();
+
+
+        ShopPage shopPage = new ShopPage();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("SHOPID", "0");
+
+        shopPage.setArguments(bundle);
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+        fragmentTransaction.add(R.id.compare_main_frag, shopPage);
+        fragmentTransaction.commit();
+
+
+        ImageHandler imageHandler = new ImageHandler();
+
+        Bundle bundle1 = new Bundle();
+        bundle1.putString("ID", "");
+        bundle1.putString("TableName", "");
+
+
+        imageHandler.setArguments(bundle);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.Main_Fragment_Holder, imageHandler);
+        fragmentTransaction.commit();
+
+
+        checkInternetConnection();
+        if(isNetworkAvailable())
+        {
+            checkInternet.getCustomInstance(getApplicationContext()).setState(true);
+        }
+        else
+        {
+            checkInternet.getCustomInstance(getApplicationContext()).setState(false);
+        }
+
+        updateDrawer();
+    }
+
+
+    public void setTabHost()
+    {
         final QuickSearchResults searchResults = new QuickSearchResults();
 
         layout3 = new LinearLayout(getApplicationContext());
@@ -311,12 +469,10 @@ public int backcount;
 
         Advrts advrts = new Advrts();
 
-        fragmentManager =getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.my_layout3,advrts);
+        fragmentTransaction.add(R.id.my_layout3, advrts);
         fragmentTransaction.commit();
-
-
 
 
         layout4 = new LinearLayout(getApplicationContext());
@@ -331,92 +487,12 @@ public int backcount;
         host.addTab(spec);
 
 
-        fragmentManager =getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.my_layout4,searchResults);
+        fragmentTransaction.add(R.id.my_layout4, searchResults);
         fragmentTransaction.commit();
 
-
-
-        tv_compare =(TextView) findViewById(R.id.tv_compare);
-        tv_home=(TextView) findViewById(R.id.tv_home);
-        tv_maps=(TextView) findViewById(R.id.tv_maps);
-        tv_notifications=(TextView) findViewById(R.id.tv_notifications);
-        tv_shopManager=(TextView) findViewById(R.id.tv_shopManager);
-
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-
-
-
-        navigationView = (NavigationView) drawer.findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-
-        View view = navigationView.getHeaderView(0);
-
-        Name=(TextView) view.findViewById(R.id.Name);
-        userType=(TextView) view.findViewById(R.id.UserType);
-
-        Name.setText(ActiveUserDetail.getCustomInstance(getApplicationContext()).getFirstName()+" "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastName());
-
-        userType.setText(ActiveUserDetail.getCustomInstance(getApplicationContext()).getUserType());
-
-        popPup= (RelativeLayout) view.findViewById(R.id.popPup);
-
-        animFadein = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.fade);
-
-        textView=(TextView) popPup.findViewById(R.id.count);
-        textView.startAnimation(animFadein);
-        textView.setText(count);
-
-        popPup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                sync();
-                popPup.setVisibility(View.GONE);
-                Snackbar.make(getCurrentFocus(),"Syncing.. ",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-            }
-        });
-
-        menu = navigationView.getMenu();
-        menuItem= menu.findItem(R.id.nav_netStatus);
-
-
-        if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getIsFirstSync()) {
-
-            try {
-                Toast.makeText(this, "syncing for first time", Toast.LENGTH_LONG).show();
-                new DBHandler(MainPage.this,getApplicationContext()).syncOffline(searchBar);
-                popPup.setVisibility(View.INVISIBLE);
-            }
-            catch (Exception e)
-            {
-                Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }
-        else
-        {
-            try {
-                populateSearchArray.getCustomInstance(getApplicationContext(), searchBar).populate(searchType.getText().toString());
-
-            }
-            catch (Exception e)
-            {
-                Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-        }
-
-        if(ActiveUserDetail.getCustomInstance(getApplicationContext()).getFirstName().equals("nerdspoint"))
-        {
+        if (ActiveUserDetail.getCustomInstance(getApplicationContext()).getFirstName().equals("nerdspoint")) {
 
 
             layout2 = new LinearLayout(getApplicationContext());
@@ -430,66 +506,56 @@ public int backcount;
 
             profileUpdation updation = new profileUpdation();
 
-            fragmentManager =getSupportFragmentManager();
+            fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.my_layout2,updation);
+            fragmentTransaction.add(R.id.my_layout2, updation);
             fragmentTransaction.commit();
 
         }
 
 
-        Notification notification= new Notification();
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-
-
-        fragmentTransaction.add(R.id.Notification_holder,notification);
-        fragmentTransaction.commit();
-
-
-        ShopPage shopPage= new ShopPage();
-
-        Bundle bundle= new Bundle();
-        bundle.putString("SHOPID","0");
-
-        shopPage.setArguments(bundle);
-
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-
-        fragmentTransaction.add(R.id.compare_main_frag,shopPage);
-        fragmentTransaction.commit();
-
-
-
-        checkInternetConnection();
     }
 
-    public void setAdds()
+    public void updateDrawer()
     {
+
+
+        if(checkInternet.getCustomInstance(getApplicationContext()).isConnected()) {
+            String temp = url;
+            String name = ActiveUserDetail.getCustomInstance(getApplicationContext()).getUserImageName();
+            if(name!="null") {
+                temp = temp + "" + name;
+                Glide.with(getApplicationContext()).load(temp)
+                        .thumbnail(0.5f)
+                        .crossFade()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(ProfilePicture);
+                 }
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "drawer not updated", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void setAdds() {
         Advrts advrts = new Advrts();
 
-        fragmentManager =getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.my_layout3,advrts);
+        fragmentTransaction.replace(R.id.my_layout3, advrts);
         fragmentTransaction.commit();
 
     }
 
-    public void driveToShop(Double latitude , Double Longitude)
-    {
+    public void driveToShop(Double latitude, Double Longitude) {
         try {
             MapsInitializer.initialize(getApplicationContext());
 
             MapFragment mapFragment = (MapFragment) getFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
-        }
-        catch (Exception e)
-        {
-            Toast.makeText(this, "error setting map "+e.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "error setting map " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         searchBar.setText("");
@@ -503,51 +569,57 @@ public int backcount;
 
 
         Cursor cursor = new DBHandler(getApplicationContext()).getAll("Places");
-        if(cursor.moveToFirst())
-        {
-            while(!cursor.isAfterLast())
-            {
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
                 ShopDetails details = new ShopDetails();
                 details.shopName = cursor.getString(cursor.getColumnIndex("ShopName"));
-                details.ShopID= cursor.getString(cursor.getColumnIndex("ShopID"));
+                details.ShopID = cursor.getString(cursor.getColumnIndex("ShopID"));
                 map_history.add(details);
             }
         }
         try {
             showroute(latitude, Longitude);
-        }
-        catch (Exception e)
-        {
-            Toast.makeText(getApplicationContext(), "error on showrouute Call "+e.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "error on showrouute Call " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
 
-    public void setCreateMessage(String Shopid,String fid)
+    public void setCreateMessage(String ShopName,String Shopid,String fid, String cpId)
     {
         createMessage message = new createMessage();
 
         Bundle bundle= new Bundle();
         bundle.putString("shopid",Shopid);
         bundle.putString("fid",fid);
+        bundle.putString("shopName",ShopName);
+        bundle.putString("cpId",cpId);
 
         message.setArguments(bundle);
+
+        searchBar.setText("");
+        host.setVisibility(View.INVISIBLE);
+        ShopManager_layout.setVisibility(View.INVISIBLE);
+        Maps_layout.setVisibility(View.INVISIBLE);
+        main_fragment_holder.setVisibility(View.INVISIBLE);
+        Notification_layout.setVisibility(View.INVISIBLE);
+        compareLayout.setVisibility(View.VISIBLE);
+        floatingButton.setVisibility(View.INVISIBLE);
 
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-        fragmentTransaction.replace(R.id.compare_main_frag,message);
+        fragmentTransaction.replace(R.id.compare_main_frag, message);
 
         fragmentTransaction.commit();
     }
 
-    public void setShopAgain(String Shopid)
-    {
+    public void setShopAgain(String Shopid) {
         ShopPage shop = new ShopPage();
 
-        Bundle bundle= new Bundle();
-        bundle.putString("shopid",Shopid);
+        Bundle bundle = new Bundle();
+        bundle.putString("shopid", Shopid);
 
         shop.setArguments(bundle);
 
@@ -555,19 +627,16 @@ public int backcount;
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-        fragmentTransaction.replace(R.id.compare_main_frag,shop);
+        fragmentTransaction.replace(R.id.compare_main_frag, shop);
 
         fragmentTransaction.commit();
     }
 
 
-
-
-    public void ShopInfo( String shopid)
-    {
-         Bundle bundle=new Bundle();
-        bundle.putString("shopid",shopid);
-        ShopInfo shopInfo=new ShopInfo();
+    public void ShopInfo(String shopid) {
+        Bundle bundle = new Bundle();
+        bundle.putString("shopid", shopid);
+        ShopInfo shopInfo = new ShopInfo();
         shopInfo.setArguments(bundle);
 
         fragmentManager = getSupportFragmentManager();
@@ -579,12 +648,11 @@ public int backcount;
     }
 
 
+    public void AddProducts(String Shopid) {
+        ProductAdd productAdd = new ProductAdd();
 
-    public void AddProducts(String Shopid)
-    {  ProductAdd productAdd = new ProductAdd();
-
-        Bundle bundle=new Bundle();
-        bundle.putString("shopid",Shopid);
+        Bundle bundle = new Bundle();
+        bundle.putString("shopid", Shopid);
 
         productAdd.setArguments(bundle);
 
@@ -599,41 +667,38 @@ public int backcount;
     }
 
 
+    public void AddShop() {
 
-  public void AddShop()
-  {
+        shopRegistration registration = new shopRegistration();
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-           shopRegistration registration = new shopRegistration();
-           fragmentManager = getSupportFragmentManager();
-           fragmentTransaction = fragmentManager.beginTransaction();
-           fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        fragmentTransaction.replace(R.id.Shop_manager_holder, registration);
+        fragmentTransaction.commit();
+        flag = false;
 
-           fragmentTransaction.replace(R.id.Shop_manager_holder, registration);
-           fragmentTransaction.commit();
-           flag=false;
+    }
 
-  }
-  public  void Shopmanger()
-  {
-      ShopManager shopManager = new ShopManager();
-      fragmentManager = getSupportFragmentManager();
-      fragmentTransaction = fragmentManager.beginTransaction();
-      fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+    public void Shopmanger() {
+        ShopManager shopManager = new ShopManager();
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-      fragmentTransaction.replace(R.id.Shop_manager_holder , shopManager);
-      fragmentTransaction.commit();
-      flag=true;
+        fragmentTransaction.replace(R.id.Shop_manager_holder, shopManager);
+        fragmentTransaction.commit();
+        flag = true;
 
-  }
+    }
 
-    public void  showShop(String shopID,String ShopName)
-    {
+    public void showShop(String shopID, String ShopName) {
 
         clear.setVisibility(View.VISIBLE);
-        if(ShopName!=null) {
+        if (ShopName != null) {
             setHistoryList(ShopName, shopID);
-            this.ShopName= ShopName;
-            this.shopID=shopID;
+            this.ShopName = ShopName;
+            this.shopID = shopID;
         }
 
 
@@ -646,11 +711,10 @@ public int backcount;
         floatingButton.setVisibility(View.VISIBLE);
 
 
+        ShopPage shopPage = new ShopPage();
 
-        ShopPage shopPage= new ShopPage();
-
-        Bundle bundle= new Bundle();
-        bundle.putString("SHOPID",shopID);
+        Bundle bundle = new Bundle();
+        bundle.putString("SHOPID", shopID);
 
         shopPage.setArguments(bundle);
 
@@ -658,20 +722,18 @@ public int backcount;
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-        fragmentTransaction.replace(R.id.compare_main_frag,shopPage);
+        fragmentTransaction.replace(R.id.compare_main_frag, shopPage);
         fragmentTransaction.commit();
     }
 
-    public void setHistoryList(String SHOPNAME,String SHOPID)
-    {
+    public void setHistoryList(String SHOPNAME, String SHOPID) {
         shopHistory.add(SHOPID);
         tempAdapter.notifyDataSetChanged();
     }
 
-    public void setMapHistory(String shopName, String ShopId)
-    {
+    public void setMapHistory(String shopName, String ShopId) {
         details = new ShopDetails();
-        details.ShopID=ShopId;
+        details.ShopID = ShopId;
         details.shopName = shopName;
         map_history.add(details);
         historyAdapter.notifyDataSetChanged();
@@ -679,67 +741,61 @@ public int backcount;
     }
 
 
-    public  void setCustomPRoductstoList(String productName)
-    {
-        Bundle bundle= new Bundle();
-        bundle.putString("product",productName);
+    public void setCustomPRoductstoList(String productName) {
+        Bundle bundle = new Bundle();
+        bundle.putString("product", productName);
 
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-        if(fragmentFlag1) {
-            customProductList productList = new customProductList();
-                productList.setArguments(bundle);
-            fragmentTransaction.add(R.id.frag_Product_list_holder, productList);
-            fragmentFlag1=false;
-
-        }
-        else {
+        if (fragmentFlag1) {
             customProductList productList = new customProductList();
             productList.setArguments(bundle);
-            fragmentTransaction.replace(R.id.frag_Product_list_holder,productList);
+            fragmentTransaction.add(R.id.frag_Product_list_holder, productList);
+            fragmentFlag1 = false;
+
+        } else {
+            customProductList productList = new customProductList();
+            productList.setArguments(bundle);
+            fragmentTransaction.replace(R.id.frag_Product_list_holder, productList);
         }
         fragmentTransaction.commit();
     }
 
-    public  void setProductsToFragmentHolder(String category)
-    {
+    public void setProductsToFragmentHolder(String category) {
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-        Bundle bundle= new Bundle();
-        bundle.putString("category",category);
+        Bundle bundle = new Bundle();
+        bundle.putString("category", category);
 
         productMenu products = new productMenu();
         products.setArguments(bundle);
-            fragmentTransaction.replace(R.id.frag_menu_holder,products);
+        fragmentTransaction.replace(R.id.frag_menu_holder, products);
         fragmentTransaction.commit();
     }
 
-    public void setCategoriesToFragmentHolder(View view)
-    {
+    public void setCategoriesToFragmentHolder(View view) {
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-        if(fragmentFlag) {
+        if (fragmentFlag) {
             categoriesMenu categories = new categoriesMenu();
 
 
             fragmentTransaction.add(R.id.frag_menu_holder, categories);
-fragmentFlag=false;
-        }
-        else {
+            fragmentFlag = false;
+        } else {
             categoriesMenu categories = new categoriesMenu();
-            fragmentTransaction.replace(R.id.frag_menu_holder,categories);
+            fragmentTransaction.replace(R.id.frag_menu_holder, categories);
         }
         fragmentTransaction.commit();
     }
 
-    public void setSearchPageVisibleOnly()
-    {
+    public void setSearchPageVisibleOnly() {
         host.setVisibility(View.VISIBLE);
         ShopManager_layout.setVisibility(View.INVISIBLE);
         Maps_layout.setVisibility(View.INVISIBLE);
@@ -749,26 +805,51 @@ fragmentFlag=false;
 
     }
 
-    public void profile(View v)
+    public void setProfilePictureParams(Context context,String id,String table,ImageView view,ImageView view1,ImageView view2)
     {
+     this.context = context;
+        this.ID=id;
+         this.tableName = table;
+        this.view0=view;
+        this.view1=view1;
+        this.view2=view2;
+    }
+    public void SetImage()
+    {
+        GetImages getImages = new GetImages(context,ID,tableName,view0,null,null);
+        getImages.fetchImages();
+    }
+
+    public void resetTabs()
+    {
+        try {
+            host.clearAllTabs();
+            setTabHost();
+            layout=null;
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(getApplicationContext(), "unable to close tab "+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void profile(View v) {
 
         EditProfile editProfile = new EditProfile();
-        Toast.makeText(getApplicationContext(),"profile working",Toast.LENGTH_SHORT).show();
-        if(drawer.isDrawerOpen(GravityCompat.START))
-        {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-
 
 
         }
 
-        if(layout==null) {
+        if (layout == null) {
             layout = new LinearLayout(getApplicationContext());
             layout.setId(R.id.my_layout);
             tabContent.addView(layout);
 
 
             fragmentManager = getSupportFragmentManager();
+
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.my_layout, editProfile);
             fragmentTransaction.commit();
@@ -779,20 +860,27 @@ fragmentFlag=false;
             host.addTab(spec);
 
         }
+        else
+        {
+            Toast.makeText(getApplicationContext(), "layout is not null", Toast.LENGTH_SHORT).show();
+        }
 
         host.setCurrentTabByTag("Edit Profile");
     }
 
 
-
-    public void sync()
-    {
+    public void sync() {
         db.syncOffline(searchBar);
         Snackbar.make(getCurrentFocus(), "Offline Database Updated", Snackbar.LENGTH_SHORT).show();
 
     }
 
-
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
     private void checkInternetConnection() {
 
@@ -812,7 +900,7 @@ fragmentFlag=false;
 
                     if (state == NetworkInfo.State.CONNECTED) {
                         menuItem.setTitle("Check New Data");
-                        setPopPup(popPup,R.id.count);
+                        setPopPup(popPup, R.id.count);
 
 
                         textView.startAnimation(animFadein);
@@ -833,11 +921,10 @@ fragmentFlag=false;
     }
 
 
-    public void setPopPup(RelativeLayout popPup,int countID)
-    {
-       // Toast.makeText(getApplicationContext(),"last shopid "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastShopID()+" Last ProductID "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastProductID()+" Category id "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCategoryID()+" customPID "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCustomPID()+" ",Toast.LENGTH_LONG).show();
+    public void setPopPup(RelativeLayout popPup, int countID) {
+        // Toast.makeText(getApplicationContext(),"last shopid "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastShopID()+" Last ProductID "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastProductID()+" Category id "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCategoryID()+" customPID "+ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCustomPID()+" ",Toast.LENGTH_LONG).show();
 
-        db.getDBStatus(popPup,countID,ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastProductID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastShopID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCategoryID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCustomPID());
+        db.getDBStatus(popPup, countID, ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastProductID(), ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastShopID(), ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCategoryID(), ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCustomPID());
 
     }
 
@@ -845,25 +932,21 @@ fragmentFlag=false;
     public void onBackPressed() {
 
 
-        if(backcount>0)
-        {
+        if (backcount > 0) {
             finish();
-        }
-        else {
+        } else {
             Toast.makeText(getApplicationContext(), "Press again to exits", Toast.LENGTH_LONG).show();
-           backcount++;
-            new CountDownTimer(2000,1000)
-            {
+            backcount++;
+            new CountDownTimer(2000, 1000) {
 
                 @Override
-                public void onTick(long l)
-                {
+                public void onTick(long l) {
 
                 }
 
                 @Override
                 public void onFinish() {
-                    backcount=0;
+                    backcount = 0;
                 }
 
             }.start();
@@ -882,12 +965,11 @@ fragmentFlag=false;
     }
 
 
-    public void changeSearchType(View v)
-    {
-        final AlertDialog.Builder alert =new AlertDialog.Builder(v.getContext());
+    public void changeSearchType(View v) {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
         alert.setTitle("Select Search Type ");
 
-        String type= searchType.getText().toString();
+        String type = searchType.getText().toString();
 
 
         LinearLayout layout = new LinearLayout(getApplicationContext());
@@ -898,17 +980,16 @@ fragmentFlag=false;
         final CheckBox checkBox2 = new CheckBox(getApplicationContext());
         checkBox2.setText("Shops");
 
-         if(type.equals("Product"))
-        {
+        if (type.equals("Product")) {
             checkBox.setChecked(true);
-        }else {
+        } else {
             checkBox2.setChecked(true);
         }
 
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                temp="Product";
+                temp = "Product";
 
                 checkBox2.setChecked(false);
             }
@@ -937,10 +1018,10 @@ fragmentFlag=false;
         });
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                    searchType.setText(temp);
+                searchType.setText(temp);
 
                 Blurry.delete((ViewGroup) content_main.getRootView());
-                populateSearchArray.getCustomInstance(getApplicationContext(),searchBar).populate(temp);
+                populateSearchArray.getCustomInstance(getApplicationContext(), searchBar).populate(temp);
 
             }
         });
@@ -950,20 +1031,17 @@ fragmentFlag=false;
     }
 
 
-    public void bottomToolbar(View v)
-    {
+    public void bottomToolbar(View v) {
         searchBar.setText("");
-        if(view!= null) {
+        if (view != null) {
             view.clearAnimation();
             view.setBackgroundResource(R.drawable.backgraoundwithborder);
         }
         view = v;
         v.startAnimation(animFadein);
         v.setBackgroundResource(R.drawable.topdownborderbackground);
-        switch(v.getId())
-        {
-            case R.id.tv_home :
-            {
+        switch (v.getId()) {
+            case R.id.tv_home: {
                 host.setVisibility(View.VISIBLE);
                 ShopManager_layout.setVisibility(View.INVISIBLE);
                 Maps_layout.setVisibility(View.INVISIBLE);
@@ -972,11 +1050,10 @@ fragmentFlag=false;
                 compareLayout.setVisibility(View.INVISIBLE);
                 floatingButton.setVisibility(View.INVISIBLE);
 
-            }break;
-            case R.id.tv_shopManager :
-            {
-                if (flag2)
-                {
+            }
+            break;
+            case R.id.tv_shopManager: {
+                if (flag2) {
                     ShopManager manager = new ShopManager();
 
 
@@ -986,10 +1063,8 @@ fragmentFlag=false;
 
                     fragmentTransaction.add(R.id.Shop_manager_holder, manager);
                     fragmentTransaction.commit();
-                    flag2=false;
-                }
-                else
-                {
+                    flag2 = false;
+                } else {
 
                     ShopManager manager = new ShopManager();
 
@@ -1012,19 +1087,17 @@ fragmentFlag=false;
                 floatingButton.setVisibility(View.INVISIBLE);
 
 
-            }break;
-            case R.id.tv_maps :
-            {
+            }
+            break;
+            case R.id.tv_maps: {
 
                 try {
 
                     MapFragment mapFragment = (MapFragment) getFragmentManager()
                             .findFragmentById(R.id.map);
                     mapFragment.getMapAsync(this);
-                }
-                catch (Exception e)
-                {
-                    Toast.makeText(this, "error setting map "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(this, "error setting map " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
                 searchBar.setText("");
@@ -1038,21 +1111,19 @@ fragmentFlag=false;
 
 
                 Cursor cursor = new DBHandler(getApplicationContext()).getAll("Places");
-                if(cursor.moveToFirst())
-                {
-                    while(!cursor.isAfterLast())
-                    {
+                if (cursor.moveToFirst()) {
+                    while (!cursor.isAfterLast()) {
                         ShopDetails details = new ShopDetails();
                         details.shopName = cursor.getString(cursor.getColumnIndex("ShopName"));
-                        details.ShopID= cursor.getString(cursor.getColumnIndex("ShopID"));
+                        details.ShopID = cursor.getString(cursor.getColumnIndex("ShopID"));
                         map_history.add(details);
                     }
                 }
 
 
-            }break;
-            case R.id.tv_notifications :
-            {
+            }
+            break;
+            case R.id.tv_notifications: {
                 searchBar.setText("");
                 host.setVisibility(View.INVISIBLE);
                 ShopManager_layout.setVisibility(View.INVISIBLE);
@@ -1062,10 +1133,10 @@ fragmentFlag=false;
                 compareLayout.setVisibility(View.INVISIBLE);
                 floatingButton.setVisibility(View.INVISIBLE);
 
-            }break;
-            case R.id.tv_compare :
-            {
-                actionButtonFlag=true;
+            }
+            break;
+            case R.id.tv_compare: {
+                actionButtonFlag = true;
                 floatingButton.setVisibility(View.VISIBLE);
                 searchBar.setText("");
                 host.setVisibility(View.INVISIBLE);
@@ -1075,8 +1146,9 @@ fragmentFlag=false;
                 Notification_layout.setVisibility(View.INVISIBLE);
                 compareLayout.setVisibility(View.VISIBLE);
 
-               // Toast.makeText(this, "working", Toast.LENGTH_SHORT).show();
-            }break;
+                // Toast.makeText(this, "working", Toast.LENGTH_SHORT).show();
+            }
+            break;
         }
     }
 
@@ -1100,25 +1172,78 @@ fragmentFlag=false;
         return super.onOptionsItemSelected(item);
     }
 
+    public void setBackStack(String value) {
+        backStack = value;
+    }
+
+    public void closeImageHandler() {
+        searchBar.setText("");
+        host.setVisibility(View.INVISIBLE);
+        ShopManager_layout.setVisibility(View.INVISIBLE);
+        Maps_layout.setVisibility(View.INVISIBLE);
+        main_fragment_holder.setVisibility(View.INVISIBLE);
+        Notification_layout.setVisibility(View.INVISIBLE);
+        compareLayout.setVisibility(View.INVISIBLE);
+        floatingButton.setVisibility(View.INVISIBLE);
+
+        if (backStack.equals("user")) {
+            host.setVisibility(View.VISIBLE);
+            SetImage();
+
+        } else if (backStack.equals("shop")) {
+            ShopManager_layout.setVisibility(View.VISIBLE);
+            SetImage();
+        } else if (backStack.equals("product")) {
+            ShopManager_layout.setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+    public void openImageHandler(String tableName, String id) {
+        ImageHandler imageHandler = new ImageHandler();
+
+
+        Bundle bundle1 = new Bundle();
+        bundle1.putString("ID", id);
+        bundle1.putString("TableName", tableName);
+
+
+        imageHandler.setArguments(bundle1);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.Main_Fragment_Holder, imageHandler);
+        fragmentTransaction.commit();
+
+        searchBar.setText("");
+        host.setVisibility(View.INVISIBLE);
+        ShopManager_layout.setVisibility(View.INVISIBLE);
+        Maps_layout.setVisibility(View.INVISIBLE);
+        main_fragment_holder.setVisibility(View.VISIBLE);
+        Notification_layout.setVisibility(View.INVISIBLE);
+        compareLayout.setVisibility(View.INVISIBLE);
+        floatingButton.setVisibility(View.INVISIBLE);
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-       if (id == R.id.nav_addShop) {
+        if (id == R.id.nav_addShop) {
+
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
             drawer.closeDrawer(GravityCompat.START);
 
         } else if (id == R.id.nav_manage) {
             searchBar.setText("");
             ActiveUserDetail.getCustomInstance(getApplicationContext()).logoutUser();
-            Intent o = new Intent(MainPage.this,LoginActivity.class);
+            Intent o = new Intent(MainPage.this, LoginActivity.class);
             startActivity(o);
             finish();
-           LoginManager.getInstance().logOut();
-
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
 
@@ -1126,19 +1251,15 @@ fragmentFlag=false;
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
 
-        }
-        else if(id == R.id.nav_netStatus)
-        {
-            if(checkInternet.getCustomInstance(getApplicationContext()).isConnected()) {
+        } else if (id == R.id.nav_netStatus) {
+            if (checkInternet.getCustomInstance(getApplicationContext()).isConnected()) {
 
-                db.getDBStatus(popPup,R.id.count,ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastProductID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastShopID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCategoryID(),ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCustomPID());
+                db.getDBStatus(popPup, R.id.count, ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastProductID(), ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastShopID(), ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCategoryID(), ActiveUserDetail.getCustomInstance(getApplicationContext()).getLastCustomPID());
 
-            }
-            else
-            {
+            } else {
                 Blurry.with(getApplicationContext()).sampling(2).onto((ViewGroup) mainPage.getRootView());
 
-                if(dialog==null) {
+                if (dialog == null) {
                     final AlertDialog.Builder alert = new AlertDialog.Builder(MainPage.this);
 
                     alert.setTitle("Oops !!");
@@ -1171,7 +1292,7 @@ fragmentFlag=false;
 
     @Override
     public void onMapReady(GoogleMap map) {
-        mMap=map;
+        mMap = map;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.setMyLocationEnabled(true);
         map.setTrafficEnabled(true);
@@ -1180,11 +1301,10 @@ fragmentFlag=false;
         map.getUiSettings().setZoomControlsEnabled(true);
     }
 
-    public void showroute(Double latitude, Double longitude)
-    {
+    public void showroute(Double latitude, Double longitude) {
         Location location = tracker.getLocation();
-        LatLng origin = new LatLng(location.getLatitude(),location.getLongitude());
-        LatLng destination = new LatLng(latitude,longitude);
+        LatLng origin = new LatLng(location.getLatitude(), location.getLongitude());
+        LatLng destination = new LatLng(latitude, longitude);
         DrawRouteMaps.getInstance(this)
                 .draw(origin, destination, mMap);
         DrawMarker.getInstance(this).draw(mMap, origin, R.drawable.ic_place_black_24dp, "Origin Location");
@@ -1197,7 +1317,4 @@ fragmentFlag=false;
         getWindowManager().getDefaultDisplay().getSize(displaySize);
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, displaySize.x, 250, 30));
     }
-
-
-
 }

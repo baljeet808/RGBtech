@@ -81,7 +81,7 @@ public class createMessage extends Fragment {
         Shopid= bundle.getString("shopid");
         fid= bundle.getString("fid");
         ShopName = bundle.getString("shopName");
-
+        cpid = bundle.getString("cpId");
 
         Cursor cursor= new DBHandler(getActivity()).getShopProducts(Shopid);
         if(cursor.moveToFirst())
