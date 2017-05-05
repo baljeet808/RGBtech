@@ -81,7 +81,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_below="@id/Shopname"
-                android:background="@drawable/generalstore_logo"
+                android:background="@drawable/medical_logo"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"

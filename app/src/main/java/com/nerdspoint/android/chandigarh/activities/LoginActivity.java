@@ -1,6 +1,7 @@
 package com.nerdspoint.android.chandigarh.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,9 +17,11 @@ import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -91,6 +94,12 @@ public class LoginActivity extends AppCompatActivity {
     LinearLayout login_activity;
 
     private String login_URL="/login.php";
+
+
+
+
+
+
 
     // paste login file url in this string    it will check that user is present or not
     // by matching email and password in the database
@@ -225,14 +234,16 @@ public class LoginActivity extends AppCompatActivity {
     public void simpleLogin(View v)
     {
         Log.d("simpleLogin","\t\t\tentered");
-        if(et_username.getText().toString().length()>1 && et_password.getText().toString().length()>1)
-        {
-            Log.d("first if","\t\t\tchecked length  "+et_username.getText().toString()+"  "+et_password.getText().toString());
+        if(et_username.getText().toString().length()>0) {
+            if (et_password.getText().toString().length() > 0)
+            {
+
+
+                Log.d("first if", "\t\t\tchecked length  " + et_username.getText().toString() + "  " + et_password.getText().toString());
             {
                 String Password = et_password.getText().toString();
-                if(Password.length()>5)
-                {
-                    Log.d("second if","\t\t\tpassword length checked");
+                if (Password.length() > 4) {
+                    Log.d("second if", "\t\t\tpassword length checked");
                     final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                     final AlertDialog alert = builder.create();
                     alert.setTitle("Loging In");
@@ -247,18 +258,17 @@ public class LoginActivity extends AppCompatActivity {
                     });
                     alert.show();
 //                   Blurry.with(getApplicationContext()).radius(25).sampling(2).onto((ViewGroup) login_activity.getRootView());
-                    Log.d("alert dialog","\t\t\talert started");
+                    Log.d("alert dialog", "\t\t\talert started");
                     StringRequest request = new StringRequest(Request.Method.POST, login_URL, new Response.Listener<String>() {
 
                         @Override
                         public void onResponse(String response) {
-                            Log.d("Response", response+"ok");
-                            if(response.equals("fail")==false)
-                            {
+                            Log.d("Response", response + "ok");
+                            if (response.equals("fail") == false) {
 
                                 alert.cancel();
-                           //     Blurry.delete((ViewGroup) login_activity.getRootView());
-                                Snackbar.make(getCurrentFocus(),"LOGIN SUCCESSFUL",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                                //     Blurry.delete((ViewGroup) login_activity.getRootView());
+                                Snackbar.make(getCurrentFocus(), "LOGIN SUCCESSFUL", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                                 try {
 
                                     JSONArray jsonArray = new JSONArray(response);
@@ -276,43 +286,40 @@ public class LoginActivity extends AppCompatActivity {
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setIsActive(true);
                                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setLoginType("Simple");
 
-                                   // Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                                    // Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
 
-                                    Intent i= new Intent(LoginActivity.this,MainPage.class);
+                                    Intent i = new Intent(LoginActivity.this, MainPage.class);
                                     startActivity(i);
                                     finish();
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                    Snackbar.make(getCurrentFocus(),"LOGIN FAILED "+e.getMessage(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                                    Snackbar.make(getCurrentFocus(), "LOGIN FAILED " + e.getMessage(), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
                                 }
-                                Snackbar.make(getCurrentFocus(),"Moving to MainPage Activity",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-                            }
-                            else
-                            {
+                                Snackbar.make(getCurrentFocus(), "Moving to MainPage Activity", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                            } else {
                                 alert.cancel();
-                             //   Blurry.delete((ViewGroup) login_activity.getRootView());
-                                Snackbar.make(getCurrentFocus(),"LOGIN FAILED",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                                //   Blurry.delete((ViewGroup) login_activity.getRootView());
+                                Snackbar.make(getCurrentFocus(), "LOGIN FAILED", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                             }
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.d("ERROR","error => "+error.toString());
+                            Log.d("ERROR", "error => " + error.toString());
 
                             alert.cancel();
-                          //  Blurry.delete((ViewGroup) login_activity.getRootView());
-                            Snackbar.make(getCurrentFocus(),error.getMessage(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                            //  Blurry.delete((ViewGroup) login_activity.getRootView());
+                            Snackbar.make(getCurrentFocus(), error.getMessage(), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                         }
                     }
-                    )
-                    {
+                    ) {
                         @Override
-                        protected Map<String,String> getParams() throws AuthFailureError {
-                            Map<String,String> map = new HashMap<>() ;
-                            map.put("UserName",et_username.getText().toString());
-                            map.put("Password",et_password.getText().toString());
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> map = new HashMap<>();
+                            map.put("UserName", et_username.getText().toString());
+                            map.put("Password", et_password.getText().toString());
                             return map;
                         }
                     };
@@ -320,15 +327,20 @@ public class LoginActivity extends AppCompatActivity {
                     RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                     queue.add(request);
 
+                } else {
+                    Snackbar.make(getCurrentFocus(), "please enter at least 5 character", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                 }
-                else
-                {
-                    Snackbar.make(getCurrentFocus(),"please enter at least 5 character",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-                }
+            }
+        }
+        else {
+                Toast.makeText(this, "Enter the Password", Toast.LENGTH_SHORT).show();
             }
 
         }
-        Toast.makeText(this, "Password length should be greater then 5", Toast.LENGTH_SHORT).show();
+        else {Toast.makeText(this, "Enter the User Name", Toast.LENGTH_SHORT).show();
+
+        }
+
 
     }
 

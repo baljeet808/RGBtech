@@ -16,13 +16,16 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +56,7 @@ EditProfile extends Fragment implements View.OnClickListener {
 
     TextView FirstName,LastName,PhoneNumber,Password,Email,UserName;
     String UID;
+    ScrollView scrollView;
     Button Submit;
     private String EditProfile_URL="/EditProfile.php";
     RelativeLayout edit_profilento;
@@ -80,6 +84,19 @@ EditProfile extends Fragment implements View.OnClickListener {
         Password=(TextView) view.findViewById(R.id.Password);
         Email=(TextView) view.findViewById(R.id.Email);
         UserName=(TextView) view.findViewById(R.id.Username);
+
+        scrollView=(ScrollView)view.findViewById(R.id.scrollView);
+        scrollView.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent ev)
+            {
+                hideKeyboard(view);
+                return false;
+            }
+        });
+
+
 
         if(usertype=="facebook")
         {
@@ -397,6 +414,11 @@ EditProfile extends Fragment implements View.OnClickListener {
 
     }
 
+    protected void hideKeyboard(View view)
+    {
+        InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
 
 
 }
