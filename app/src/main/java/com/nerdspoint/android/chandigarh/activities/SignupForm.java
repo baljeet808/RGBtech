@@ -1,6 +1,7 @@
 package com.nerdspoint.android.chandigarh.activities;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,8 +13,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -50,9 +53,12 @@ public class SignupForm extends AppCompatActivity {
 
     EditText mobile,Email,Password,ConfirmPassword,userName;
 
-    String condition;
+
     Button Back,OTP;
     TextView login;
+    String usertype;
+    RadioGroup newORold;
+    EditText FirstName,LastName;
     RadioButton shopkeeper, vistor;
     RelativeLayout holder;
     private SharedPreferences sharedPreferences;
@@ -66,6 +72,17 @@ public class SignupForm extends AppCompatActivity {
 
     private String signup_url ="/signup.php";          // enter the url here for signup purpose
 
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,20 +108,20 @@ public class SignupForm extends AppCompatActivity {
             }
         });
 
-        RadioGroup newORold = (RadioGroup) findViewById(R.id.UserType);
+         newORold = (RadioGroup) findViewById(R.id.UserType);
 
         newORold.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.visitor:
 
-                        condition="Visitor";
+                        usertype="Visitor";
                         // do operations specific to this selection
                         // Toast.makeText(AddBook.this, "new", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.shopowner:
                         // do operations specific to this selection
-                        condition="Shop Owner";
+                        usertype="Shop Owner";
                         // Toast.makeText(AddBook.this, "old", Toast.LENGTH_SHORT).show();
 
                         break;
@@ -118,9 +135,24 @@ public class SignupForm extends AppCompatActivity {
         mobile = (EditText) findViewById(R.id.mobileNo);
         Email = (EditText) findViewById(R.id.email);
         Back=(Button)findViewById(R.id.btnBack);
+        FirstName=(EditText)findViewById(R.id.input_name);
+        LastName=(EditText)findViewById(R.id.input_Lastname);
+
+
 
         Password=(EditText) findViewById(R.id.password);
         ConfirmPassword=(EditText) findViewById(R.id.confirmpassword);
+
+
+
+
+
+
+
+
+
+
+
 
         OTP.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +172,7 @@ public class SignupForm extends AppCompatActivity {
                                 + Number, Toast.LENGTH_LONG).show();
 
                         // Do something
+
                     }
 
                     @Override
@@ -174,59 +207,109 @@ public class SignupForm extends AppCompatActivity {
 
     public void signup(final View v)
     {
-                if(mobile.getText().length()==10)
+
+
+
+                if(FirstName.getText().length()>0)
                 {
-                        String email= Email.getText().toString();
-                        if(email.contains("@gmail.com") || email.contains("@live.com") || email.contains("@hotmail.com") || email.contains("@yahoo.in"))
-                        {
-                            if(Password.getText().length()>4 )
-                            {
-                                if(Password.getText().toString().equals(ConfirmPassword.getText().toString()))
-                                {
-                                    final AlertDialog.Builder alert =new AlertDialog.Builder(v.getContext());
-                                    alert.setTitle("Enter Your Name >");
-                                    final EditText editText = new EditText(getApplicationContext());
-                                    editText.setHint("Note : username will be used for login");
-                                    editText.setHintTextColor(Color.RED);
-                                    editText.setTextColor(Color.BLACK);
-                                    editText.setTextSize(14.0f);
-                                    alert.setView(editText);
 
-                                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
+                  if(LastName.getText().length()>0) {
 
-                                            if(editText.getText().length()>1) {
+                      if(Email.getText().length()>0) {
 
-                                                SaveUser(v,mobile.getText().toString(), Email.getText().toString(), Password.getText().toString(),editText.getText().toString());
-                                            }
-                                            else
-                                            {
-                                     //           Snackbar.make(v.findFocus(),"give a UserName for future login reference ",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-                                            }
-                                        }
-                                    });
-                                    alert.show();
-                                }
-                                else{
-                             //       Snackbar.make(v.findFocus(),"Password does not match",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-                                    }
-                            }else
-                            {
-                          //      Snackbar.make(v.findFocus(),"Password should be atleast of 5 letters",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-                            }
-                        }else
-                        {
-                       //     Snackbar.make(v.findFocus(),"invalid email",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
-                        }
 
-                }else
+                       if(Password.getText().length()>0) {
+
+                           if(ConfirmPassword.getText().length()>0) {
+
+
+                               if (mobile.getText().length() == 10) {
+                                   String email = Email.getText().toString();
+                                   if (email.contains("@gmail.com") || email.contains("@live.com") || email.contains("@hotmail.com") || email.contains("@yahoo.in")) {
+                                       if (Password.getText().length() > 4) {
+                                           if (Password.getText().toString().equals(ConfirmPassword.getText().toString()))
+                                           {
+                                               if (newORold.getCheckedRadioButtonId() == -1)
+                                               {
+                                                   Toast.makeText(this, "Please select the user type Visitor OR Shop Owner", Toast.LENGTH_SHORT).show();
+                                               }
+                                               else {
+                                                   final AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
+                                                   alert.setTitle("Enter Your Name >");
+                                                   final EditText editText = new EditText(getApplicationContext());
+                                                   editText.setHint("Note : username will be used for login");
+                                                   editText.setHintTextColor(Color.RED);
+                                                   editText.setTextColor(Color.BLACK);
+                                                   editText.setTextSize(14.0f);
+                                                   alert.setView(editText);
+
+                                                   alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                       public void onClick(DialogInterface dialog, int whichButton) {
+
+                                                           if (editText.getText().length() > 1) {
+
+                                                               SaveUser(v, mobile.getText().toString(), Email.getText().toString(), Password.getText().toString(), editText.getText().toString(), FirstName.getText().toString(), LastName.getText().toString(), usertype);
+                                                           } else {
+                                                               //           Snackbar.make(v.findFocus(),"give a UserName for future login reference ",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                                                           }
+                                                       }
+                                                   });
+                                                   alert.show();
+                                               }
+
+                                           }
+
+
+                                           else {
+                                               Toast.makeText(this, "Password is not matching", Toast.LENGTH_SHORT).show();
+                                           }
+                                       } else {
+                                           Toast.makeText(this, "Password is greater then 4", Toast.LENGTH_SHORT).show();
+                                       }
+                                   } else {
+                                       Toast.makeText(this, "incorrect Email", Toast.LENGTH_SHORT).show();
+                                   }
+
+                               } else {
+                                   Toast.makeText(this, "Mobile Number Should be 10 digit", Toast.LENGTH_SHORT).show();
+                               }
+                           }
+                           else {
+                               Toast.makeText(this, "Please enter the Confirm password", Toast.LENGTH_SHORT).show();
+                           }
+
+
+
+                       }
+
+                       else {
+                           Toast.makeText(this, "Please enter the password", Toast.LENGTH_SHORT).show();
+                       }
+
+
+
+
+                      }
+                      else
+                      {
+                          Toast.makeText(this, "Please enter the Email", Toast.LENGTH_SHORT).show();
+
+                      }
+                  }
+
+                  else
+                      {
+                          Toast.makeText(this, "Please enter the Last Name", Toast.LENGTH_SHORT).show();
+                  }
+                }
+                else
                 {
-                  //  Snackbar.make(v.findFocus(),"please correct mobile number",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                    Toast.makeText(this, "Please enter the First Name", Toast.LENGTH_SHORT).show();
                 }
 
     }
 
-    private void SaveUser(final View v,final String Mobile, final String email, final String password, final String userName)
+    private void SaveUser(final View v,final String mobile, final String email, final String password, final String userName,final String FirstName,final String LastName,final String usertype)
     {
         final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
         final AlertDialog alert = builder.create();
@@ -240,12 +323,26 @@ public class SignupForm extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.d("Response", response+"Done");
-                if(response.equals("Already"))
+                if(response.equals("Email"))
                 {
 
                     alert.dismiss();
-                    Snackbar.make(getCurrentFocus(),"User already exists with this detail",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                    Snackbar.make(getCurrentFocus(),"Email already exists ",Snackbar.LENGTH_LONG).setAction("Action",null).show();
                 }
+                if(response.equals("UserName"))
+                {
+
+                    alert.dismiss();
+                    Snackbar.make(getCurrentFocus(),"Username already exists  ",Snackbar.LENGTH_LONG).setAction("Action",null).show();
+                }
+                if(response.equals("PhoneNumber"))
+                {
+
+                    alert.dismiss();
+                    Snackbar.make(getCurrentFocus(),"PhoneNumber already exists ",Snackbar.LENGTH_LONG).setAction("Action",null).show();
+                }
+
+
 
                 if(response.equals("User Successfully Registered"))
                 {
@@ -254,17 +351,25 @@ public class SignupForm extends AppCompatActivity {
 
                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setLoginType("Simple");
                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setEmailAddress(email);
+                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setFirstName(FirstName);
+                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setLastName(LastName);
+                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setUserType(usertype);
+
+                   // ActiveUserDetail.getCustomInstance(getApplicationContext()).setEmailAddress(email);
                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setUserName(userName);
-                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setPhoneNumber(Mobile);
+                    ActiveUserDetail.getCustomInstance(getApplicationContext()).setPhoneNumber(mobile);
                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setPassword(password);
                     ActiveUserDetail.getCustomInstance(getApplicationContext()).setIsActive(true);
 
-                   profileUpdation profileUpdation = new profileUpdation();
-                    fragmentManager =getSupportFragmentManager();
-                    fragmentTransaction = fragmentManager.beginTransaction();
+                 Intent intent=new Intent(getApplicationContext(),MainPage.class);
+                    startActivity(intent);
+                    finish();
+
+                    //fragmentManager =getSupportFragmentManager();
+                    //fragmentTransaction = fragmentManager.beginTransaction();
                    //  fragmentTransaction.add(R.id.fragment_container,profileUpdation);
-                    fragmentTransaction.commit();
-                    holder.setVisibility(View.GONE);
+                    //fragmentTransaction.commit();
+                    //holder.setVisibility(View.GONE);
 
                  // Snackbar.make(v.findFocus(),"Moving to next Step",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
 
@@ -291,9 +396,13 @@ public class SignupForm extends AppCompatActivity {
                 Map map = new HashMap<>() ;
 
                 map.put("UserName",userName);
+                map.put("PhoneNumber",mobile);
                 map.put("Email",email);
                 map.put("Password",password);
-                map.put("PhoneNumber",Mobile);
+                map.put("FirstName",FirstName);
+                map.put("LastName",LastName);
+                map.put("UserType",usertype);
+
 
                 return map;
             }

@@ -2,6 +2,7 @@ package com.nerdspoint.android.chandigarh.fragments;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -11,8 +12,10 @@ import android.support.v7.app.AlertDialog;
 import android.test.mock.MockPackageManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +55,7 @@ public class shopRegistration extends Fragment   {
 
     private static String shopRegistering_url="/shop.php";
     GPSTracker gps;
+    RelativeLayout relativeLayout;
     ArrayList list;
     ArrayAdapter adapter;
     Spinner spinner;
@@ -108,7 +113,16 @@ public class shopRegistration extends Fragment   {
         spinner = (Spinner) view.findViewById(R.id.categoryEdit);
         spinner.setAdapter(adapter);
 
-
+     relativeLayout=(RelativeLayout)view.findViewById(R.id.relativeLayout);
+        relativeLayout.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent ev)
+            {
+                hideKeyboard(view);
+                return false;
+            }
+        });
 
 
         tv_shopname=(EditText)view.findViewById(R.id.shopName);
@@ -271,6 +285,10 @@ public class shopRegistration extends Fragment   {
         Log.d("shared preferences ","UID > "+bundle.getString("UID")+" phone "+bundle.getString("PhoneNumber")+" username "+bundle.getString("UserName")+" fname "+bundle.getString("FirstName")+" lname "+bundle.getString("LastName")+" Iactive "+bundle.getString("IsActive")+" userType "+bundle.getString("UserType")+" LoginType "+bundle.getString("LoginType")+" email "+bundle.getString("Email")+" Password "+bundle.getString("Password"));
     }
 
-
+    protected void hideKeyboard(View view)
+    {
+        InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
 
 }

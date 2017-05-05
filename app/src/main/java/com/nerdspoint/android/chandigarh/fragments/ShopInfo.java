@@ -1,19 +1,23 @@
 package com.nerdspoint.android.chandigarh.fragments;
 
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +44,7 @@ import java.util.Map;
 public class ShopInfo extends Fragment {
 
   Button Back,Update;
+    RelativeLayout relativeLayout;
     GPSTracker gps;
     EditText Shopname,ShopAddres,PhoneNumber,SCO,Pincode,Sector;
     TextView latitude,longitude;
@@ -66,6 +71,20 @@ public class ShopInfo extends Fragment {
         EditShopProfile_URL= ipAddress.getCustomInstance(getActivity()).getIp()+ EditShopProfile_URL;
         Back=(Button)view.findViewById(R.id.back_button);
         Update=(Button)view.findViewById(R.id.Update);
+
+        relativeLayout=(RelativeLayout)view.findViewById(R.id.relativeLayout);
+
+        relativeLayout.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent ev)
+            {
+                hideKeyboard(view);
+                return false;
+            }
+        });
+
+
 
         Shopname=(EditText)view.findViewById(R.id.shopName);
         PhoneNumber=(EditText)view.findViewById(R.id.contactNumber);
@@ -252,5 +271,11 @@ public class ShopInfo extends Fragment {
 
 
     }
+    protected void hideKeyboard(View view)
+    {
+        InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
 
 }
