@@ -1231,14 +1231,9 @@ public class MainPage extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_addShop) {
 
 
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-            drawer.closeDrawer(GravityCompat.START);
-
-        } else if (id == R.id.nav_manage) {
+        if (id == R.id.nav_manage) {
             searchBar.setText("");
             ActiveUserDetail.getCustomInstance(getApplicationContext()).logoutUser();
             Intent o = new Intent(MainPage.this, LoginActivity.class);
@@ -1247,7 +1242,18 @@ public class MainPage extends AppCompatActivity
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
 
-        } else if (id == R.id.nav_share) {
+        }
+
+        else if(id==R.id.nav_aboutus)
+        {
+            Toast.makeText(getApplicationContext(), "hello ", Toast.LENGTH_SHORT).show();
+            Intent o = new Intent(MainPage.this, AboutUs.class);
+            startActivity(o);
+            finish();
+        }
+
+
+        else if (id == R.id.nav_share) {
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
 

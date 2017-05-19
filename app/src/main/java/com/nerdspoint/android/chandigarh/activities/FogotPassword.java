@@ -2,17 +2,14 @@ package com.nerdspoint.android.chandigarh.activities;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -55,16 +52,6 @@ public class FogotPassword extends AppCompatActivity {
     ProgressDialog progress;
     String Number;
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-
-
-        if (getCurrentFocus() != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-        return super.dispatchTouchEvent(ev);
-    }
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -83,18 +70,27 @@ public class FogotPassword extends AppCompatActivity {
 
         main=(RelativeLayout)findViewById(R.id.Main_page_passHolder);
         passfrag=(RelativeLayout)findViewById(R.id.Pass_holder);
-        verify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progress = ProgressDialog.show(FogotPassword.this,"Verifying...","Please wait.",false, false);
+       // container=(RelativeLayout)findViewById(R.id.for_frag);
 
-                Number=number.getText().toString();
+            verify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                verifyNumber(Number);
+                        Number = number.getText().toString();
+                    if(Number.length()==10) {
+                        progress = ProgressDialog.show(FogotPassword.this, "Verifying...", "Please wait.", false, false);
+                        verifyNumber(Number);
+                    }
+                    else
+                    {
+                        Toast.makeText(FogotPassword.this, "Please enter the correct mobile number", Toast.LENGTH_SHORT).show();
+                    }
 
-            }
+                }
 
-        });
+            });
+
+
         OTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,8 +121,9 @@ public class FogotPassword extends AppCompatActivity {
 
         builder.withPhoneNumber("+91 "+Number);
 
+        OTP.setText("Change Password");
 
-       AuthConfig.Builder digits = builder.withAuthCallBack(new AuthCallback() {
+      builder.withAuthCallBack(new AuthCallback() {
             @Override
             public void success(DigitsSession session, String Number) {
 
@@ -157,7 +154,10 @@ public class FogotPassword extends AppCompatActivity {
 
 
 
-    public void verifyNumber(final String number)
+
+
+
+    public void verifyNumber(final String Number)
     {
         StringRequest request = new StringRequest(Request.Method.POST, URL_PHONE, new Response.Listener<String>() {
             @Override
@@ -190,7 +190,7 @@ public class FogotPassword extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                params.put("PhoneNumber",number);
+                params.put("PhoneNumber",Number);
                 return params;
             }
         };

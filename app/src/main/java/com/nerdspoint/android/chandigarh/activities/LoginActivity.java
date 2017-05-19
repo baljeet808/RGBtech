@@ -92,6 +92,18 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
     LinearLayout login_activity;
 
     private String login_URL="/login.php";
@@ -254,7 +266,7 @@ public class LoginActivity extends AppCompatActivity {
                     alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
-                            Blurry.delete((ViewGroup) login_activity.getRootView());
+//z                            Blurry.delete((ViewGroup) login_activity.getRootView());
                         }
                     });
                     alert.show();
@@ -296,12 +308,13 @@ public class LoginActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                     Snackbar.make(getCurrentFocus(), "LOGIN FAILED " + e.getMessage(), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-
+                                    Toast.makeText(LoginActivity.this, ""+e.getMessage().toString(), Toast.LENGTH_LONG).show();
                                 }
                                 Snackbar.make(getCurrentFocus(), "Moving to MainPage Activity", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                             } else {
                                 alert.cancel();
                                 //   Blurry.delete((ViewGroup) login_activity.getRootView());
+                                Toast.makeText(LoginActivity.this, "LOGIN FAILED", Toast.LENGTH_SHORT).show();
                                 Snackbar.make(getCurrentFocus(), "LOGIN FAILED", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                             }
                         }
@@ -311,8 +324,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("ERROR", "error => " + error.toString());
 
                             alert.cancel();
+
                             //  Blurry.delete((ViewGroup) login_activity.getRootView());
                             Snackbar.make(getCurrentFocus(), error.getMessage(), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                           /// Toast.makeText(LoginActivity.this, ""+error.getMessage().toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
                     ) {

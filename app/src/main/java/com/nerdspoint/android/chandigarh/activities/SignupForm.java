@@ -97,6 +97,7 @@ public class SignupForm extends AppCompatActivity {
         editor= sharedPreferences.edit();                                       // SharedPreferences contain >>  email , password , location, sex , age, interests,name , type  of user
         editor.apply();
         OTP=(Button)findViewById(R.id.otp);
+        OTP.setVisibility(View.GONE);
         login=(TextView)findViewById(R.id.link_login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
